@@ -1,0 +1,113 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* line 20, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+body {
+  line-height: 1;
+}
+
+/* line 22, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 24, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 26, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 28, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 101, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 30, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 114, ../../../../../../opt/local/lib/ruby/gems/1.8/gems/compass-0.11.6/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/*
+.x-btn-default-small .x-btn-inner, .x-btn-default-medium .x-btn-inner, .x-btn-default-large .x-btn-inner, .x-btn-default-toolbar-small .x-btn-inner, .x-btn-default-toolbar-medium .x-btn-inner, .x-btn-default-toolbar-large .x-btn-inner, .x-menu-item-text, .x-html-editor-tb .x-font-select, .x-panel-header-default, .x-panel-header-text-default, .x-panel-header-default-framed, .x-tip-header, .x-tip-body, .x-form-invalid-tip-body, .x-tip-header-text, .x-progress-text, .x-toolbar, .x-toolbar .x-form-item-label, .x-toolbar .x-toolbar-text, .x-window-header-text-default, .x-tab-bar, .x-tab button, .x-grid-rowbody, .x-grid-row .x-grid-cell, .x-grid-group-title, .x-grid-row-editor .x-form-field, .x-grid-row-editor .x-form-display-field, .x-form-invalid-under, .x-fieldset-header, .x-column-header, .x-mask-msg div, .x-btn-group-header-text-default-framed, table.x-datepicker-inner a, .x-monthpicker-item, .x-dd-drag-ghost 
+{ 
+    font-size: 13px;
+}
+.x-panel-header-text, .x-panel-header-text-default {
+}
+.x-grid-cell-inner {
+	font-size: 13px;
+}
+.x-column-header {
+	@include single-text-shadow(#777777, 1px, 1px, 1px);
+	font-size: 15px;
+}
+*/
+/* line 29, ../sass/screen.scss */
+.portal-title {
+  color: #36393D;
+  font-size: 32px;
+  font-family: 'Arial Black', Arial, 標楷體;
+  font-weight: normal;
+  padding: 10px 25px;
+  text-shadow: #eeeeee 2px 2px 2px;
+}
+
+/* line 38, ../sass/screen.scss */
+.portal-header {
+  background: #eeeeee url(http://a3.twimg.com/profile_background_images/19467359/Vladstudio_11016.jpg) bottom center;
+}
+
+/* line 42, ../sass/screen.scss */
+.portal-message {
+  line-height: 1.5em;
+}
+/* line 44, ../sass/screen.scss */
+.portal-message strong {
+  font-weight: bold;
+}
+
+/* line 49, ../sass/screen.scss */
+.larger-font {
+  font-size: 1.25em;
+  line-height: 1.25em;
+}
