@@ -12,16 +12,16 @@ body {
 
 .x-btn-default-small .x-btn-inner, .x-btn-default-medium .x-btn-inner, .x-btn-default-large .x-btn-inner, .x-btn-default-toolbar-small .x-btn-inner, .x-btn-default-toolbar-medium .x-btn-inner, .x-btn-default-toolbar-large .x-btn-inner, .x-menu-item-text, .x-html-editor-tb .x-font-select, .x-panel-header-default, .x-panel-header-text-default, .x-panel-header-default-framed, .x-tip-header, .x-tip-body, .x-form-invalid-tip-body, .x-tip-header-text, .x-progress-text, .x-toolbar, .x-toolbar .x-form-item-label, .x-toolbar .x-toolbar-text, .x-window-header-text-default, .x-tab-bar, .x-tab button, .x-grid-rowbody, .x-grid-row .x-grid-cell, .x-grid-group-title, .x-grid-row-editor .x-form-field, .x-grid-row-editor .x-form-display-field, .x-form-invalid-under, .x-fieldset-header, .x-column-header, .x-mask-msg div, .x-btn-group-header-text-default-framed, table.x-datepicker-inner a, .x-monthpicker-item, .x-dd-drag-ghost 
 { 
-    font-size: 13px;
+    font-size: 15px;
 }
 .x-panel-header-text, .x-panel-header-text-default {
 }
 .x-grid-cell-inner {
-	font-size: 13px;
+	font-size: 15px;
 }
 .x-column-header {
-	@include single-text-shadow(#777777, 1px, 1px, 1px);
 	font-size: 15px;
+	@include single-text-shadow(#777777, 1px, 1px, 1px);
 }
 
 .portal-title {
