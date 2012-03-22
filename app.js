@@ -14,10 +14,10 @@ var app = module.exports = express.createServer();
 */
 var mongodb = require('mongodb');
 var dbserver = function() {
-    return new mongodb.Server('localhost', 27017, {});
+    return new mongodb.Server('staff.mongohq.com', 10028, {});
 };
 var dbclient = function() {
-    return new mongodb.Db('test', dbserver(), {});
+    return new mongodb.Db('acad_taj', dbserver(), {});
 };
 var dbquery = function(collection, callback) {
     dbclient().open(function (error, client) {
@@ -44,8 +44,8 @@ app.configure(function(){
     app.use(express.static(__dirname + '/public'));
 
     //session support
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: "keyboard cat", store: new MongoDBStore({url: 'localhost', maxAge: 300000}) }));
+    //app.use(express.cookieParser());
+    //app.use(express.session({ secret: "keyboard cat", store: new MongoDBStore({url: 'localhost', maxAge: 300000}) }));
 });
 
 app.configure('development', function(){
