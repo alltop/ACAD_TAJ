@@ -4,7 +4,6 @@
 */
 
 var express = require('express')
-  , MongoDBStore = require('connect-mongodb')
   , routes = require('./routes');
 
 var app = module.exports = express.createServer();
@@ -62,11 +61,13 @@ var renderAsJSON = function (res, obj) {
     res.charset = 'UTF-8';
     res.contentType('application/json'); 
     res.send(JSON.stringify(obj));
-}
+};
 
 // Routes
 
 app.get('/', routes.index);
+
+app.get('/service/login.json', routes.login);
 
 app.get('/readData.json', function(req, res) {
     var t = timediff();
@@ -78,6 +79,20 @@ app.get('/readData.json', function(req, res) {
         });
     });
 });
+
+app.get('/service/listall.json', function(req, res) {
+    renderAsJSON(res, {'result': [
+        {a: 1, b: 2, c: 3},
+        {a: 1, b: 2, c: 3},
+        {a: 1, b: 2, c: 3},
+        {a: 1, b: 2, c: 3}
+    ]});
+});
+
+app.get('/service/listdept.json', function(req, res) {
+    renderAsJSON(res, {'result': '9991234 login ok'});
+});
+
 
 app.listen(process.env.PORT || 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
