@@ -12,16 +12,20 @@ exports.index = function(req, res){
 };
 
 exports.login = function(req, res) {
-    var studentid = req.params.studentid;
+    var studentid = req.query['studentid']
+      , password =  req.query['password'];
     
     res.charset = 'UTF-8';
     res.contentType('application/json');
     
-    res.send(req.params.studentid);
-    console.log('test');
-    console.log(req.param.studentid);
-
-/*    db.collection('tStudent').find({}).toArray(function(err, posts){
-        res.send("test"+JSON.stringify(posts));
-    });*/
+    console.log(studentid);
+    
+    db.collection('tStudent').find({studentid: parseInt(studentid), password: parseInt(password)}).toArray(function(err, rows){
+        console.log(results);
+        var results = {
+            result: true,
+            data: rows
+        };
+        res.send(JSON.stringify(results));
+    });
 };
