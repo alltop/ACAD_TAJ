@@ -8,23 +8,6 @@ var express = require('express')
 
 var app = module.exports = express.createServer();
 
-/**
-* MongoDB Native Driver
-*/
-var mongodb = require('mongodb');
-var dbserver = function() {
-    return new mongodb.Server('staff.mongohq.com', 10028, {});
-};
-var dbclient = function() {
-    return new mongodb.Db('acad_taj', dbserver(), {});
-};
-var dbquery = function(collection, callback) {
-    dbclient().open(function (error, client) {
-        if (error) throw error;
-        //console.log(callback);
-        callback(new mongodb.Collection(client, collection));
-    });
-};
 var timediff = function() {
     var begin = new Date();
     return function() {
@@ -55,44 +38,9 @@ app.configure('production', function(){
     app.use(express.errorHandler()); 
 });
 
-//
-
-var renderAsJSON = function (res, obj) {
-    res.charset = 'UTF-8';
-    res.contentType('application/json'); 
-    res.send(JSON.stringify(obj));
-};
-
 // Routes
-
 app.get('/', routes.index);
-
 app.get('/service/login.json', routes.login);
-
-app.get('/readData.json', function(req, res) {
-    var t = timediff();
-    //req.params.table
-    dbquery('foo', function(collection) {
-        collection.find({}, {limit: 65535}).toArray(function(err, docs) {
-            renderAsJSON(res, {'results': docs});
-            console.log(t());
-        });
-    });
-});
-
-app.get('/service/listall.json', function(req, res) {
-    renderAsJSON(res, {'result': [
-        {a: 1, b: 2, c: 3},
-        {a: 1, b: 2, c: 3},
-        {a: 1, b: 2, c: 3},
-        {a: 1, b: 2, c: 3}
-    ]});
-});
-
-app.get('/service/listdept.json', function(req, res) {
-    renderAsJSON(res, {'result': '9991234 login ok'});
-});
-
 
 app.listen(process.env.PORT || 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
