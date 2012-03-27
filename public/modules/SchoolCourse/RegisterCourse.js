@@ -7,7 +7,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Store1', {
     fields: ['semcourseid', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
     proxy: {
         type: 'ajax',
-        url: __ajax_url_prefix+'readData.json?table=semcourse',
+        url: '/service/listall.json',
         reader: {
             type: 'json',
             root: 'results'

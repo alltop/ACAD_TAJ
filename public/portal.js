@@ -8,7 +8,7 @@ var package = function(name) {
 };
 */
 
-var __ajax_url_prefix = '/';
+var __ajax_url_prefix = '/service/';
 
 //啟用 Ext 動態載入器
 Ext.Loader.setConfig({

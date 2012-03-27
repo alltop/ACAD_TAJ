@@ -29,3 +29,12 @@ exports.login = function(req, res) {
         res.send(JSON.stringify(results));
     });
 };
+
+exports.listall = function(req, res) {
+    res.charset = 'UTF-8';
+    res.contentType('application/json');
+        
+    db.collection('tSemesterCusWeb').find().toArray(function(err, rows){
+        res.send(JSON.stringify(rows));
+    });
+};
