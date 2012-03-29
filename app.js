@@ -40,7 +40,7 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', routes.index);
-app.get('/service/login.json', routes.login);
+app.post('/service/login.json', routes.login);
 app.get('/service/listall.json', routes.listall);
 
 app.listen(process.env.PORT || 3000);
