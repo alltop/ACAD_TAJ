@@ -178,5 +178,5 @@ Ext.onReady(function(){
             module.init();
             module.load();
         }        
-    }, 500);
+    }, 100);
 });

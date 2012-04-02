@@ -3,7 +3,8 @@ Ext.onReady(function(){
     var login = new Ext.FormPanel({
         labelWidth:80,
         url: '/service/login.json',
-        frame: true,
+        frame: false,
+        border: false,
         defaultType: 'textfield',
 	    monitorValid: true,
         items:[{

@@ -274,7 +274,6 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         {
             text: '快速加選',
             handler: function() {
-
                 Ext.Msg.prompt(
                     '加入課程候選區',
                     '<span class="portal-message">請輸入學期課號，將會快速判斷您是否可選這堂課，並放入課程候選區！！<br/>&nbsp;<br/>學期課號：</span>',
@@ -317,6 +316,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         },
         {
             xtype: 'label',
+            height: 16,
             text: '必修/必選的學分數: 4 選修的學分數: 0'
         }
     ]
@@ -331,15 +331,23 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         _previous: null
     },
     constructor: function() {
-        this.setShowOnReload(true);
     },
     load: function() {
+        var thisModule = this;
+
+        //將目前的模組記錄在 URL HASH
+    	window.location.hash = '#'+this.$className;
+        
         var content = Ext.getCmp('portal-content');
         //console.log(content);
 
         //使用新頁籤建立主畫面
         //content.setLoading('讀取中');
-        var panel = Ext.create('Module.SchoolCourse.RegisterCourse.MainPanel');
+        var panel = Ext.create('Module.SchoolCourse.RegisterCourse.MainPanel', {
+            listeners: {
+                beforeclose: function() { thisModule.unload(); }
+            }
+        });
 
         //關閉曾經開啟的 Tab
         if (Module.SchoolCourse.RegisterCourse._previous) {
@@ -350,5 +358,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         //新增主畫面到 Tab
         content.add(panel);
         content.setActiveTab(panel);
+    },
+    unload: function() {
+        //從 URL HASH 移除目前的模組記錄
+        if (window.location.hash == '#'+this.$className) {
+            window.location.hash = '';
+        }
     }
 });
