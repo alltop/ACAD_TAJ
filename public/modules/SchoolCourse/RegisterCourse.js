@@ -4,19 +4,21 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Store1', {
     autoDestroy: false,
     autoSync: false,
     autoLoad: false,
-    fields: ['semcourseid', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
+    buffered: false,
+    purgePageCount: 0,
+    fields: ['semcourseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
     proxy: {
         type: 'ajax',
         url: '/service/listall.json',
+        method: 'GET',
         reader: {
-            type: 'json',
-            root: 'results'
+            type: 'array'
         }
     },
     listeners: {
         load: function(store) {
             store.filterBy(function(rec, id) {
-                return rec.get('coursetypename') == '通識';
+                return rec.get('coursetype') == '1';
             });
         }
     }
@@ -26,7 +28,7 @@ Ext.create('Module.SchoolCourse.RegisterCourse.Store1');
 Ext.define('Module.SchoolCourse.RegisterCourse.Store2', {
     extend: 'Ext.data.Store',
     storeId: 'SchoolCourse-RegisterCourse-Store2',
-    fields: ['semcourseid', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
+    fields: ['semcourseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
     data:{'items':[]},
     proxy: {
         type: 'memory',
@@ -41,7 +43,7 @@ Ext.create('Module.SchoolCourse.RegisterCourse.Store2');
 var changeFilterHandler = function(val) {
     var store = Ext.data.StoreManager.lookup('SchoolCourse-RegisterCourse-Store1');
     store.filterBy(function(rec, id) {
-        return rec.get('coursetypename') == val;
+        return rec.get('coursetype') == val;
     });
 };
 
@@ -49,19 +51,20 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-RegisterCourse-Grid1',
     store: Ext.data.StoreManager.lookup('SchoolCourse-RegisterCourse-Store1'),
+    loadMask: true,
+    disableSelection: false,
+    invalidateScrollerOnRefresh: true,
+    viewConfig: {
+        trackOver: false
+    },
     listeners: {
         render: function(grid) {
+            //載入資料
             //grid.body.mask('讀取中');
-            var store = grid.getStore();
-            if (!store.count()) {
-                Ext.defer(function() {
-                    store.load();
-                }, 500);
-            }
         }
     },
     columns: [
-        { 
+        {
             header: '加選',
             xtype: 'actioncolumn',
             width: 50,
@@ -73,7 +76,6 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 xtype: 'button',
                 tooltip: '加選',
                 handler: function(grid, rowIndex, colIndex) {
-
                     //設定選課來源資料
                     var store1 = grid.getStore();
                     var rec = store1.getAt(rowIndex);
@@ -110,7 +112,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 toggleGroup: 'grid1-filter',
                 pressed: true,
                 handler: function() {
-                    changeFilterHandler('通識');
+                    changeFilterHandler('1');
                     var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                     label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
                 }
@@ -120,7 +122,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 text: '體育選修',
                 toggleGroup: 'grid1-filter',
                 handler: function() {
-                    changeFilterHandler('體育');
+                    changeFilterHandler('2');
                     var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                     label.setText('體育選修...');
                 }
@@ -130,7 +132,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 text: '院訂選修',
                 toggleGroup: 'grid1-filter',
                 handler: function() {
-                    changeFilterHandler('院訂');
+                    changeFilterHandler('3');
                     var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                     label.setText('院訂選修...');
                 }
@@ -140,7 +142,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 text: '軍訓課程',
                 toggleGroup: 'grid1-filter',
                 handler: function() {
-                    changeFilterHandler('軍訓');
+                    changeFilterHandler('4');
                     var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                     label.setText('軍訓課程...');
                 }
@@ -150,7 +152,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 text: '服務教育',
                 toggleGroup: 'grid1-filter',
                 handler: function() {
-                    changeFilterHandler('服務');
+                    changeFilterHandler('8');
                     var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                     label.setText('服務教育...');
                 }
@@ -334,6 +336,14 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
     },
     load: function() {
         var thisModule = this;
+        
+        //載入資料
+        var store = Ext.data.StoreManager.lookup('SchoolCourse-RegisterCourse-Store1');
+        if (!store.count()) {
+            Ext.defer(function() {
+                store.load();
+            }, 100);
+        }
 
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;

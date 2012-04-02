@@ -41,8 +41,24 @@ exports.login = function(req, res) {
 exports.listall = function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
+    
+    var fields = {
+        'semcourseid':1, 'coursetype':1, 'coursetypename':1, 'semcoursename':1,
+        'teachername':1, 'coursetime_view':1, 'roomname':1, 'maxcount':1,
+        'selectedcount': 1
+    };
         
-    db.collection('tSemesterCusWeb').find().toArray(function(err, rows){
-        res.send(JSON.stringify(rows));
+    db.collection('tSemesterCusWeb').find({}, fields).toArray(function(err, rows){
+        //res.send(JSON.stringify(rows));
+        var arr = new Array();
+        rows.forEach(function(item) {
+            var arr2 = new Array();
+            Object.keys(fields).forEach(function(key) {
+                arr2.push(item[key]);
+            });
+            arr.push(arr2);
+        });
+        res.send(JSON.stringify(arr));
+        res.end();
     });
 };
