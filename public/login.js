@@ -6,7 +6,9 @@ Ext.onReady(function(){
         frame: false,
         border: false,
         defaultType: 'textfield',
-	    monitorValid: true,
+        monitorValid: true,
+        margins: '3 3 3 3',
+        bodyStyle: 'padding:5px;background:transparent;',
         items:[{
             fieldLabel: '學號',
             name: 'studentno',
@@ -26,12 +28,15 @@ Ext.onReady(function(){
                     waitTitle: '連線中',
                     waitMsg: '正在傳送...',
                     success: function(){
-                    	Ext.Msg.alert('狀態', '登入成功', function(btn, text) {
-        		        if (btn == 'ok') {
+                        /*
+                        Ext.Msg.alert('狀態', '登入成功', function(btn, text) {
+                        if (btn == 'ok') {
                             var redirect = 'portal.html';
                             window.location = redirect;
                            }
-    			        });
+                        });
+                        */
+                        window.location = 'portal.html';
                     },
                     failure: function(form, action) {
                         if(action.failureType == 'server'){
@@ -56,6 +61,6 @@ Ext.onReady(function(){
         plain: true,
         border: false,
         items: [login]
-	});
-	win.show();
+    });
+    win.show();
 });

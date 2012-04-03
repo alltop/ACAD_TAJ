@@ -7,6 +7,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Store1', {
     buffered: false,
     purgePageCount: 0,
     fields: ['semcourseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
+    sorters: [
+        {
+            property : 'semcoursename',
+            direction: 'DESC'
+        }
+    ],
     proxy: {
         type: 'ajax',
         url: '/service/listall.json',
@@ -17,9 +23,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Store1', {
     },
     listeners: {
         load: function(store) {
-            store.filterBy(function(rec, id) {
-                return rec.get('coursetype') == '1';
-            });
+            changeFilterHandler('1');
         }
     }
 });
@@ -40,11 +44,17 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Store2', {
 });
 Ext.create('Module.SchoolCourse.RegisterCourse.Store2');
 
+var __changeFilterHandler_state = null;
 var changeFilterHandler = function(val) {
+    if (!val) {
+        val = __changeFilterHandler_state;
+    }
+    __changeFilterHandler_state = val;
     var store = Ext.data.StoreManager.lookup('SchoolCourse-RegisterCourse-Store1');
     store.filterBy(function(rec, id) {
         return rec.get('coursetype') == val;
     });
+    store.sort();
 };
 
 Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
@@ -105,64 +115,57 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '上限', dataIndex: 'maxcount', width: 50 }
     ],
     tbar: {
-        items: [
-            {
-                xtype: 'button',
-                text: '通識選修',
-                toggleGroup: 'grid1-filter',
-                pressed: true,
-                handler: function() {
-                    changeFilterHandler('1');
-                    var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                    label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
-                }
-            },
-            {
-                xtype: 'button',
-                text: '體育選修',
-                toggleGroup: 'grid1-filter',
-                handler: function() {
-                    changeFilterHandler('2');
-                    var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                    label.setText('體育選修...');
-                }
-            },
-            {
-                xtype: 'button',
-                text: '院訂選修',
-                toggleGroup: 'grid1-filter',
-                handler: function() {
-                    changeFilterHandler('3');
-                    var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                    label.setText('院訂選修...');
-                }
-            },
-            {
-                xtype: 'button',
-                text: '軍訓課程',
-                toggleGroup: 'grid1-filter',
-                handler: function() {
-                    changeFilterHandler('4');
-                    var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                    label.setText('軍訓課程...');
-                }
-            },
-            {
-                xtype: 'button',
-                text: '服務教育',
-                toggleGroup: 'grid1-filter',
-                handler: function() {
-                    changeFilterHandler('8');
-                    var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                    label.setText('服務教育...');
-                }
-            },
-            { xtype: 'tbseparator'},
-            {
-                xtype: 'label',
-                text: '最低學分/最高學分：16學分/28學分'
+        items: [{
+            xtype: 'button',
+            text: '通識選修',
+            toggleGroup: 'grid1-filter',
+            pressed: true,
+            handler: function() {
+                changeFilterHandler('1');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
             }
-        ]
+        }, {
+            xtype: 'button',
+            text: '體育選修',
+            toggleGroup: 'grid1-filter',
+            handler: function() {
+                changeFilterHandler('2');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('體育選修...');
+            }
+        }, {
+            xtype: 'button',
+            text: '院訂選修',
+            toggleGroup: 'grid1-filter',
+            handler: function() {
+                changeFilterHandler('3');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('院訂選修...');
+            }
+        }, {
+            xtype: 'button',
+            text: '軍訓課程',
+            toggleGroup: 'grid1-filter',
+            handler: function() {
+                changeFilterHandler('4');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('軍訓課程...');
+            }
+        }, {
+            xtype: 'button',
+            text: '服務教育',
+            toggleGroup: 'grid1-filter',
+            handler: function() {
+                changeFilterHandler('8');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('服務教育...');
+            }
+        }, { xtype: 'tbseparator'}, {
+            xtype: 'label',
+            height: 'auto',
+            text: '最低學分/最高學分：16學分/28學分'
+        }]
     },
     bbar: {
         itemId: 'footbar',
@@ -205,6 +208,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
                                 //將選課資料移到待選區
                                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-RegisterCourse-Store1');
                                 store2.add(rec);
+                                changeFilterHandler();
                                 store1.removeAt(rowIndex);
                             }
                         }
@@ -318,7 +322,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         },
         {
             xtype: 'label',
-            height: 16,
+            height: 10,
             text: '必修/必選的學分數: 4 選修的學分數: 0'
         }
     ]
@@ -342,7 +346,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         if (!store.count()) {
             Ext.defer(function() {
                 store.load();
-            }, 100);
+            }, 1);
         }
 
         //將目前的模組記錄在 URL HASH

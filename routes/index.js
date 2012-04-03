@@ -47,7 +47,7 @@ exports.listall = function(req, res) {
         'teachername':1, 'coursetime_view':1, 'roomname':1, 'maxcount':1,
         'selectedcount': 1
     };
-        
+    
     db.collection('tSemesterCusWeb').find({}, fields).toArray(function(err, rows){
         //res.send(JSON.stringify(rows));
         var arr = new Array();
