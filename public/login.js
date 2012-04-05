@@ -27,7 +27,7 @@ Ext.onReady(function(){
                     method:'POST',
                     waitTitle: '連線中',
                     waitMsg: '正在傳送...',
-                    success: function(){
+                    success: function(form, action) {
                         /*
                         Ext.Msg.alert('狀態', '登入成功', function(btn, text) {
                         if (btn == 'ok') {
@@ -36,11 +36,16 @@ Ext.onReady(function(){
                            }
                         });
                         */
-                        window.location = 'portal.html';
+
+                        // 從回傳資料取得 SESSION 代碼（sid），傳遞給主畫面
+                        //var values = login.getForm().getValues();
+                        var obj = Ext.JSON.decode(action.response.responseText);
+                        //console.log(obj);
+                        window.location = 'portal.html?sid='+obj.data.studentno;
                     },
                     failure: function(form, action) {
                         if(action.failureType == 'server'){
-                            obj = Ext.JSON.decode(action.response.responseText);
+                            var obj = Ext.JSON.decode(action.response.responseText);
                             Ext.Msg.alert('登入失敗', obj.errors.reason);
                         }else{
                             Ext.Msg.alert('警告', '伺服器發生錯誤: ' + action.response.responseText);

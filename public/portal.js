@@ -23,6 +23,12 @@ Ext.require([
     'Module.SchoolCourse.RegisterCourse'
 ]);
 
+Ext.define('ClientSession', { 
+    singleton: true,
+    sid: null,
+    user: {}
+});
+
 //資料讀取提示訊息
 if(Ext.view.AbstractView){
     Ext.apply(Ext.view.AbstractView.prototype, {
@@ -31,6 +37,26 @@ if(Ext.view.AbstractView){
 }
 
 Ext.onReady(function(){
+
+    // 取得 SESSION 變數
+    var getParams = document.URL.split("?");
+    var params = Ext.urlDecode(getParams[1]);
+    Ext.Msg.wait('正在快取資料...');
+
+    ClientSession.sid = params.sid;
+
+    Ext.Ajax.request({
+        url: '/service/readdata.json/'+ClientSession.sid,
+        method: 'GET',
+        success: function(response) {
+            //Ext.Msg.updateProgress(1);
+            Ext.Msg.hide();
+
+            var obj = Ext.JSON.decode(response.responseText);
+            ClientSession.user = obj.user;
+        }
+    });
+
     var content = new Ext.TabPanel({
         id: 'portal-content',
         region: 'center',

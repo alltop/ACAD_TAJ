@@ -41,6 +41,8 @@ app.configure('production', function(){
 // Routes
 app.get('/', routes.index);
 app.post('/service/login.json', routes.login);
+app.get('/service/readdata.json/:sid', routes.readdata);
+app.post('/service/selcourse.json/:sid', routes.selcourse);
 app.get('/service/listall.json', routes.listall);
 
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3000);

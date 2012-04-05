@@ -271,10 +271,34 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         {
             text: '確定加選',
             handler: function() {
+                var courses = new Array();
+
                 var store = Ext.data.StoreManager.lookup('SchoolCourse-RegisterCourse-Store2');
                 store.each(function(rec) {
                     //console.log(rec.get('semcourseid'));
+                    courses.push(rec.get('semcourseid'));
                 });
+
+                if (courses.length == 0) {
+                    Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
+                }
+                else {
+                    Ext.Msg.wait('正在處理加選...');
+                    Ext.Ajax.request({
+                        url: '/service/selcourse.json/'+ClientSession.sid,
+                        method: 'POST',
+                        params: {
+                            courses: Ext.Array.from(courses).join(',')
+                        },
+                        success: function(response) {
+                            Ext.Msg.hide();
+
+                            var obj = Ext.JSON.decode(response.responseText);
+
+                            Ext.Msg.alert("伺服器回應", response.responseText);
+                        }
+                    });
+                }
             }
         },
         {
