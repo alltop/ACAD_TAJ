@@ -2,13 +2,13 @@
  * showOnReload: 重新整理網頁後是否重新載入模組
  */
 Ext.define('Module.Prototype.Module', {
-	init: function() {
+	moduleInit: function() {
+		console.log(this.$className+'.moduleInit() at prototype');
 	},
-    destroy: function() {
-    },
-	load: function() {
-		console.log(this.$className+'.load() undefined');
+	moduleLoad: function() {
+		console.log(this.$className+'.moduleLoad() at prototype');
 	},
-    unload: function() {
+    moduleUnload: function() {
+    	console.log(this.$className+'.moduleUnload() at prototype');
     }
 });

@@ -18,11 +18,9 @@ Ext.Loader.setConfig({
     }
 });
 
-//建立登入畫面
-Ext.require([
-    'Module.SchoolCourse.RegisterCourse'
-]);
+//Ext.require([...]);
 
+//實作瀏覽器資料快取
 Ext.define('ClientSession', { 
     singleton: true,
     sid: null,
@@ -30,13 +28,18 @@ Ext.define('ClientSession', {
 });
 
 //資料讀取提示訊息
-if(Ext.view.AbstractView){
+if (Ext.view.AbstractView) {
     Ext.apply(Ext.view.AbstractView.prototype, {
-        loadingText: '讀取中...',
+        loadingText: '資料讀取中...',
     });
 }
 
 Ext.onReady(function(){
+
+    //讀取套件定義
+    var pack = Ext.create('Module.SchoolCourse.Package');
+    pack.packageInit();
+
 
     // 取得 SESSION 變數
     var getParams = document.URL.split("?");
@@ -62,10 +65,13 @@ Ext.onReady(function(){
         region: 'center',
         xtype: 'tabpanel',
         items: [{
-            title: '歡迎使用',
+            title: '首頁',
             bodyStyle: 'padding: 10px',
-            html: '<img src="images/top.jpg" alt="logo" />',
-            closable: false
+            closable: false,
+            autoLoad: {
+                url: 'main.html',
+                scripts: false
+            }
         }]
     });
     
@@ -92,9 +98,10 @@ Ext.onReady(function(){
                     //console.log('click: ' + moduleName);
 
                     if (moduleName) {
+                        console.log('Load module: '+moduleName);
                         var module = Ext.create(moduleName);
-                        module.init();
-                        module.load();
+                        module.moduleInit();
+                        module.moduleLoad();
                     }
                 }
             }
@@ -116,7 +123,7 @@ Ext.onReady(function(){
                     leaf : true
                 }, {
                     text : '退選 - 全校',
-                    //id: 'Module-SchoolCourse-UnregisterCourse',
+                    id: 'Module.SchoolCourse.UnregisterCourse',
                     leaf : true
                 }, {
                     text : '我的課程清單',

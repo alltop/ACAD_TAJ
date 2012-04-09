@@ -4,17 +4,17 @@ var changeFilterHandler = function(val) {
         val = __changeFilterHandler_state;
     }
     __changeFilterHandler_state = val;
-    var store = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+    var store = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
     store.filterBy(function(rec, id) {
         return rec.get('coursetype') == val;
     });
     store.sort();
 };
 
-Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
+Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-RegisterCourse-Grid1',
-    store: 'SchoolCourse-Store1',
+    alias: 'widget.SchoolCourse-UnregisterCourse-Grid1',
+    store: 'SchoolCourse-Store3',
     loadMask: true,
     disableSelection: false,
     invalidateScrollerOnRefresh: true,
@@ -51,7 +51,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                         function (btn, text) {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
-                                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
                                 store2.add(rec);
                                 store1.removeAt(rowIndex);
                             }
@@ -134,101 +134,28 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
     }
 });
 
-Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-RegisterCourse-Grid2',
-    store: 'SchoolCourse-Store2',
-    columns: [
-        { 
-            header: '移除',
-            xtype: 'actioncolumn',
-            width: 50,
-            sortable: false,
-            align: 'center',
-            items: [{
-                icon: 'images/icons/cancel.png',
-                tooltip: '移除',
-                handler: function(grid, rowIndex, colIndex) {
-                    //設定選課來源資料
-                    var store1 = grid.getStore();
-                    var rec = store1.getAt(rowIndex);
-                    //console.log('移除 ' + rec.get('semcourseid'));
-                    
-                    Ext.MessageBox.confirm(
-                        '移除候選區課程',
-                        '<span class="portal-message">此動作將會移除候選區課程<strong>'+rec.get('semcoursename')+'</strong>！</span>',
-                        function (btn, text) {
-                            if (btn=='yes') {
-                                //將選課資料移到待選區
-                                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
-                                store2.add(rec);
-                                changeFilterHandler();
-                                store1.removeAt(rowIndex);
-                            }
-                        }
-                    );
-
-                }
-            }]
-        },
-        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '學期課號', dataIndex: 'semcourseid', width: 120 },
-        { header: '教師', dataIndex: 'teachername' },
-        { header: '星期/節', dataIndex: 'coursetime_view' },
-        { header: '上課地點', dataIndex: 'roomname' },
-        { header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 }
-    ]
-});
-
-Ext.define('Module.SchoolCourse.RegisterCourse.Grid3', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-RegisterCourse-Grid3',
-    store: Ext.data.StoreManager.lookup('SchoolCourse-Store3'),
-    columns: [
-        { header: '必修學分數', dataIndex: 'num1', sortable: false },
-        { header: '必選的學分數', dataIndex: 'num2', sortable: false },
-        { header: '選修的學分數', dataIndex: 'num3', sortable: false },
-        { header: '最低學分數', dataIndex: 'num4', sortable: false },
-        { header: '最高學分數', dataIndex: 'num5', sortable: false, flex: true }
-    ]
-});
-
-Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
+Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
     closable: true,
-    title: '加選 - 全校',
+    title: '退選 - 全校',
     layout: 'border',
-    items: [
-        {
-            xtype: 'SchoolCourse-RegisterCourse-Grid1',
-            itemId: 'grid1',
-            border: true,
-            region: 'center',
-            autoHeight: true,
-            autoScroll: true,
-            margins: '5 5 0 5'
-        },
-        {
-            xtype: 'SchoolCourse-RegisterCourse-Grid2',
-            itemId: 'grid2',
-            border: true,
-            resizable: true,
-            region: 'south',
-            title: '候選區',
-            height: 150,
-            autoScroll: true,
-            margins: '5 5 5 5'
-        }
-    ],
+    items: [{
+        xtype: 'SchoolCourse-UnregisterCourse-Grid1',
+        itemId: 'grid1',
+        border: true,
+        region: 'center',
+        autoHeight: true,
+        autoScroll: true,
+        margins: '5 5 0 5'
+    }],
     buttonAlign: 'left',
     buttons: [{
         text: '確定加選',
         handler: function() {
             var courses = new Array();
 
-            var store = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+            var store = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
             store.each(function(rec) {
                 //console.log(rec.get('semcourseid'));
                 courses.push(rec.get('semcourseid'));
@@ -264,7 +191,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 function(btn, text){
                     if (btn == 'ok'){
                         //設定選課來源資料
-                        var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+                        var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
                         var rowIndex = store1.findBy(function(rec, id) {
                             if (rec.get('semcourseid')==text) {
                                 return true;
@@ -280,7 +207,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                 function (btn, text) {
                                     if (btn=='yes') {
                                         //將選課資料移到待選區
-                                        var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                                        var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
                                         store2.add(rec);
                                         store1.removeAt(rowIndex);
                                     }
@@ -306,7 +233,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
 /**
  * 模組主程式定義區
  */
-Ext.define('Module.SchoolCourse.RegisterCourse', {
+Ext.define('Module.SchoolCourse.UnregisterCourse', {
     extend: 'Module.Prototype.Module',
     statics: {
         _previous: null
@@ -315,7 +242,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         var thisModule = this;
         
         //載入資料
-        var store = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+        var store = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
         if (!store.count()) {
             Ext.defer(function() {
                 store.load();
@@ -331,17 +258,17 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
 
         //使用新頁籤建立主畫面
         //content.setLoading('讀取中');
-        var panel = Ext.create('Module.SchoolCourse.RegisterCourse.MainPanel', {
+        var panel = Ext.create('Module.SchoolCourse.UnregisterCourse.MainPanel', {
             listeners: {
-                beforeclose: function() { thisModule.moduleUnload(); }
+                beforeclose: function() { thisModule.unload(); }
             }
         });
 
         //關閉曾經開啟的 Tab
-        if (Module.SchoolCourse.RegisterCourse._previous) {
-            content.remove(Module.SchoolCourse.RegisterCourse._previous);
+        if (Module.SchoolCourse.UnregisterCourse._previous) {
+            content.remove(Module.SchoolCourse.UnregisterCourse._previous);
         }
-        Module.SchoolCourse.RegisterCourse._previous = panel;
+        Module.SchoolCourse.UnregisterCourse._previous = panel;
 
         //新增主畫面到 Tab
         content.add(panel);
