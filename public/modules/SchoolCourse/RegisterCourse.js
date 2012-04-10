@@ -1,14 +1,25 @@
 var __changeFilterHandler_state = null;
 var changeFilterHandler = function(val) {
+    if (val==__changeFilterHandler_state) {
+        return true;
+    }
     if (!val) {
         val = __changeFilterHandler_state;
     }
     __changeFilterHandler_state = val;
-    var store = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
-    store.filterBy(function(rec, id) {
-        return rec.get('coursetype') == val;
-    });
-    store.sort();
+
+    var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+    var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+
+    store1.removeAll();
+
+    Ext.defer(function() {
+        var result = store0.queryBy(function(record) {
+            return (record.get('coursetype')==val);
+        });
+        store1.loadRecords(result.items);
+        store1.sort();
+    }, 100);    
 };
 
 Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
@@ -313,15 +324,6 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
     },
     moduleLoad: function() {
         var thisModule = this;
-        
-        //載入資料
-        var store = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
-        if (!store.count()) {
-            Ext.defer(function() {
-                store.load();
-                changeFilterHandler('1');
-            }, 1);
-        }
 
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;
@@ -346,6 +348,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         //新增主畫面到 Tab
         content.add(panel);
         content.setActiveTab(panel);
+
+        //載入資料
+        changeFilterHandler('1');
     },
     moduleUnload: function() {
         //從 URL HASH 移除目前的模組記錄

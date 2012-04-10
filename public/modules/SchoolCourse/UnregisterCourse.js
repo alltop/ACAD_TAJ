@@ -1,16 +1,3 @@
-var __changeFilterHandler_state = null;
-var changeFilterHandler = function(val) {
-    if (!val) {
-        val = __changeFilterHandler_state;
-    }
-    __changeFilterHandler_state = val;
-    var store = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-    store.filterBy(function(rec, id) {
-        return rec.get('coursetype') == val;
-    });
-    store.sort();
-};
-
 Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-UnregisterCourse-Grid1',
@@ -29,7 +16,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
     },
     columns: [
         {
-            header: '加選',
+            header: '退選',
             xtype: 'actioncolumn',
             width: 50,
             sortable: false,
@@ -68,59 +55,6 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
         { header: '已選', dataIndex: 'selectedcount', width: 50 },
         { header: '上限', dataIndex: 'maxcount', width: 50 }
     ],
-    tbar: {
-        items: [{
-            xtype: 'button',
-            text: '通識選修',
-            toggleGroup: 'grid1-filter',
-            pressed: true,
-            handler: function() {
-                changeFilterHandler('1');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
-            }
-        }, {
-            xtype: 'button',
-            text: '體育選修',
-            toggleGroup: 'grid1-filter',
-            handler: function() {
-                changeFilterHandler('2');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('體育選修...');
-            }
-        }, {
-            xtype: 'button',
-            text: '院訂選修',
-            toggleGroup: 'grid1-filter',
-            handler: function() {
-                changeFilterHandler('3');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('院訂選修...');
-            }
-        }, {
-            xtype: 'button',
-            text: '軍訓課程',
-            toggleGroup: 'grid1-filter',
-            handler: function() {
-                changeFilterHandler('4');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('軍訓課程...');
-            }
-        }, {
-            xtype: 'button',
-            text: '服務教育',
-            toggleGroup: 'grid1-filter',
-            handler: function() {
-                changeFilterHandler('8');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('服務教育...');
-            }
-        }, { xtype: 'tbseparator'}, {
-            xtype: 'label',
-            height: 'auto',
-            text: '最低學分/最高學分：16學分/28學分'
-        }]
-    },
     bbar: {
         itemId: 'footbar',
         items: [
@@ -183,47 +117,6 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
             }
         }
     }, {
-        text: '快速加選',
-        handler: function() {
-            Ext.Msg.prompt(
-                '加入課程候選區',
-                '<span class="portal-message">請輸入學期課號，將會快速判斷您是否可選這堂課，並放入課程候選區！！<br/>&nbsp;<br/>學期課號：</span>',
-                function(btn, text){
-                    if (btn == 'ok'){
-                        //設定選課來源資料
-                        var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-                        var rowIndex = store1.findBy(function(rec, id) {
-                            if (rec.get('semcourseid')==text) {
-                                return true;
-                            }
-                            return false;
-                        });
-
-                        if (rowIndex > -1) {
-                            var rec = store1.getAt(rowIndex);
-                            Ext.Msg.confirm(
-                                '符合選課條件',
-                                '<span class="portal-message">課程：<strong>'+rec.get('semcoursename')+'</strong>已放入候選區！<br/>請按<strong style="color:red">確定加選</strong>按鈕送出所有候選區資料！</span>',
-                                function (btn, text) {
-                                    if (btn=='yes') {
-                                        //將選課資料移到待選區
-                                        var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-                                        store2.add(rec);
-                                        store1.removeAt(rowIndex);
-                                    }
-                                }
-                            );
-                        }
-                        else {
-                            Ext.Msg.alert('沒有符合的課程', '您輸入的學期課號無法找到符合選課條件！');
-                        }
-                    }
-                }
-            );                
-        }
-    }, {
-        text: '選課結果'
-    }, {
         xtype: 'label',
         height: 10,
         text: '必修/必選的學分數: 4 選修的學分數: 0'
@@ -242,11 +135,26 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
         var thisModule = this;
         
         //載入資料
-        var store = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-        if (!store.count()) {
+        var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+        var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+        if (!store3.count()) {
             Ext.defer(function() {
-                store.load();
-                changeFilterHandler('1');
+                Ext.Ajax.request({
+                    url: '/service/listselected.json/'+ClientSession.sid,
+                    method: 'GET',
+                    success: function(response) {
+                        var obj = Ext.JSON.decode(response.responseText);
+                        Ext.Array.forEach(obj, function(item, index, allItems) {
+                            console.log(item);
+                            var index = store0.find('semcourseid', item);
+                            // index -1
+                            if (index > -1) {
+                                store3.add(store0.getAt(index));
+                                store0.removeAt(index);
+                            }
+                        });
+                    }
+                });
             }, 1);
         }
 
@@ -260,7 +168,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
         //content.setLoading('讀取中');
         var panel = Ext.create('Module.SchoolCourse.UnregisterCourse.MainPanel', {
             listeners: {
-                beforeclose: function() { thisModule.unload(); }
+                beforeclose: function() { thisModule.moduleUnload(); }
             }
         });
 

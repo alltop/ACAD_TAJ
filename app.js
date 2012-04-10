@@ -44,6 +44,7 @@ app.post('/service/login.json', routes.login);
 app.get('/service/readdata.json/:sid', routes.readdata);
 app.post('/service/selcourse.json/:sid', routes.selcourse);
 app.get('/service/listall.json', routes.listall);
+app.get('/service/listselected.json/:sid', routes.listselected);
 
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

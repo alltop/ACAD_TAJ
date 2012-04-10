@@ -48,16 +48,38 @@ Ext.onReady(function(){
 
     ClientSession.sid = params.sid;
 
+    var jobs = new Array();
+
+    jobs[0] = 0;
+    jobs[1] = 0;
+
+    var completeJob = function(index) {
+        jobs[index] = 1;
+        for (var i=0; i<2; i++) {
+            if (jobs[i] == 0) return false;
+        }
+        Ext.Msg.updateProgress(1);
+        Ext.Msg.hide();
+        return true;
+    };
+
     Ext.Ajax.request({
         url: '/service/readdata.json/'+ClientSession.sid,
         method: 'GET',
         success: function(response) {
-            //Ext.Msg.updateProgress(1);
-            Ext.Msg.hide();
-
             var obj = Ext.JSON.decode(response.responseText);
             ClientSession.user = obj.user;
+            completeJob(0);
         }
+    });
+
+    Ext.defer(function() {
+        var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+        store0.load({
+            callback: function(records, operation, success) {
+                completeJob(1);
+            }
+        });
     });
 
     var content = new Ext.TabPanel({
@@ -204,12 +226,14 @@ Ext.onReady(function(){
         renderTo: Ext.getBody()
     });
 
+    /*
     //re-open tab from url hash
     Ext.defer(function() {
         if (window.location.hash) {
             var module = Ext.create(window.location.hash.replace('#', ''));
-            module.init();
-            module.load();
+            module.moduleInit();
+            module.moduleLoad();
         }        
     }, 100);
+    */
 });
