@@ -120,7 +120,7 @@ Ext.onReady(function(){
                     //console.log('click: ' + moduleName);
 
                     if (moduleName) {
-                        console.log('Load module: '+moduleName);
+                        Ext.log('Load module: '+moduleName);
                         var module = Ext.create(moduleName);
                         module.moduleInit();
                         module.moduleLoad();

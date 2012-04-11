@@ -3,7 +3,7 @@
  */
 Ext.define('Module.Prototype.Package', {
 	packageInit: function() {
-		console.log(this.$className+'.packageInit() at prototype');
+		Ext.log(this.$className+'.packageInit() at prototype');
 	},
 	requireStore: function(storeClass, storeId) {
 		var store = Ext.data.StoreManager.lookup(storeId);

@@ -15,6 +15,7 @@ var changeFilterHandler = function(val) {
 
     Ext.defer(function() {
         var result = store0.queryBy(function(record) {
+            if (val=='5') return (record.get('semcoursename')=='高級專業英文');
             return (record.get('coursetype')==val);
         });
         store1.loadRecords(result.items);
@@ -116,6 +117,24 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 changeFilterHandler('4');
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('軍訓課程...');
+            }
+        }, {
+            xtype: 'button',
+            text: '專業課程',
+            toggleGroup: 'grid1-filter',
+            handler: function() {
+                changeFilterHandler('5');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('專業課程...');
+            }
+        }, {
+            xtype: 'button',
+            text: '英文課程',
+            toggleGroup: 'grid1-filter',
+            handler: function() {
+                changeFilterHandler('7');
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('英文課程...');
             }
         }, {
             xtype: 'button',

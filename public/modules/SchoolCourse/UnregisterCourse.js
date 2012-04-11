@@ -145,7 +145,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
                     success: function(response) {
                         var obj = Ext.JSON.decode(response.responseText);
                         Ext.Array.forEach(obj, function(item, index, allItems) {
-                            console.log(item);
+                            //console.log(item);
                             var index = store0.find('semcourseid', item);
                             // index -1
                             if (index > -1) {

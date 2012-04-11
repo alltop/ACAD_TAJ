@@ -3,12 +3,12 @@
  */
 Ext.define('Module.Prototype.Module', {
 	moduleInit: function() {
-		console.log(this.$className+'.moduleInit() at prototype');
+		Ext.log(this.$className+'.moduleInit() at prototype');
 	},
 	moduleLoad: function() {
-		console.log(this.$className+'.moduleLoad() at prototype');
+		Ext.log(this.$className+'.moduleLoad() at prototype');
 	},
     moduleUnload: function() {
-    	console.log(this.$className+'.moduleUnload() at prototype');
+    	Ext.log(this.$className+'.moduleUnload() at prototype');
     }
 });
