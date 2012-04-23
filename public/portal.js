@@ -77,7 +77,18 @@ Ext.onReady(function(){
         var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
         store0.load({
             callback: function(records, operation, success) {
-                completeJob(1);
+                var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
+                
+                var tempIds = {};
+                var result = store0.queryBy(function(record) {
+                    var returnValue = (tempIds[record.get('semcoursename')]==null);
+                    tempIds[record.get('semcoursename')] = true;
+                    return returnValue;
+                });
+                store1a.loadRecords(result.items);
+                //store1a.sort();
+
+                completeJob(1);                
             }
         });
     });
@@ -216,9 +227,9 @@ Ext.onReady(function(){
                 split: true,
                 collapsible: true,
                 margins: '2 0 5 5',
-                width: 250,
+                width: 200,
                 minSize: 100,
-                maxSize: 500,
+                maxSize: 360,
                 items: [accordion, detailsPanel]
             },
             content

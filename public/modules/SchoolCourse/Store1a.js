@@ -1,9 +1,9 @@
 /**
- * 畫面右方課程清單
+ * 畫面左方課程清單
  */
-Ext.define('Module.SchoolCourse.Store1', {
+Ext.define('Module.SchoolCourse.Store1a', {
     extend: 'Ext.data.Store',
-    fields: ['semcourseid', 'courseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
+    fields: ['courseid', 'coursetype', 'semcoursename'],
     sorters: [{
         property : 'semcoursename',
         direction: 'ASC'

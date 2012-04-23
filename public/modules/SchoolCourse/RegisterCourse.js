@@ -10,18 +10,52 @@ var changeFilterHandler = function(val) {
 
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
     var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+    var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
 
     store1.removeAll();
+    //store1a.removeAll();
+
+    Ext.defer(function() {
+        store1a.filterBy(function(record) {
+            return (record.get('coursetype')==val);
+        });
+    }, 100);
 
     Ext.defer(function() {
         var result = store0.queryBy(function(record) {
-            if (val=='5') return (record.get('semcoursename')=='高級專業英文');
             return (record.get('coursetype')==val);
         });
         store1.loadRecords(result.items);
         store1.sort();
-    }, 100);    
+    }, 100);
 };
+
+Ext.define('Module.SchoolCourse.RegisterCourse.Grid1a', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.SchoolCourse-RegisterCourse-Grid1a',
+    store: 'SchoolCourse-Store1a',
+    loadMask: true,
+    disableSelection: false,
+    invalidateScrollerOnRefresh: true,
+    viewConfig: {
+        trackOver: false
+    },
+    listeners: {
+        render: function(grid) {
+            //載入資料
+            //grid.body.mask('讀取中');
+        },
+        itemclick: function(grid, record, item, index, e, eOpts) {
+            var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+            store1.filterBy(function(record2) {
+                return (record2.get('semcoursename')==record.get('semcoursename'));
+            });
+        }
+    },
+    columns: [
+        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 }
+    ]
+});
 
 Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
     extend: 'Ext.grid.Panel',
@@ -73,13 +107,163 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
             }]  
         },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '學期課號', dataIndex: 'semcourseid', width: 120 },
-        { header: '教師', dataIndex: 'teachername' },
-        { header: '星期/節', dataIndex: 'coursetime_view' },
+        { header: '教師', dataIndex: 'teachername', width: 80 },
+        { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
         { header: '上課地點', dataIndex: 'roomname' },
         { header: '已選', dataIndex: 'selectedcount', width: 50 },
         { header: '上限', dataIndex: 'maxcount', width: 50 }
-    ],
+    ]
+});
+
+Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.SchoolCourse-RegisterCourse-Grid2',
+    store: 'SchoolCourse-Store2',
+    columns: [
+        { 
+            header: '移除',
+            xtype: 'actioncolumn',
+            width: 50,
+            sortable: false,
+            align: 'center',
+            items: [{
+                icon: 'images/icons/cancel.png',
+                tooltip: '移除',
+                handler: function(grid, rowIndex, colIndex) {
+                    var store2 = grid.getStore();
+                    var record = store2.getAt(rowIndex);
+                    
+                    Ext.MessageBox.confirm(
+                        '移除候選區課程',
+                        '<span class="portal-message">此動作將會移除候選區課程<strong>'+record.get('semcoursename')+'</strong>！</span>',
+                        function (btn, text) {
+                            if (btn=='yes') {
+                                //將選課資料移到待選區
+                                store2.removeAt(rowIndex);
+                                //changeFilterHandler();
+                            }
+                        }
+                    );
+                }
+            }]
+        },
+        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
+        { header: '教師', dataIndex: 'teachername', width: 80 },
+        { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
+        { header: '上課地點', dataIndex: 'roomname' },
+        { header: '已選', dataIndex: 'selectedcount', width: 50 },
+        { header: '上限', dataIndex: 'maxcount', width: 50 }
+    ]
+});
+
+Ext.define('Module.SchoolCourse.RegisterCourse.Grid3', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.SchoolCourse-RegisterCourse-Grid3',
+    store: Ext.data.StoreManager.lookup('SchoolCourse-Store3'),
+    columns: [
+        { header: '必修學分數', dataIndex: 'num1', sortable: false },
+        { header: '必選的學分數', dataIndex: 'num2', sortable: false },
+        { header: '選修的學分數', dataIndex: 'num3', sortable: false },
+        { header: '最低學分數', dataIndex: 'num4', sortable: false },
+        { header: '最高學分數', dataIndex: 'num5', sortable: false, flex: true }
+    ]
+});
+
+Ext.define('Module.SchoolCourse.RegisterCourse.FilterPanel', {
+    extend: 'Ext.FormPanel',
+    alias: 'widget.SchoolCourse-RegisterCourse-Filter1',
+    frame: false,
+    layout: 'column',
+    defaultType: 'textfield',
+    monitorValid: true,
+    bodyStyle: 'padding:5px 5px 0 5px;background:transparent;',
+    items:[{
+        xtype: 'checkbox',
+        boxLabel: '系所&nbsp;',
+        name: 'studentno',
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '全校&nbsp;',
+        name: 'password'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '院&nbsp;',
+        name: 'password'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '跨部&nbsp;',
+        name: 'password'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '星期一&nbsp;',
+        name: 'dayofweek'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '二&nbsp;',
+        name: 'dayofweek'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '三&nbsp;',
+        name: 'dayofweek'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '四&nbsp;',
+        name: 'dayofweek'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '五&nbsp;',
+        name: 'dayofweek'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '六&nbsp;',
+        name: 'dayofweek'
+    }, {
+        xtype: 'checkbox',
+        boxLabel: '日&nbsp;',
+        name: 'dayofweek'
+    }],
+});
+
+Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
+    extend: 'Ext.Panel',
+    frame: false,
+    closable: true,
+    title: '加選 - 全校',
+    layout: 'border',
+    items: [{
+        xtype: 'SchoolCourse-RegisterCourse-Filter1',
+        itemId: 'filter1',
+        border: false,
+        region: 'north'
+    }, {
+        xtype: 'SchoolCourse-RegisterCourse-Grid1a',
+        itemId: 'grid1a',
+        border: true,
+        resizable: true,
+        region: 'west',
+        autoHeight: true,
+        autoScroll: true,
+        width: 180,
+        margins: '5 0 0 5'
+    }, {
+        xtype: 'SchoolCourse-RegisterCourse-Grid1',
+        itemId: 'grid1',
+        border: true,
+        region: 'center',
+        autoHeight: true,
+        autoScroll: true,
+        margins: '5 5 0 5'
+    }, {
+        xtype: 'SchoolCourse-RegisterCourse-Grid2',
+        itemId: 'grid2',
+        border: true,
+        resizable: true,
+        region: 'south',
+        title: '候選區',
+        autoScroll: true,
+        height: 150,
+        margins: '5 5 5 5'
+    }],
     tbar: {
         items: [{
             xtype: 'button',
@@ -147,7 +331,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
             }
         }, { xtype: 'tbseparator'}, {
             xtype: 'label',
-            height: 'auto',
+            height: 10,
             text: '最低學分/最高學分：16學分/28學分'
         }]
     },
@@ -158,100 +342,10 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                 xtype: 'label',
                 itemId: 'label-status',
                 text: '顯示全部',
-                cls: 'larger-font'
+                height: 15
             }
         ]
-    }
-});
-
-Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-RegisterCourse-Grid2',
-    store: 'SchoolCourse-Store2',
-    columns: [
-        { 
-            header: '移除',
-            xtype: 'actioncolumn',
-            width: 50,
-            sortable: false,
-            align: 'center',
-            items: [{
-                icon: 'images/icons/cancel.png',
-                tooltip: '移除',
-                handler: function(grid, rowIndex, colIndex) {
-                    //設定選課來源資料
-                    var store1 = grid.getStore();
-                    var rec = store1.getAt(rowIndex);
-                    //console.log('移除 ' + rec.get('semcourseid'));
-                    
-                    Ext.MessageBox.confirm(
-                        '移除候選區課程',
-                        '<span class="portal-message">此動作將會移除候選區課程<strong>'+rec.get('semcoursename')+'</strong>！</span>',
-                        function (btn, text) {
-                            if (btn=='yes') {
-                                //將選課資料移到待選區
-                                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
-                                store2.add(rec);
-                                changeFilterHandler();
-                                store1.removeAt(rowIndex);
-                            }
-                        }
-                    );
-
-                }
-            }]
-        },
-        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '學期課號', dataIndex: 'semcourseid', width: 120 },
-        { header: '教師', dataIndex: 'teachername' },
-        { header: '星期/節', dataIndex: 'coursetime_view' },
-        { header: '上課地點', dataIndex: 'roomname' },
-        { header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 }
-    ]
-});
-
-Ext.define('Module.SchoolCourse.RegisterCourse.Grid3', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-RegisterCourse-Grid3',
-    store: Ext.data.StoreManager.lookup('SchoolCourse-Store3'),
-    columns: [
-        { header: '必修學分數', dataIndex: 'num1', sortable: false },
-        { header: '必選的學分數', dataIndex: 'num2', sortable: false },
-        { header: '選修的學分數', dataIndex: 'num3', sortable: false },
-        { header: '最低學分數', dataIndex: 'num4', sortable: false },
-        { header: '最高學分數', dataIndex: 'num5', sortable: false, flex: true }
-    ]
-});
-
-Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
-    extend: 'Ext.Panel',
-    frame: false,
-    closable: true,
-    title: '加選 - 全校',
-    layout: 'border',
-    items: [
-        {
-            xtype: 'SchoolCourse-RegisterCourse-Grid1',
-            itemId: 'grid1',
-            border: true,
-            region: 'center',
-            autoHeight: true,
-            autoScroll: true,
-            margins: '5 5 0 5'
-        },
-        {
-            xtype: 'SchoolCourse-RegisterCourse-Grid2',
-            itemId: 'grid2',
-            border: true,
-            resizable: true,
-            region: 'south',
-            title: '候選區',
-            height: 150,
-            autoScroll: true,
-            margins: '5 5 5 5'
-        }
-    ],
+    },
     buttonAlign: 'left',
     buttons: [{
         text: '確定加選',
