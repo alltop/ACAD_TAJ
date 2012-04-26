@@ -9,6 +9,7 @@ var package = function(name) {
 */
 
 var __ajax_url_prefix = '/service/';
+var __SILK_ICONS_URL = 'http://cdn.lyhdev.com/silk-icons/';
 
 //啟用 Ext 動態載入器
 Ext.Loader.setConfig({

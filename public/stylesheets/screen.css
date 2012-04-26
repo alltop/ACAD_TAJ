@@ -67,6 +67,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
+/* line 13, ../sass/screen.scss */
+.x-action-col-icon {
+  cursor: pointer;
+}
+
 /*
 .x-btn-default-small .x-btn-inner, .x-btn-default-medium .x-btn-inner, .x-btn-default-large .x-btn-inner, .x-btn-default-toolbar-small .x-btn-inner, .x-btn-default-toolbar-medium .x-btn-inner, .x-btn-default-toolbar-large .x-btn-inner, .x-menu-item-text, .x-html-editor-tb .x-font-select, .x-panel-header-default, .x-panel-header-text-default, .x-panel-header-default-framed, .x-tip-header, .x-tip-body, .x-form-invalid-tip-body, .x-tip-header-text, .x-progress-text, .x-toolbar, .x-toolbar .x-form-item-label, .x-toolbar .x-toolbar-text, .x-window-header-text-default, .x-tab-bar, .x-tab button, .x-grid-rowbody, .x-grid-row .x-grid-cell, .x-grid-group-title, .x-grid-row-editor .x-form-field, .x-grid-row-editor .x-form-display-field, .x-form-invalid-under, .x-fieldset-header, .x-column-header, .x-mask-msg div, .x-btn-group-header-text-default-framed, table.x-datepicker-inner a, .x-monthpicker-item, .x-dd-drag-ghost 
 { 
@@ -75,14 +80,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 .x-panel-header-text, .x-panel-header-text-default {
 }
 .x-grid-cell-inner {
-	font-size: 15px;
+    font-size: 15px;
 }
 .x-column-header {
-	font-size: 15px;
-	@include single-text-shadow(#777777, 1px, 1px, 1px);
+    font-size: 15px;
+    @include single-text-shadow(#777777, 1px, 1px, 1px);
 }
 */
-/* line 29, ../sass/screen.scss */
+/* line 33, ../sass/screen.scss */
 .portal-title {
   color: #36393D;
   font-size: 32px;
@@ -92,21 +97,21 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   text-shadow: #eeeeee 2px 2px 2px;
 }
 
-/* line 38, ../sass/screen.scss */
+/* line 42, ../sass/screen.scss */
 .portal-header {
   background: #eeeeee url(http://a3.twimg.com/profile_background_images/19467359/Vladstudio_11016.jpg) bottom center;
 }
 
-/* line 42, ../sass/screen.scss */
+/* line 46, ../sass/screen.scss */
 .portal-message {
   line-height: 1.5em;
 }
-/* line 44, ../sass/screen.scss */
+/* line 48, ../sass/screen.scss */
 .portal-message strong {
   font-weight: bold;
 }
 
-/* line 49, ../sass/screen.scss */
+/* line 53, ../sass/screen.scss */
 .larger-font {
   font-size: 1.25em;
   line-height: 1.25em;
