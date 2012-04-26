@@ -9,7 +9,6 @@ var package = function(name) {
 */
 
 var __ajax_url_prefix = '/service/';
-var __SILK_ICONS_URL = 'http://cdn.lyhdev.com/silk-icons/';
 
 //啟用 Ext 動態載入器
 Ext.Loader.setConfig({
@@ -100,6 +99,8 @@ Ext.onReady(function(){
         xtype: 'tabpanel',
         items: [{
             title: '首頁',
+            itemId: 'home',
+            icon: __SILK_ICONS_URL+'application_home.png',
             bodyStyle: 'padding: 10px',
             closable: false,
             autoLoad: {
@@ -152,17 +153,20 @@ Ext.onReady(function(){
                 text : '全校選課',
                 expanded: true,
                 children : [{
-                    text : '加選 - 全校',
+                    text: '加選 - 全校',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
                     id: 'Module.SchoolCourse.RegisterCourse',
-                    leaf : true
+                    leaf: true
                 }, {
-                    text : '退選 - 全校',
+                    text: '退選 - 全校',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
                     id: 'Module.SchoolCourse.UnregisterCourse',
-                    leaf : true
+                    leaf: true
                 }, {
-                    text : '我的課程清單',
+                    text: '我的課程清單',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
                     //id: 'Module-SchoolCourse-StudentCourse',
-                    leaf : true
+                    leaf: true
                 }]
             }]
         }
@@ -194,21 +198,36 @@ Ext.onReady(function(){
                         xtype: 'tbfill'
                     },
                     {
-                        xtype: 'label',
-                        text: '王小明 1234567 四技 機械工程系',
-                        width: 400
-                    },
+                        xtype: 'tbtext',
+                        text: '王小明 1234567 四技 機械工程系'
+                    }, '-',
                     {
                         text: '首頁',
-                        icon: 'images/icons/house.png'
+                        icon: __SILK_ICONS_URL+'application_home.png',
+                        handler: function(button, e) {
+                            var content = Ext.getCmp('portal-content');
+                            content.setActiveTab('home');
+                        }
                     },
                     {
                         text: '個人設定',
-                        icon: 'images/icons/user_edit.png'
+                        icon: __SILK_ICONS_URL+'user_edit.png'
                     },
                     {
                         text: '離開',
-                        icon: 'images/icons/link_break.png'
+                        icon: __SILK_ICONS_URL+'link_break.png',
+                        handler: function(button, e) {
+                            Ext.MessageBox.confirm(
+                                '是否登出系統',
+                                '<span class="portal-message">請按「是」確認登出系統，按「否」則取消！</span>',
+                                function (btn, text) {
+                                    if (btn=='yes') {
+                                         location.href = 'login.html';
+                                    }
+                                }
+                            );
+                           
+                        }
                     }
                 ],
                 items: [

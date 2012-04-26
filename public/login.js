@@ -21,6 +21,7 @@ Ext.onReady(function(){
         }],
         buttons:[{
             text: '登入',
+            icon: __SILK_ICONS_URL+'application_go.png',
             formBind: true,
             handler: function() {
                 login.getForm().submit({
@@ -58,6 +59,7 @@ Ext.onReady(function(){
     });
     var win = new Ext.Window({
         title: '選課學生登入',
+        icon: __SILK_ICONS_URL+'user.png',
         layout: 'fit',
         width: 300,
         height: 150,

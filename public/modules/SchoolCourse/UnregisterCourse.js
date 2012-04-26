@@ -22,7 +22,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
             sortable: false,
             align: 'center',
             items: [{
-                icon: 'images/icons/accept.png',
+                icon: __SILK_ICONS_URL+'accept.png',
                 text: 'test',
                 xtype: 'button',
                 tooltip: '加選',
@@ -73,6 +73,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
     frame: false,
     closable: true,
     title: '退選 - 全校',
+    icon: __SILK_ICONS_URL+'application_view_columns.png',
     layout: 'border',
     items: [{
         xtype: 'SchoolCourse-UnregisterCourse-Grid1',

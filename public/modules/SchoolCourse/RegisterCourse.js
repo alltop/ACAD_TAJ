@@ -82,7 +82,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
             sortable: false,
             align: 'center',
             items: [{
-                icon: __SILK_ICONS_URL+'accept.png',
+                icon: __SILK_ICONS_URL+'add.png',
                 tooltip: '加選',
                 getClass: function(value, metadata, record) {
                     return 'x-grid-center-icon';
@@ -130,7 +130,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
             align: 'center',
             style: {cursor: 'hand'},
             items: [{
-                icon: __SILK_ICONS_URL+'cancel.png',
+                icon: __SILK_ICONS_URL+'delete.png',
                 tooltip: '移除',
                 handler: function(grid, rowIndex, colIndex) {
                     var store2 = grid.getStore();
@@ -177,12 +177,15 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
     closable: true,
+    icon: __SILK_ICONS_URL+'application_view_columns.png',
     title: '加選 - 全校',
     layout: 'border',
     dockedItems: [{
         xtype: 'toolbar',
+        dock: 'top',
         items: [{
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '通識選修',
             toggleGroup: 'grid1-filter',
             pressed: true,
@@ -194,6 +197,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }
         }, {
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '體育選修',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
@@ -204,6 +208,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }
         }, {
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '院訂選修',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
@@ -214,6 +219,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }
         }, {
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '軍訓課程',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
@@ -224,6 +230,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }
         }, {
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '專業課程',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
@@ -234,6 +241,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }
         }, {
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '英文課程',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
@@ -244,6 +252,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }
         }, {
             xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '服務教育',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
@@ -258,6 +267,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         }]
     }, {
         xtype: 'toolbar',
+        dock: 'top',
         items: [{
             xtype: 'checkboxgroup',
             width: 180,
@@ -302,6 +312,92 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 alert("Pressed");
             }
         }]
+    }, {
+        xtype: 'toolbar',
+        dock: 'bottom',
+        ui: 'footer',
+        itemId: 'footbar',
+        items: [{
+            icon: __SILK_ICONS_URL+'accept.png',
+            text: '確定加選',
+            handler: function() {
+                var courses = new Array();
+
+                var store = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                store.each(function(rec) {
+                    //console.log(rec.get('semcourseid'));
+                    courses.push(rec.get('semcourseid'));
+                });
+
+                if (courses.length == 0) {
+                    Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
+                }
+                else {
+                    Ext.Msg.wait('正在處理加選...');
+                    Ext.Ajax.request({
+                        url: '/service/selcourse.json/'+ClientSession.sid,
+                        method: 'POST',
+                        params: {
+                            courses: Ext.Array.from(courses).join(',')
+                        },
+                        success: function(response) {
+                            Ext.Msg.hide();
+
+                            var obj = Ext.JSON.decode(response.responseText);
+
+                            Ext.Msg.alert("伺服器回應", response.responseText);
+                        }
+                    });
+                }
+            }
+        }, {
+            icon: __SILK_ICONS_URL+'lightning_add.png',
+            text: '快速加選',
+            handler: function() {
+                Ext.Msg.prompt(
+                    '加入課程候選區',
+                    '<span class="portal-message">請輸入學期課號，將會快速判斷您是否可選這堂課，並放入課程候選區！！<br/>&nbsp;<br/>學期課號：</span>',
+                    function(btn, text){
+                        if (btn == 'ok'){
+                            //設定選課來源資料
+                            var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+                            var rowIndex = store1.findBy(function(record, id) {
+                                if (record.get('semcourseid')==text) {
+                                    return true;
+                                }
+                                return false;
+                            });
+                            if (rowIndex > -1) {
+                                var record = store1.getAt(rowIndex);
+                                Ext.Msg.confirm(
+                                    '符合選課條件',
+                                    '<span class="portal-message">課程：<strong>'+record.get('semcoursename')+'</strong>已放入候選區！<br/>請按<strong style="color:red">確定加選</strong>按鈕送出所有候選區資料！</span>',
+                                    function (btn, text) {
+                                        if (btn=='yes') {
+                                            //將選課資料移到待選區
+                                            var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                                            store2.add(record);
+                                        }
+                                    }
+                                );
+                            }
+                            else {
+                                Ext.Msg.alert('沒有符合的課程', '您輸入的學期課號無法找到符合選課條件！');
+                            }
+                        }
+                    }
+                );                
+            }
+        }, {
+            text: '選課結果'
+        }, {
+            xtype: 'tbtext',
+            text: '必修/必選的學分數: 4 選修的學分數: 0'
+        }, {
+            xtype: 'tbtext',
+            itemId: 'label-status',
+            text: '顯示全部'
+        }]
     }],
     items: [{
         xtype: 'SchoolCourse-RegisterCourse-Grid1a',
@@ -330,94 +426,6 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         autoScroll: true,
         height: 150,
         margins: '5 5 5 5'
-    }],
-    bbar: {
-        itemId: 'footbar',
-        items: [
-            {
-                xtype: 'label',
-                itemId: 'label-status',
-                text: '顯示全部',
-                height: 15
-            }
-        ]
-    },
-    buttonAlign: 'left',
-    buttons: [{
-        text: '確定加選',
-        handler: function() {
-            var courses = new Array();
-
-            var store = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-            store.each(function(rec) {
-                //console.log(rec.get('semcourseid'));
-                courses.push(rec.get('semcourseid'));
-            });
-
-            if (courses.length == 0) {
-                Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
-            }
-            else {
-                Ext.Msg.wait('正在處理加選...');
-                Ext.Ajax.request({
-                    url: '/service/selcourse.json/'+ClientSession.sid,
-                    method: 'POST',
-                    params: {
-                        courses: Ext.Array.from(courses).join(',')
-                    },
-                    success: function(response) {
-                        Ext.Msg.hide();
-
-                        var obj = Ext.JSON.decode(response.responseText);
-
-                        Ext.Msg.alert("伺服器回應", response.responseText);
-                    }
-                });
-            }
-        }
-    }, {
-        text: '快速加選',
-        handler: function() {
-            Ext.Msg.prompt(
-                '加入課程候選區',
-                '<span class="portal-message">請輸入學期課號，將會快速判斷您是否可選這堂課，並放入課程候選區！！<br/>&nbsp;<br/>學期課號：</span>',
-                function(btn, text){
-                    if (btn == 'ok'){
-                        //設定選課來源資料
-                        var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
-                        var rowIndex = store1.findBy(function(record, id) {
-                            if (record.get('semcourseid')==text) {
-                                return true;
-                            }
-                            return false;
-                        });
-                        if (rowIndex > -1) {
-                            var record = store1.getAt(rowIndex);
-                            Ext.Msg.confirm(
-                                '符合選課條件',
-                                '<span class="portal-message">課程：<strong>'+record.get('semcoursename')+'</strong>已放入候選區！<br/>請按<strong style="color:red">確定加選</strong>按鈕送出所有候選區資料！</span>',
-                                function (btn, text) {
-                                    if (btn=='yes') {
-                                        //將選課資料移到待選區
-                                        var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                                        store2.add(record);
-                                    }
-                                }
-                            );
-                        }
-                        else {
-                            Ext.Msg.alert('沒有符合的課程', '您輸入的學期課號無法找到符合選課條件！');
-                        }
-                    }
-                }
-            );                
-        }
-    }, {
-        text: '選課結果'
-    }, {
-        xtype: 'label',
-        height: 10,
-        text: '必修/必選的學分數: 4 選修的學分數: 0'
     }]
 });
 
