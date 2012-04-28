@@ -81,14 +81,17 @@ Ext.onReady(function(){
                 
                 var tempIds = {};
                 var result = store0.queryBy(function(record) {
-                    var returnValue = (tempIds[record.get('semcoursename')]==null);
-                    tempIds[record.get('semcoursename')] = true;
+                    var returnValue = (tempIds[record.get('courseid')]==null);
+                    tempIds[record.get('courseid')] = true;
                     return returnValue;
                 });
                 store1a.loadRecords(result.items);
                 //store1a.sort();
 
-                completeJob(1);                
+                //Ext.Msg.alert('除錯訊息', "共載入 " + store0.count() + " 筆課程資料！", function() {
+                //    completeJob(1);
+                //});
+                completeJob(1);
             }
         });
     });
@@ -235,7 +238,7 @@ Ext.onReady(function(){
                         xtype: 'box',
                         id: 'header',
                         cls: 'portal-header',
-                        html: '<h1 class="portal-title">ALLTOP 網路選課系統</h1>'
+                        html: '<h1 class="portal-title">ExtJS 網路選課系統</h1>'
                     }
                 ]
             },{

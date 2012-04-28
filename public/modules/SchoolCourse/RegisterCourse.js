@@ -48,7 +48,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1a', {
         itemclick: function(grid, record, item, index, e, eOpts) {
             var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
             store1.filterBy(function(record2) {
-                return (record2.get('semcoursename')==record.get('semcoursename'));
+                return (record2.get('courseid')==record.get('courseid'));
             });
         }
     },
@@ -107,6 +107,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
             }]  
         },
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
+        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
         { header: '教師', dataIndex: 'teachername', width: 80 },
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
@@ -151,6 +152,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
             }]
         },
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
+        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
         { header: '教師', dataIndex: 'teachername', width: 80 },
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
@@ -273,11 +275,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             width: 180,
             items: [{
                 xtype: 'checkbox',
-                boxLabel: '系所',
-                name: 'studentno',
+                boxLabel: '全校',
+                name: 'password'
             }, {
                 xtype: 'checkbox',
-                boxLabel: '全校',
+                boxLabel: '跨部',
                 name: 'password'
             }, {
                 xtype: 'checkbox',
@@ -285,16 +287,17 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 name: 'password'
             }, {
                 xtype: 'checkbox',
-                boxLabel: '跨部',
-                name: 'password'
+                boxLabel: '系所',
+                name: 'studentno',
             }]
         }, {
             xtype: 'checkboxgroup',
             fieldLabel: '星期',
             labelAlign: 'right',
-            labelWidth: 40,
+            labelWidth: 30,
             width: 320,
             items: [
+                { xtype: 'checkbox', boxLabel: '全時段', name: 'dayofweek', inputValue: 0, checked: true, width: 60 },
                 { xtype: 'checkbox', boxLabel: '一', name: 'dayofweek', inputValue: 1, checked: true },
                 { xtype: 'checkbox', boxLabel: '二', name: 'dayofweek', inputValue: 2, checked: true },
                 { xtype: 'checkbox', boxLabel: '三', name: 'dayofweek', inputValue: 3, checked: true },
@@ -389,7 +392,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 );                
             }
         }, {
-            text: '選課結果'
+            text: '清除候選區'
         }, {
             xtype: 'tbtext',
             text: '必修/必選的學分數: 4 選修的學分數: 0'
@@ -423,6 +426,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         resizable: true,
         region: 'south',
         title: '候選區',
+        icon: __SILK_ICONS_URL+'cart_add.png',
         autoScroll: true,
         height: 150,
         margins: '5 5 5 5'

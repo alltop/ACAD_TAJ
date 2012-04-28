@@ -1,6 +1,5 @@
 Ext.define('Module.SchoolCourse.Store0', {
     extend: 'Ext.data.Store',
-    autoDestroy: false,
     autoSync: false,
     autoLoad: false,
     buffered: false,

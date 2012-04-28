@@ -1,4 +1,12 @@
 Ext.onReady(function(){
+    Ext.apply(Ext.form.field.VTypes, {
+        IPAddress:  function(v) {
+            return /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(v);
+        },
+        IPAddressText: 'Must be a numeric IP address',
+        IPAddressMask: /[\d\.]/i
+    });
+    
     Ext.QuickTips.init();
     var login = new Ext.FormPanel({
         labelWidth:80,
@@ -12,7 +20,8 @@ Ext.onReady(function(){
         items:[{
             fieldLabel: '學號',
             name: 'studentno',
-            allowBlank:false
+            allowBlank: false,
+            vtype: 'IPAddress'
         },{
             fieldLabel: '密碼',
             name: 'password',

@@ -19,10 +19,11 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
             header: '退選',
             xtype: 'actioncolumn',
             width: 50,
+            hideable: false,
             sortable: false,
             align: 'center',
             items: [{
-                icon: __SILK_ICONS_URL+'accept.png',
+                icon: __SILK_ICONS_URL+'delete.png',
                 text: 'test',
                 xtype: 'button',
                 tooltip: '加選',
@@ -47,25 +48,14 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                 }
             }]  
         },
+        { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true},
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '學期課號', dataIndex: 'semcourseid', width: 120 },
         { header: '教師', dataIndex: 'teachername' },
         { header: '星期/節', dataIndex: 'coursetime_view' },
         { header: '上課地點', dataIndex: 'roomname' },
         { header: '已選', dataIndex: 'selectedcount', width: 50 },
         { header: '上限', dataIndex: 'maxcount', width: 50 }
-    ],
-    bbar: {
-        itemId: 'footbar',
-        items: [
-            {
-                xtype: 'label',
-                itemId: 'label-status',
-                text: '顯示全部',
-                cls: 'larger-font'
-            }
-        ]
-    }
+    ]
 });
 
 Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
@@ -75,6 +65,17 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
     title: '退選 - 全校',
     icon: __SILK_ICONS_URL+'application_view_columns.png',
     layout: 'border',
+    tbar: [{
+        xtype: 'button',
+        icon: __SILK_ICONS_URL+'arrow_rotate_clockwise.png',
+        text: '重新讀取',
+        handler: function(button, e) {
+            Ext.defer(function() {
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                store3.load();
+            }, 1);
+        }
+    }],
     items: [{
         xtype: 'SchoolCourse-UnregisterCourse-Grid1',
         itemId: 'grid1',
@@ -82,44 +83,10 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
         region: 'center',
         autoHeight: true,
         autoScroll: true,
-        margins: '5 5 0 5'
+        margins: '5 5 5 5'
     }],
-    buttonAlign: 'left',
-    buttons: [{
-        text: '確定加選',
-        handler: function() {
-            var courses = new Array();
-
-            var store = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-            store.each(function(rec) {
-                //console.log(rec.get('semcourseid'));
-                courses.push(rec.get('semcourseid'));
-            });
-
-            if (courses.length == 0) {
-                Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
-            }
-            else {
-                Ext.Msg.wait('正在處理加選...');
-                Ext.Ajax.request({
-                    url: '/service/selcourse.json/'+ClientSession.sid,
-                    method: 'POST',
-                    params: {
-                        courses: Ext.Array.from(courses).join(',')
-                    },
-                    success: function(response) {
-                        Ext.Msg.hide();
-
-                        var obj = Ext.JSON.decode(response.responseText);
-
-                        Ext.Msg.alert("伺服器回應", response.responseText);
-                    }
-                });
-            }
-        }
-    }, {
-        xtype: 'label',
-        height: 10,
+    bbar: [{
+        xtype: 'tbtext',
         text: '必修/必選的學分數: 4 選修的學分數: 0'
     }]
 });
@@ -135,32 +102,14 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
     moduleLoad: function() {
         var thisModule = this;
         
-        //載入資料
-        var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-        var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
-        if (!store3.count()) {
-            Ext.defer(function() {
-                Ext.Ajax.request({
-                    url: '/service/listselected.json/'+ClientSession.sid,
-                    method: 'GET',
-                    success: function(response) {
-                        var obj = Ext.JSON.decode(response.responseText);
-                        Ext.Array.forEach(obj, function(item, index, allItems) {
-                            //console.log(item);
-                            var index = store0.find('semcourseid', item);
-                            // index -1
-                            if (index > -1) {
-                                store3.add(store0.getAt(index));
-                                store0.removeAt(index);
-                            }
-                        });
-                    }
-                });
-            }, 1);
-        }
-
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;
+
+        //載入資料
+        Ext.defer(function() {
+            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+            store3.load();
+        }, 1);
         
         var content = Ext.getCmp('portal-content');
         //console.log(content);
