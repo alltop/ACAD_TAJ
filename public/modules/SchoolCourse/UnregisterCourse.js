@@ -29,19 +29,17 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                 tooltip: '加選',
                 handler: function(grid, rowIndex, colIndex) {
                     //設定選課來源資料
-                    var store1 = grid.getStore();
-                    var rec = store1.getAt(rowIndex);
+                    var store3 = grid.getStore();
+                    var record = store3.getAt(rowIndex);
                     //console.log('加選 ' + rec.get('semcourseid'));
 
                     Ext.MessageBox.confirm(
-                        '符合選課條件',
-                        '<span class="portal-message">課程：<strong>'+rec.get('semcoursename')+'</strong>已放入候選區！<br/>請按<strong style="color:red">確定加選</strong>按鈕送出所有候選區資料！</span>',
+                        '取消確認',
+                        '<span class="portal-message">請按「是」取消<strong>'+record.get('semcoursename')+'</strong>課程！</span>',
                         function (btn, text) {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
-                                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-                                store2.add(rec);
-                                store1.removeAt(rowIndex);
+                                
                             }
                         }
                     );

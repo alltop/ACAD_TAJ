@@ -40,9 +40,12 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', routes.index);
+
+// RESTful Services
 app.post('/service/login.json', routes.login);
 app.get('/service/readdata.json/:sid', routes.readdata);
-app.post('/service/selcourse.json/:sid', routes.selcourse);
+app.post('/service/selectcourse.json/:sid', routes.selectcourse);
+app.post('/service/cancelcourse.json/:sid', routes.cancelcourse);
 app.get('/service/listall.json', routes.listall);
 app.get('/service/listselected.json/:sid', routes.listselected);
 

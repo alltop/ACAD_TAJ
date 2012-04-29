@@ -61,7 +61,7 @@ exports.readdata = function(req, res) {
 /**
  * 課程加選處理（學生）
  */
-exports.selcourse = function(req, res) {
+exports.selectcourse = function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     
@@ -104,6 +104,48 @@ exports.selcourse = function(req, res) {
             }
         };
 
+        res.send(JSON.stringify(results));
+    });
+};
+
+/**
+ * 課程取消加選處理（學生）
+ */
+exports.cancelcourse = function(req, res) {
+    res.charset = 'UTF-8';
+    res.contentType('application/json');
+    
+    var sid = req.params.sid;
+    var courses = req.body['courses'].split(',');
+
+    //console.log(req.params);
+    var query = {
+        sid: req.params.sid
+    };
+
+    console.log(sid + " 取消選課 " + courses);
+
+    var docs = new Array();
+
+    courses.forEach(function(course) {
+        docs.push({
+            semcourseid: course,
+            courseid: '',
+            studentid: sid,
+            studentno: sid,
+            createdate: new Date(),
+            regtype: '1'
+        });
+    });
+
+    var options = {
+        safe: true
+    };
+
+    db.collection('tSelectedSemCus').remove(selector, options, function() {
+        var results = {
+            success: true
+        };
         res.send(JSON.stringify(results));
     });
 };
