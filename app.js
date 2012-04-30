@@ -4,20 +4,14 @@
 */
 
 var express = require('express')
-  , routes = require('./routes');
+  , routes = require('./routes')
+  , mongo = require('mongoskin')
+  , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj');
 
 var app = module.exports = express.createServer();
 
-var timediff = function() {
-    var begin = new Date();
-    return function() {
-        return (new Date().getTime()-begin.getTime());
-    };
-};
-
 // Configuration
-
-app.configure(function(){
+app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
@@ -41,13 +35,12 @@ app.configure('production', function(){
 // Routes
 app.get('/', routes.index);
 
-// RESTful Services
-app.post('/service/login.json', routes.login);
-app.get('/service/readdata.json/:sid', routes.readdata);
-app.post('/service/selectcourse.json/:sid', routes.selectcourse);
-app.post('/service/cancelcourse.json/:sid', routes.cancelcourse);
-app.get('/service/listall.json', routes.listall);
-app.get('/service/listselected.json/:sid', routes.listselected);
+// Load Services
+require('./service')(app, db);
 
+/*
+ * process.env.PORT: Windows Azure, Cloud9, Heroku
+ * process.env.VCAP_APP_PORT: Cloud Foundry
+ */
 app.listen(process.env.PORT || process.env.VCAP_APP_PORT || 3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

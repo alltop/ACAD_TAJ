@@ -39,7 +39,21 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                         function (btn, text) {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
-                                
+                                Ext.Msg.wait('正在取消課程...');
+                                Ext.Ajax.request({
+                                    url: '/service/cancelcourse.json/'+ClientSession.sid,
+                                    method: 'POST',
+                                    params: {
+                                        courses: Ext.Array.from(courses).join(',')
+                                    },
+                                    success: function(response) {
+                                        Ext.Msg.hide();
+
+                                        var obj = Ext.JSON.decode(response.responseText);
+
+                                        Ext.Msg.alert("伺服器回應", response.responseText);
+                                    }
+                                });
                             }
                         }
                     );

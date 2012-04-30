@@ -338,7 +338,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 else {
                     Ext.Msg.wait('正在處理加選...');
                     Ext.Ajax.request({
-                        url: '/service/selcourse.json/'+ClientSession.sid,
+                        url: '/service/selectcourse.json/'+ClientSession.sid,
                         method: 'POST',
                         params: {
                             courses: Ext.Array.from(courses).join(',')
