@@ -2,7 +2,7 @@ Ext.define('Module.SchoolCourse.Store3', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     autoSync: false,
-    fields: ['semcourseid', 'courseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
+    fields: ['semcourseid', 'courseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
     data: {'items':[]},
     proxy: {
         type: 'memory',

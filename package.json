@@ -1,7 +1,13 @@
 {
-    "name": "application-name"
+    "name": "acad_taj"
   , "version": "0.0.1"
   , "private": true
+  , "config": {
+    "port": "3000"
+  }
+  , "scripts": {
+    "start" : "forever -w start app.js" 
+  }
   , "engines": {
       "node": "0.6.x"
     , "npm": "1.1.x"
@@ -9,5 +15,6 @@
   , "dependencies": {
       "express": "latest"
     , "mongoskin": "latest"
+    , "seq": "latest"
   }
 }

@@ -1,5 +1,5 @@
 var __changeFilterHandler_state = null;
-var changeFilterHandler = function(val) {
+var changeFilterHandler = function(val, params) {
     if (val==__changeFilterHandler_state) {
         return true;
     }
@@ -7,6 +7,13 @@ var changeFilterHandler = function(val) {
         val = __changeFilterHandler_state;
     }
     __changeFilterHandler_state = val;
+
+    //初始化參數
+    if (!params) {
+        params = {};
+    }
+
+    var weekdays = params.weekdays?params.weekdays:null;
 
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
     var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
@@ -23,7 +30,53 @@ var changeFilterHandler = function(val) {
 
     Ext.defer(function() {
         var result = store0.queryBy(function(record) {
-            return (record.get('coursetype')==val);
+            if (record.get('coursetype')==val) {
+                if (weekdays) {
+
+                    var coursetime = Ext.String.trim(record.get('coursetime'));
+                    var coursetime_array = coursetime.split(',');
+                    var weeksetup = [
+                        false, false, false, false,
+                        false, false, false, false
+                    ];
+
+                    weeksetup[0] = (coursetime == '');
+
+                    Ext.Array.each(coursetime_array, function(item) {
+                        if (item >= 100 && item <= 199) {
+                            weeksetup[1] = true;
+                        }
+                        else if (item >= 200 && item <= 299) {
+                            weeksetup[2] = true;
+                        }
+                        else if (item >= 300 && item <= 399) {
+                            weeksetup[3] = true;
+                        }
+                        else if (item >= 400 && item <= 499) {
+                            weeksetup[4] = true;
+                        }
+                        else if (item >= 500 && item <= 599) {
+                            weeksetup[5] = true;
+                        }
+                        else if (item >= 600 && item <= 699) {
+                            weeksetup[6] = true;
+                        }
+                        else if (item >= 700 && item <= 799) {
+                            weeksetup[7] = true;
+                        }
+                    });
+
+                    var result = false;
+
+                    Ext.Array.each(weekdays, function(item) {
+                        if (weeksetup[item]) result = true;
+                    });
+
+                    return result;
+                }
+
+                return true;
+            }
         });
         store1.loadRecords(result.items);
         store1.sort();
@@ -291,20 +344,21 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 name: 'studentno',
             }]
         }, {
+            itemId: 'week-filter',
             xtype: 'checkboxgroup',
             fieldLabel: '星期',
             labelAlign: 'right',
             labelWidth: 30,
             width: 320,
             items: [
-                { xtype: 'checkbox', boxLabel: '全時段', name: 'dayofweek', inputValue: 0, checked: true, width: 60 },
-                { xtype: 'checkbox', boxLabel: '一', name: 'dayofweek', inputValue: 1, checked: true },
-                { xtype: 'checkbox', boxLabel: '二', name: 'dayofweek', inputValue: 2, checked: true },
-                { xtype: 'checkbox', boxLabel: '三', name: 'dayofweek', inputValue: 3, checked: true },
-                { xtype: 'checkbox', boxLabel: '四', name: 'dayofweek', inputValue: 4, checked: true },
-                { xtype: 'checkbox', boxLabel: '五', name: 'dayofweek', inputValue: 5, checked: true },
-                { xtype: 'checkbox', boxLabel: '六', name: 'dayofweek', inputValue: 6, checked: true },
-                { xtype: 'checkbox', boxLabel: '日', name: 'dayofweek', inputValue: 7, checked: true }
+                { xtype: 'checkbox', boxLabel: '全時段', name: 'days', inputValue: 0, checked: true, width: 60 },
+                { xtype: 'checkbox', boxLabel: '一', name: 'days', inputValue: 1, checked: true },
+                { xtype: 'checkbox', boxLabel: '二', name: 'days', inputValue: 2, checked: true },
+                { xtype: 'checkbox', boxLabel: '三', name: 'days', inputValue: 3, checked: true },
+                { xtype: 'checkbox', boxLabel: '四', name: 'days', inputValue: 4, checked: true },
+                { xtype: 'checkbox', boxLabel: '五', name: 'days', inputValue: 5, checked: true },
+                { xtype: 'checkbox', boxLabel: '六', name: 'days', inputValue: 6, checked: true },
+                { xtype: 'checkbox', boxLabel: '日', name: 'days', inputValue: 7, checked: true }
             ]
         }, '-', {
             xtype: 'button',
@@ -312,7 +366,13 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             tooltip: '加選',
             text: '查詢',
             handler: function() {
-                alert("Pressed");
+                var cbg = this.up('toolbar').getComponent('week-filter');
+
+                //取得勾選的星期資料（陣列）
+                var weekdays = cbg.getValue().days;
+
+                //重新篩選查詢
+                changeFilterHandler(null, {weekdays: weekdays});
             }
         }]
     }, {
@@ -326,10 +386,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             handler: function() {
                 var courses = new Array();
 
-                var store = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                store.each(function(rec) {
-                    //console.log(rec.get('semcourseid'));
-                    courses.push(rec.get('semcourseid'));
+                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+
+                store2.each(function(record) {
+                    courses.push(record.get('semcourseid'));
                 });
 
                 if (courses.length == 0) {
@@ -349,6 +410,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                             var obj = Ext.JSON.decode(response.responseText);
 
                             Ext.Msg.alert("伺服器回應", response.responseText);
+
+                            if (obj.success) {
+                                store2.removeAll();
+                                store3.load();
+                            }
                         }
                     });
                 }

@@ -26,7 +26,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                 icon: __SILK_ICONS_URL+'delete.png',
                 text: 'test',
                 xtype: 'button',
-                tooltip: '加選',
+                tooltip: '取消選擇的課程',
                 handler: function(grid, rowIndex, colIndex) {
                     //設定選課來源資料
                     var store3 = grid.getStore();
@@ -38,6 +38,10 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                         '<span class="portal-message">請按「是」取消<strong>'+record.get('semcoursename')+'</strong>課程！</span>',
                         function (btn, text) {
                             if (btn=='yes') {
+
+                                var courses = new Array();
+                                courses.push(record.get('semcourseid'));
+
                                 //將選課資料移到待選區
                                 Ext.Msg.wait('正在取消課程...');
                                 Ext.Ajax.request({
@@ -48,10 +52,13 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                                     },
                                     success: function(response) {
                                         Ext.Msg.hide();
-
                                         var obj = Ext.JSON.decode(response.responseText);
+                                        
+                                        //Ext.Msg.alert("伺服器回應", obj.success);
 
-                                        Ext.Msg.alert("伺服器回應", response.responseText);
+                                        if (obj.success) {
+                                            store3.load();
+                                        }
                                     }
                                 });
                             }

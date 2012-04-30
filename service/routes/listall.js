@@ -4,7 +4,7 @@ app.get('/service/listall.json', function(req, res) {
     
     var fields = {
         'semcourseid':1, 'courseid': 1, 'coursetype':1, 'coursetypename':1, 'semcoursename':1,
-        'teachername':1, 'coursetime_view':1, 'roomname':1, 'maxcount':1,
+        'teachername':1, 'coursetime': 1, 'coursetime_view':1, 'roomname':1, 'maxcount':1,
         'selectedcount': 1
     };
     
