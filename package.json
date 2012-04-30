@@ -6,7 +6,8 @@
     "port": "3000"
   }
   , "scripts": {
-    "start" : "forever -w start app.js" 
+      "start": "node app.js"
+    , "forever": "forever -w start app.js"
   }
   , "engines": {
       "node": "0.6.x"
