@@ -1,4 +1,4 @@
-app.get('/service/listall.json', function(req, res) {
+app.get(urlprefix + '/service/listall.json', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     

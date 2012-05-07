@@ -156,6 +156,11 @@ Ext.onReady(function(){
                 text : '全校選課',
                 expanded: true,
                 children : [{
+                    text: '加選 - 即選即上',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                    id: 'Module.SchoolCourse.RealtimeCourse',
+                    leaf: true
+                }, {
                     text: '加選 - 全校',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
                     id: 'Module.SchoolCourse.RegisterCourse',

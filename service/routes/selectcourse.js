@@ -1,7 +1,7 @@
 /**
  * 課程加選處理（學生）
  */
-app.post('/service/selectcourse.json/:sid', function(req, res) {
+app.post(urlprefix + '/service/selectcourse.json/:sid', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     

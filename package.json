@@ -16,6 +16,6 @@
   , "dependencies": {
       "express": "latest"
     , "mongoskin": "latest"
-    , "seq": "latest"
+    , "connect-mongodb": "latest"
   }
 }

@@ -1,7 +1,7 @@
 /**
  * 課程取消加選處理（學生）
  */
-app.post('/service/cancelcourse.json/:sid', function(req, res) {
+app.post(urlprefix + '/service/cancelcourse.json/:sid', function(req, res) {
     
     
     var sid = req.params.sid;

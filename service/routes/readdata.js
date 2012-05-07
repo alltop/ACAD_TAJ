@@ -1,4 +1,4 @@
-app.get('/service/readdata.json/:sid', function(req, res) {
+app.get(urlprefix + '/service/readdata.json/:sid', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     

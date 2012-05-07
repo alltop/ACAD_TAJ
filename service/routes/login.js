@@ -1,4 +1,4 @@
-app.post('/service/login.json', function(req, res) {
+app.post(urlprefix + '/service/login.json', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     
@@ -13,6 +13,7 @@ app.post('/service/login.json', function(req, res) {
                 success: true,
                 data: rows[0]
             };
+            req.session.login = results;
             res.send(JSON.stringify(results));
         }
         else {

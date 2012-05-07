@@ -1,7 +1,7 @@
 /**
  * 回傳學生已選課程清單
  */
-app.get('/service/listselected.json/:sid', function(req, res) {
+app.get(urlprefix + '/service/listselected.json/:sid', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     db.collection('tSelectedSemCus').find().toArray(function(err, rows){

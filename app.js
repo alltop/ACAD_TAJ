@@ -6,42 +6,51 @@
 var express = require('express')
   , routes = require('./routes')
   , mongo = require('mongoskin')
-  , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=5');
+  , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=5')
+  , mongoStore = require('connect-mongodb');
 
 var app = module.exports = express.createServer();
 
-// Configuration
-app.configure(function() {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(app.router);
-    app.use(express.static(__dirname + '/public'));
+var urlprefix = ''
 
-    //session support
-    //app.use(express.cookieParser());
-    //app.use(express.session({ secret: "keyboard cat", store: new MongoDBStore({url: 'localhost', maxAge: 300000}) }));
+db.open(function(err, nativedb) {
+
+    // Configuration
+    app.configure(function() {
+        app.set('views', __dirname + '/views');
+        app.set('view engine', 'jade');
+        app.use(express.methodOverride());
+        app.use(express.static(__dirname + '/public'));
+        app.use(express.bodyParser());
+        app.use(express.cookieParser());
+        app.use(express.session({
+            cookie: {maxAge: 60000 * 30},
+            secret: '50709ff051bfabda20ac5284fc01a1e5',
+            store: new mongoStore({db: nativedb})
+        }));
+        app.use(app.router);
+    });
+
+    app.configure('development', function(){
+        app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+    });
+
+    app.configure('production', function(){
+        app.use(express.errorHandler()); 
+    });
+
+    // Routes
+    app.get('/', routes.index);
+
+    // Load Services
+    require('./service')(app, db, urlprefix);
+
+    /*
+     * process.env.PORT: Windows Azure, Cloud9, Heroku
+     * process.env.VCAP_APP_PORT: Cloud Foundry
+     * process.env.npm_package_config_port: package.json
+     */
+    app.listen(process.env.PORT || process.env.VCAP_APP_PORT || process.env.npm_package_config_port || 3000);
+    console.log("伺服器已經啟動，連接埠： %d ，模式： %s", app.address().port, app.settings.env);
+
 });
-
-app.configure('development', function(){
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
-});
-
-app.configure('production', function(){
-    app.use(express.errorHandler()); 
-});
-
-// Routes
-app.get('/', routes.index);
-
-// Load Services
-require('./service')(app, db);
-
-/*
- * process.env.PORT: Windows Azure, Cloud9, Heroku
- * process.env.VCAP_APP_PORT: Cloud Foundry
- * process.env.npm_package_config_port: package.json
- */
-app.listen(process.env.PORT || process.env.VCAP_APP_PORT || process.env.npm_package_config_port || 3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
