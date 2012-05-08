@@ -2,7 +2,7 @@ Ext.onReady(function() {
     Ext.QuickTips.init();
     var login = new Ext.FormPanel({
         labelWidth:80,
-        url: '/service/login.json',
+        url: __SERVICE_URL + '/service/login.json',
         frame: false,
         border: false,
         defaultType: 'textfield',
@@ -38,11 +38,8 @@ Ext.onReady(function() {
                         });
                         */
 
-                        // 從回傳資料取得 SESSION 代碼（sid），傳遞給主畫面
-                        //var values = login.getForm().getValues();
-                        var obj = Ext.JSON.decode(action.response.responseText);
-                        //console.log(obj);
-                        window.location = 'portal.html?sid='+obj.data.studentno;
+                        //載入主畫面
+                        window.location = 'portal.html';
                     },
                     failure: function(form, action) {
                         if(action.failureType == 'server'){

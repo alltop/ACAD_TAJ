@@ -7,13 +7,15 @@ app.post(urlprefix + '/service/login.json', function(req, res) {
         password: req.body['password']
     };
     
-    db.collection('tStudent').find(query).toArray(function(err, rows){
-        if (rows.length>0) {
+    // SELECT * FROM tStudent WHERE [query]
+    db.collection('tStudent').findOne(query, function(err, row){
+        //console.log(row);
+        if (row) {
             var results = {
                 success: true,
-                data: rows[0]
+                data: row
             };
-            req.session.login = results;
+            req.session.user = row;
             res.send(JSON.stringify(results));
         }
         else {

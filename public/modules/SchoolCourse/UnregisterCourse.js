@@ -45,7 +45,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                                 //將選課資料移到待選區
                                 Ext.Msg.wait('正在取消課程...');
                                 Ext.Ajax.request({
-                                    url: '/service/cancelcourse.json/'+ClientSession.sid,
+                                    url: __SERVICE_URL + '/service/cancelcourse.json',
                                     method: 'POST',
                                     params: {
                                         courses: Ext.Array.from(courses).join(',')
@@ -124,32 +124,39 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;
 
-        //載入資料
-        Ext.defer(function() {
-            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-            store3.load();
-        }, 1);
-        
-        var content = Ext.getCmp('portal-content');
-        //console.log(content);
+        var tabpanel = Ext.getCmp('portal-tabpanel');
 
-        //使用新頁籤建立主畫面
-        //content.setLoading('讀取中');
-        var panel = Ext.create('Module.SchoolCourse.UnregisterCourse.MainPanel', {
-            listeners: {
-                beforeclose: function() { thisModule.moduleUnload(); }
-            }
-        });
+        //判斷 Panel 是否已經存在 Tab（建立或切換）
+        var panel = Module.SchoolCourse.UnregisterCourse._previous;
 
-        //關閉曾經開啟的 Tab
-        if (Module.SchoolCourse.UnregisterCourse._previous) {
-            content.remove(Module.SchoolCourse.UnregisterCourse._previous);
+        if (!panel) {
+            //使用新頁籤建立主畫面
+            //tabpanel.setLoading('讀取中');
+            var panel = Ext.create('Module.SchoolCourse.UnregisterCourse.MainPanel', {
+                listeners: {
+                    beforeclose: function(panel, eOpts) {
+                        thisModule.moduleUnload();
+                        Module.SchoolCourse.UnregisterCourse._previous = null;
+                    },
+                    afterrender: function(panel, eOpts) {
+                        //載入資料
+                        Ext.defer(function() {
+                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                            store3.load();
+                        }, 50);
+                    }
+                }
+            });
+
+            //新增主畫面到 Tab
+            tabpanel.add(panel);
+
+            //記錄已建立的新 Panel
+            Module.SchoolCourse.UnregisterCourse._previous = panel;
         }
-        Module.SchoolCourse.UnregisterCourse._previous = panel;
 
-        //新增主畫面到 Tab
-        content.add(panel);
-        content.setActiveTab(panel);
+        //切換到 Panel
+        tabpanel.setActiveTab(panel);
     },
     moduleUnload: function() {
         //從 URL HASH 移除目前的模組記錄

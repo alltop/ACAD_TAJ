@@ -16,7 +16,7 @@ Ext.define('Module.SchoolCourse.Store3', {
             var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
             if (store0) {
                 var request = Ext.Ajax.request({
-                    url: '/service/listselected.json/'+ClientSession.sid,
+                    url: __SERVICE_URL + '/service/listselected.json',
                     method: 'GET',
                     success: function(response) {
                         var obj = Ext.JSON.decode(response.responseText);

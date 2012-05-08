@@ -22,62 +22,64 @@ var changeFilterHandler = function(val, params) {
     store1.removeAll();
     //store1a.removeAll();
 
+    var __filter_proc = function(record) {
+        if (record.get('coursetype')==val) {
+            if (weekdays) {
+
+                var coursetime = Ext.String.trim(record.get('coursetime'));
+                var coursetime_array = coursetime.split(',');
+                var weeksetup = [
+                    false, false, false, false,
+                    false, false, false, false
+                ];
+
+                weeksetup[0] = (coursetime == '');
+
+                Ext.Array.each(coursetime_array, function(item) {
+                    if (item >= 100 && item <= 199) {
+                        weeksetup[1] = true;
+                    }
+                    else if (item >= 200 && item <= 299) {
+                        weeksetup[2] = true;
+                    }
+                    else if (item >= 300 && item <= 399) {
+                        weeksetup[3] = true;
+                    }
+                    else if (item >= 400 && item <= 499) {
+                        weeksetup[4] = true;
+                    }
+                    else if (item >= 500 && item <= 599) {
+                        weeksetup[5] = true;
+                    }
+                    else if (item >= 600 && item <= 699) {
+                        weeksetup[6] = true;
+                    }
+                    else if (item >= 700 && item <= 799) {
+                        weeksetup[7] = true;
+                    }
+                });
+
+                var result = false;
+
+                Ext.Array.each(weekdays, function(item) {
+                    if (weeksetup[item]) result = true;
+                });
+
+                return result;
+            }
+
+            return true;
+        }
+    };
+
+    //處理左邊分類清單查詢
     Ext.defer(function() {
-        store1a.filterBy(function(record) {
-            return (record.get('coursetype')==val);
-        });
+        store1a.filterBy(__filter_proc);
     }, 100);
 
+    //處理課程清單
     Ext.defer(function() {
-        var result = store0.queryBy(function(record) {
-            if (record.get('coursetype')==val) {
-                if (weekdays) {
-
-                    var coursetime = Ext.String.trim(record.get('coursetime'));
-                    var coursetime_array = coursetime.split(',');
-                    var weeksetup = [
-                        false, false, false, false,
-                        false, false, false, false
-                    ];
-
-                    weeksetup[0] = (coursetime == '');
-
-                    Ext.Array.each(coursetime_array, function(item) {
-                        if (item >= 100 && item <= 199) {
-                            weeksetup[1] = true;
-                        }
-                        else if (item >= 200 && item <= 299) {
-                            weeksetup[2] = true;
-                        }
-                        else if (item >= 300 && item <= 399) {
-                            weeksetup[3] = true;
-                        }
-                        else if (item >= 400 && item <= 499) {
-                            weeksetup[4] = true;
-                        }
-                        else if (item >= 500 && item <= 599) {
-                            weeksetup[5] = true;
-                        }
-                        else if (item >= 600 && item <= 699) {
-                            weeksetup[6] = true;
-                        }
-                        else if (item >= 700 && item <= 799) {
-                            weeksetup[7] = true;
-                        }
-                    });
-
-                    var result = false;
-
-                    Ext.Array.each(weekdays, function(item) {
-                        if (weeksetup[item]) result = true;
-                    });
-
-                    return result;
-                }
-
-                return true;
-            }
-        });
+        var result = store0.queryBy(__filter_proc);
         store1.loadRecords(result.items);
         store1.sort();
     }, 100);
@@ -98,10 +100,11 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1a', {
             //載入資料
             //grid.body.mask('讀取中');
         },
-        itemclick: function(grid, record, item, index, e, eOpts) {
+        select: function(grid, record, index, eOpts) {
+            var record_courseid = record.get('courseid');
             var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
             store1.filterBy(function(record2) {
-                return (record2.get('courseid')==record.get('courseid'));
+                return (record2.get('courseid')==record_courseid);
             });
         }
     },
@@ -390,7 +393,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
 
                 store2.each(function(record) {
-                    courses.push(record.get('semcourseid'));
+                    courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
                 });
 
                 if (courses.length == 0) {
@@ -398,8 +401,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 }
                 else {
                     Ext.Msg.wait('正在處理加選...');
+
                     Ext.Ajax.request({
-                        url: '/service/selectcourse.json/'+ClientSession.sid,
+                        url: __SERVICE_URL + '/service/selectcourse.json',
                         method: 'POST',
                         params: {
                             courses: Ext.Array.from(courses).join(',')
@@ -513,29 +517,36 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;
         
-        var content = Ext.getCmp('portal-content');
-        //console.log(content);
+        var tabpanel = Ext.getCmp('portal-tabpanel');
 
-        //使用新頁籤建立主畫面
-        //content.setLoading('讀取中');
-        var panel = Ext.create('Module.SchoolCourse.RealtimeCourse.MainPanel', {
-            listeners: {
-                beforeclose: function() { thisModule.moduleUnload(); }
-            }
-        });
+        //判斷 Panel 是否已經存在 Tab（建立或切換）
+        var panel = Module.SchoolCourse.RealtimeCourse._previous;
 
-        //關閉曾經開啟的 Tab
-        if (Module.SchoolCourse.RealtimeCourse._previous) {
-            content.remove(Module.SchoolCourse.RealtimeCourse._previous);
+        if (!panel) {
+            //使用新頁籤建立主畫面
+            //tabpanel.setLoading('讀取中');
+            panel = Ext.create('Module.SchoolCourse.RealtimeCourse.MainPanel', {
+                listeners: {
+                    beforeclose: function(panel, eOpts) {
+                        thisModule.moduleUnload();
+                        Module.SchoolCourse.RealtimeCourse._previous = null;
+                    },
+                    afterrender: function(panel, eOpts) {
+                        //載入資料
+                        changeFilterHandler('1');
+                    }
+                }
+            });
+            
+            //新增主畫面到 Tab
+            tabpanel.add(panel);
+
+            //記錄已建立的新 Panel
+            Module.SchoolCourse.RealtimeCourse._previous = panel;
         }
-        Module.SchoolCourse.RealtimeCourse._previous = panel;
 
-        //新增主畫面到 Tab
-        content.add(panel);
-        content.setActiveTab(panel);
-
-        //載入資料
-        changeFilterHandler('1');
+        //切換到 Panel
+        tabpanel.setActiveTab(panel);
     },
     moduleUnload: function() {
         //從 URL HASH 移除目前的模組記錄

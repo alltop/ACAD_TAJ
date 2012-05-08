@@ -11,7 +11,7 @@ Ext.define('Module.SchoolCourse.Store0', {
     }],*/
     proxy: {
         type: 'ajax',
-        url: '/service/listall.json',
+        url: __SERVICE_URL + '/service/listall.json',
         method: 'GET',
         reader: {
             type: 'array'

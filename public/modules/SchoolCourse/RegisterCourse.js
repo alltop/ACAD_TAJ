@@ -399,7 +399,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 else {
                     Ext.Msg.wait('正在處理加選...');
                     Ext.Ajax.request({
-                        url: '/service/selectcourse.json/'+ClientSession.sid,
+                        url: __SERVICE_URL + '/service/selectcourse.json',
                         method: 'POST',
                         params: {
                             courses: Ext.Array.from(courses).join(',')
@@ -513,29 +513,36 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;
         
-        var content = Ext.getCmp('portal-content');
-        //console.log(content);
+        var tabpanel = Ext.getCmp('portal-tabpanel');
 
-        //使用新頁籤建立主畫面
-        //content.setLoading('讀取中');
-        var panel = Ext.create('Module.SchoolCourse.RegisterCourse.MainPanel', {
-            listeners: {
-                beforeclose: function() { thisModule.moduleUnload(); }
-            }
-        });
+        //判斷 Panel 是否已經存在 Tab（建立或切換）
+        var panel = Module.SchoolCourse.RegisterCourse._previous;
 
-        //關閉曾經開啟的 Tab
-        if (Module.SchoolCourse.RegisterCourse._previous) {
-            content.remove(Module.SchoolCourse.RegisterCourse._previous);
+        if (!panel) {
+            //使用新頁籤建立主畫面
+            //tabpanel.setLoading('讀取中');
+            var panel = Ext.create('Module.SchoolCourse.RegisterCourse.MainPanel', {
+                listeners: {
+                    beforeclose: function(panel, eOpts) {
+                        thisModule.moduleUnload();
+                        Module.SchoolCourse.RegisterCourse._previous = null;
+                    },
+                    afterrender: function(panel, eOpts) {
+                        //載入資料
+                        changeFilterHandler('1');
+                    }
+                }
+            });
+
+            //新增主畫面到 Tab
+            tabpanel.add(panel);
+
+            //記錄已建立的新 Panel
+            Module.SchoolCourse.RegisterCourse._previous = panel;
         }
-        Module.SchoolCourse.RegisterCourse._previous = panel;
 
-        //新增主畫面到 Tab
-        content.add(panel);
-        content.setActiveTab(panel);
-
-        //載入資料
-        changeFilterHandler('1');
+        //切換到 Panel
+        tabpanel.setActiveTab(panel);
     },
     moduleUnload: function() {
         //從 URL HASH 移除目前的模組記錄

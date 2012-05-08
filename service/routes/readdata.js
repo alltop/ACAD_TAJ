@@ -1,19 +1,12 @@
-app.get(urlprefix + '/service/readdata.json/:sid', function(req, res) {
+app.get(urlprefix + '/service/readdata.json', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
-    
-    //console.log(req.params);
-    var query = {
-        studentno: req.params.sid
+        
+    var results = {
+        success: true,
+        data: {
+            user: req.session.user
+        }
     };
-    
-    db.collection('tStudent').find(query).toArray(function(err, rows){
-        var results = {
-            success: true,
-            data: {
-                user: rows[0]
-            }
-        };
-        res.send(JSON.stringify(results));
-    });
+    res.send(JSON.stringify(results));
 });
