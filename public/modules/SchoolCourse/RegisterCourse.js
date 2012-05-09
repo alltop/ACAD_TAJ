@@ -390,7 +390,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
 
                 store2.each(function(record) {
-                    courses.push(record.get('semcourseid'));
+                    courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
                 });
 
                 if (courses.length == 0) {

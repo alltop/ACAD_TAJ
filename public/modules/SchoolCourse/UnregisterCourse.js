@@ -40,7 +40,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                             if (btn=='yes') {
 
                                 var courses = new Array();
-                                courses.push(record.get('semcourseid'));
+                                courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
 
                                 //將選課資料移到待選區
                                 Ext.Msg.wait('正在取消課程...');
@@ -68,6 +68,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
             }]  
         },
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true},
+        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
         { header: '教師', dataIndex: 'teachername' },
         { header: '星期/節', dataIndex: 'coursetime_view' },

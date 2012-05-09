@@ -1,3 +1,6 @@
+/**
+ * 已選課程資料來源（退選用）
+ */
 Ext.define('Module.SchoolCourse.Store3', {
     extend: 'Ext.data.Store',
     autoLoad: false,

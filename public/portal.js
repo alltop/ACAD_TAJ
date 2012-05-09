@@ -42,7 +42,6 @@ Ext.onReady(function(){
             itemclick: {
                 fn: function(view, record, item, index, event) {
                     var moduleName = record.get('id');
-                    //console.log('click: ' + moduleName);
 
                     if (moduleName) {
                         Ext.log('Load module: '+moduleName);
@@ -200,10 +199,11 @@ Ext.onReady(function(){
     Ext.Msg.wait('正在快取資料...');
 
     var jobs = new Array();
-
     jobs[0] = 0;
     jobs[1] = 0;
+    //jobs[2] = 0;
 
+    //背景工作完成查核函式
     var completeJob = function(index) {
         jobs[index] = 1;
         for (var i=0; i<2; i++) {
@@ -227,7 +227,6 @@ Ext.onReady(function(){
                 //更新使用者資訊列
                 if (obj.data.user) {
                     var user = obj.data.user;
-                    console.log(obj.data.user);
                     var cmp = Ext.getCmp('userinfo');
                     cmp.setText(user.chtname+' '+user.studentno+' '+user.classname);
                 }
@@ -256,10 +255,16 @@ Ext.onReady(function(){
                 //Ext.Msg.alert('除錯訊息', "共載入 " + store0.count() + " 筆課程資料！", function() {
                 //    completeJob(1);
                 //});
-                completeJob(1);
+
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                store3.load({
+                    callback: function(records, operation, success) {
+                        completeJob(1);
+                    }
+                });
             }
         });
-    });
+    }, 0);
 
     /*
     //re-open tab from url hash

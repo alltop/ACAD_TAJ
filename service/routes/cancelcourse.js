@@ -17,12 +17,30 @@ app.post(urlprefix + '/service/cancelcourse.json', function(req, res) {
     };
 
     courses.forEach(function(course) {
-        var selector = {
-            semcourseid: course,
+        var course_arr = course.split(':');
+
+        var where = {
+            semcourseid: course_arr[0],
             studentid: user.studentid
         };
-        db.collection('tSelectedSemCus').remove(selector, options, function(result) {
-            //...
+
+        //退選處理
+        db.collection('tSelectedSemCus').remove(where, options, function(err, result) {
+
+            var doc = {
+                semcourseid: course_arr[0],
+                courseid: course_arr[1],
+                studentid: user.studentid,
+                studentno: user.studentno,
+                createdate: new Date().getTime(),
+                adddel: '退選',
+                checked: '通過',
+                regtype: '1',
+                failcause: '記錄訊息'
+            };
+
+            //加退選記錄
+            db.collection('tSelectedAddDel').insert(doc, options, function() {});
         });
     });
 

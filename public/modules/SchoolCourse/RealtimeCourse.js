@@ -138,15 +138,24 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
             sortable: false,
             align: 'center',
             items: [{
-                icon: __SILK_ICONS_URL+'add.png',
+                icon: __SILK_ICONS_URL + 'add.png',
                 tooltip: '加選',
                 getClass: function(value, metadata, record) {
+                    //如果課程已經在已選清單中，就不顯示加選按鈕
+                    var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                    var record_semcourseid = record.get('semcourseid');
+                    var exists = store3.find('semcourseid', record_semcourseid);
+                    if (exists >= 0) {
+                       return 'x-hide-display';
+                    }
                     return 'x-grid-center-icon';
                 },
-                handler: function(grid, rowIndex, colIndex) {
+                handler: function(view, rowIndex, colIndex, item, e) {
                     //設定選課來源資料
-                    var store1 = grid.getStore();
+                    var store1 = view.getStore();
                     var record = store1.getAt(rowIndex);
+
+                    console.log(item);
 
                     Ext.MessageBox.confirm(
                         '符合選課條件',
@@ -168,7 +177,6 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
         { header: '教師', dataIndex: 'teachername', width: 80 },
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
         { header: '上課地點', dataIndex: 'roomname' },
-        { header: '已選', dataIndex: 'selectedcount', width: 50 },
         { header: '上限', dataIndex: 'maxcount', width: 50 }
     ]
 });
@@ -476,7 +484,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
         xtype: 'SchoolCourse-RealtimeCourse-Grid1a',
         itemId: 'grid1a',
         border: true,
-        resizable: true,
+        resizable: false,
         region: 'west',
         autoScroll: true,
         width: 180,
@@ -485,7 +493,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
         xtype: 'SchoolCourse-RealtimeCourse-Grid1',
         itemId: 'grid1',
         border: true,
-        resizable: true,
+        resizable: false,
         region: 'center',
         autoScroll: true,
         margins: '5 5 0 5'
