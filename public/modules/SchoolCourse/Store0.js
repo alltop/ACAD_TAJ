@@ -4,11 +4,12 @@ Ext.define('Module.SchoolCourse.Store0', {
     autoLoad: false,
     buffered: false,
     purgePageCount: 0,
-    fields: ['semcourseid', 'courseid', 'coursetype', 'coursetypename', 'semcoursename', 'teachername', 'coursetime', 'coursetime_view', 'roomname', 'maxcount', 'selectedcount'],
-    /*sorters: [{
-        property : 'semcourseid',
-        direction: 'DESC'
-    }],*/
+    fields: [
+        'semcourseid', 'courseid', 'coursetype', 'coursetypename',
+        'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
+        'roomname', 'maxcount', 'selectedcount',
+        'unitid', 'collegeid', 'studytype'
+    ],
     proxy: {
         type: 'ajax',
         url: __SERVICE_URL + '/service/listall.json',

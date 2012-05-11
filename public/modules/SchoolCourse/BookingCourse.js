@@ -1,9 +1,9 @@
 /**
- * 「退選」功能模組
+ * 「加選 - 待分發」功能模組
  */
-Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
+Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-UnregisterCourse-Grid1',
+    alias: 'widget.SchoolCourse-BookingCourse-Grid1',
     store: 'SchoolCourse-Store3',
     loadMask: true,
     disableSelection: false,
@@ -81,11 +81,11 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
     ]
 });
 
-Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
+Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
     closable: true,
-    title: '退選',
+    title: '加選 - 待分發',
     icon: __SILK_ICONS_URL+'application_view_columns.png',
     layout: 'border',
     tbar: [{
@@ -100,7 +100,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
         }
     }],
     items: [{
-        xtype: 'SchoolCourse-UnregisterCourse-Grid1',
+        xtype: 'SchoolCourse-BookingCourse-Grid1',
         itemId: 'grid1',
         border: true,
         region: 'center',
@@ -117,7 +117,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
 /**
  * 模組主程式定義區
  */
-Ext.define('Module.SchoolCourse.UnregisterCourse', {
+Ext.define('Module.SchoolCourse.BookingCourse', {
     extend: 'Module.Prototype.Module',
     statics: {
         _previous: null
@@ -131,16 +131,16 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
         var tabpanel = Ext.getCmp('portal-tabpanel');
 
         //判斷 Panel 是否已經存在 Tab（建立或切換）
-        var panel = Module.SchoolCourse.UnregisterCourse._previous;
+        var panel = Module.SchoolCourse.BookingCourse._previous;
 
         if (!panel) {
             //使用新頁籤建立主畫面
             //tabpanel.setLoading('讀取中');
-            var panel = Ext.create('Module.SchoolCourse.UnregisterCourse.MainPanel', {
+            var panel = Ext.create('Module.SchoolCourse.BookingCourse.MainPanel', {
                 listeners: {
                     beforeclose: function(panel, eOpts) {
                         thisModule.moduleUnload();
-                        Module.SchoolCourse.UnregisterCourse._previous = null;
+                        Module.SchoolCourse.BookingCourse._previous = null;
                     },
                     afterrender: function(panel, eOpts) {
                         //載入資料
@@ -156,7 +156,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
             tabpanel.add(panel);
 
             //記錄已建立的新 Panel
-            Module.SchoolCourse.UnregisterCourse._previous = panel;
+            Module.SchoolCourse.BookingCourse._previous = panel;
         }
 
         //切換到 Panel

@@ -1,3 +1,6 @@
+/**
+ * 「加選 - 即選即上」功能模組
+ */
 var __changeFilterHandler_state = null;
 var changeFilterHandler = function(val, params) {
     if (val==__changeFilterHandler_state) {
@@ -14,6 +17,7 @@ var changeFilterHandler = function(val, params) {
     }
 
     var weekdays = params.weekdays?params.weekdays:null;
+    var depttypes = params.depttypes?params.depttypes:null;
 
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
     var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
@@ -23,9 +27,37 @@ var changeFilterHandler = function(val, params) {
     //store1a.removeAll();
 
     var __filter_proc = function(record) {
-        if (record.get('coursetype')==val) {
-            if (weekdays) {
+        var result = false;
 
+        if (record.get('coursetype')==val) {
+            result = true;
+
+            //單位篩選
+            if (depttypes) {
+                //部（studytype）
+                if (result && Ext.Array.contains(depttypes, 'studytype')) {
+                    if (record.get('studytype') != ClientSession.user.studytype) {
+                        result = false;
+                    }
+                }
+
+                //院（collegeid）
+                if (result && Ext.Array.contains(depttypes, 'collegeid')) {
+                    if (record.get('collegeid') != ClientSession.user.collegeid) {
+                        result = false;
+                    }
+                }
+
+                //系所（unitid）
+                if (result && Ext.Array.contains(depttypes, 'unitid')) {
+                    if (record.get('unitid') != ClientSession.user.unitid) {
+                        result = false;
+                    }
+                }
+            }
+
+            //星期篩選
+            if (result && weekdays) {
                 var coursetime = Ext.String.trim(record.get('coursetime'));
                 var coursetime_array = coursetime.split(',');
                 var weeksetup = [
@@ -59,17 +91,16 @@ var changeFilterHandler = function(val, params) {
                     }
                 });
 
-                var result = false;
-
+                result = false;
                 Ext.Array.each(weekdays, function(item) {
-                    if (weeksetup[item]) result = true;
+                    if (weeksetup[item]) {
+                        result = (result || true);
+                    }
                 });
-
-                return result;
             }
-
-            return true;
         }
+        //傳回處理結果
+        return result;
     };
 
     //處理左邊分類清單查詢
@@ -226,19 +257,6 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
     ]
 });
 
-Ext.define('Module.SchoolCourse.RealtimeCourse.Grid3', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.SchoolCourse-RealtimeCourse-Grid3',
-    store: Ext.data.StoreManager.lookup('SchoolCourse-Store3'),
-    columns: [
-        { header: '必修學分數', dataIndex: 'num1', sortable: false },
-        { header: '必選的學分數', dataIndex: 'num2', sortable: false },
-        { header: '選修的學分數', dataIndex: 'num3', sortable: false },
-        { header: '最低學分數', dataIndex: 'num4', sortable: false },
-        { header: '最高學分數', dataIndex: 'num5', sortable: false, flex: true }
-    ]
-});
-
 Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
@@ -336,24 +354,14 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
         dock: 'top',
         items: [{
             xtype: 'checkboxgroup',
+            itemId: 'dept-filter',
             width: 180,
-            items: [{
-                xtype: 'checkbox',
-                boxLabel: '全校',
-                name: 'password'
-            }, {
-                xtype: 'checkbox',
-                boxLabel: '跨部',
-                name: 'password'
-            }, {
-                xtype: 'checkbox',
-                boxLabel: '院',
-                name: 'password'
-            }, {
-                xtype: 'checkbox',
-                boxLabel: '系所',
-                name: 'studentno',
-            }]
+            items: [
+                {xtype: 'checkbox', boxLabel: '全校', name: 'types', inputValue: 'all', checked: false},
+                {xtype: 'checkbox', boxLabel: '跨部', name: 'types', inputValue: 'studytype', checked: false},
+                {xtype: 'checkbox', boxLabel: '院', name: 'types', inputValue: 'collegeid', checked: false},
+                {xtype: 'checkbox', boxLabel: '系所', name: 'types', inputValue: 'unitid', checked: false}
+            ]
         }, {
             itemId: 'week-filter',
             xtype: 'checkboxgroup',
@@ -377,13 +385,14 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             tooltip: '加選',
             text: '查詢',
             handler: function() {
-                var cbg = this.up('toolbar').getComponent('week-filter');
-
                 //取得勾選的星期資料（陣列）
-                var weekdays = cbg.getValue().days;
+                var weekdays = this.up('toolbar').getComponent('week-filter').getValue().days;
+
+                //取得勾選的單位資料（陣列）
+                var depttypes = this.up('toolbar').getComponent('dept-filter').getValue().types;
 
                 //重新篩選查詢
-                changeFilterHandler(null, {weekdays: weekdays});
+                changeFilterHandler(null, {weekdays: weekdays, depttypes: depttypes});
             }
         }]
     }, {
@@ -470,7 +479,20 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 );                
             }
         }, {
-            text: '清除候選區'
+            icon: __SILK_ICONS_URL + 'cart_delete.png',
+            text: '清除候選區',
+            handler: function() {
+                Ext.Msg.confirm(
+                    '清除確認',
+                    '請按「是」將候選區資料清空；按「否」取消動作。',
+                    function(btn, text){
+                        if (btn == 'yes'){
+                            var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                            store2.removeAll();
+                        }
+                    }
+                );
+            }
         }, {
             xtype: 'tbtext',
             text: '必修/必選的學分數: 4 選修的學分數: 0'

@@ -57,11 +57,25 @@ Ext.onReady(function(){
             text : '',
             expanded: true,
             children : [{
-                text : '系所選課',
+                text : '登記分發',
                 expanded: true,
-                children : []
+                children : [{
+                    text: '加選 - 登記',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                    id: 'Module.SchoolCourse.RegisterCourse',
+                    leaf: true
+                }, {
+                    text: '加選 - 待分發',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                    id: 'Module.SchoolCourse.BookingCourse',
+                    leaf: true
+                }, {
+                    text: '我的課程清單',
+                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                    leaf: true
+                }]
             }, {
-                text : '全校選課',
+                text : '即選即上',
                 expanded: true,
                 children : [{
                     text: '加選 - 即選即上',
@@ -69,19 +83,13 @@ Ext.onReady(function(){
                     id: 'Module.SchoolCourse.RealtimeCourse',
                     leaf: true
                 }, {
-                    text: '加選 - 全校',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    id: 'Module.SchoolCourse.RegisterCourse',
-                    leaf: true
-                }, {
-                    text: '退選 - 全校',
+                    text: '退選',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
                     id: 'Module.SchoolCourse.UnregisterCourse',
                     leaf: true
                 }, {
                     text: '我的課程清單',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    //id: 'Module-SchoolCourse-StudentCourse',
                     leaf: true
                 }]
             }]
