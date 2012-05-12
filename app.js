@@ -1,15 +1,29 @@
-
 /**
-* Module dependencies.
-*/
+ * 網路選課系統
+ * Powerd by ExtJS + Node.js + MongoDB
+ *
+ * @author lyhcode@gmail.com
+ */
+
+
+// Module dependencies.
 
 var express = require('express')
   , routes = require('./routes')
+  , cache = require('connect-cache')
   , mongo = require('mongoskin')
   , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=5')
   , mongoStore = require('connect-mongodb');
 
-var app = module.exports = express.createServer();
+// Express web server
+
+var app = module.exports = express.createServer(
+  cache({rules: [
+    {regex: /\/cached\/.*/, ttl: 60*60*1000}
+  ]})
+);
+
+// URL prefix setup for additional path like iisnode
 
 var urlprefix = ''
 

@@ -1,4 +1,4 @@
-app.get(urlprefix + '/service/listall.json', function(req, res) {
+app.get(urlprefix + '/service/cached/listall.json', function(req, res) {
     res.charset = 'UTF-8';
     res.contentType('application/json');
     
@@ -8,6 +8,8 @@ app.get(urlprefix + '/service/listall.json', function(req, res) {
         'roomname':1, 'maxcount':1, 'selectedcount': 1,
         'unitid': 1, 'collegeid': 1, 'studytype': 1
     };
+
+    console.log('Query tSemesterCusWeb from MongoDB '+new Date());
     
     db.collection('tSemesterCusWeb').find({}, fields).toArray(function(err, rows){
         //res.send(JSON.stringify(rows));

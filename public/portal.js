@@ -125,12 +125,17 @@ Ext.onReady(function(){
                         '是否登出系統',
                         '<span class="portal-message">請按「是」確認登出系統，按「否」則取消！</span>',
                         function (btn, text) {
-                            if (btn=='yes') {
-                                 location.href = 'login.html';
+                            if (btn == 'yes') {
+                                Ext.Ajax.request({
+                                    url: __SERVICE_URL + '/service/logout.json',
+                                    method: 'GET',
+                                    success: function(response) {
+                                         location.href = 'login.html';
+                                    }
+                                });
                             }
                         }
                     );
-                   
                 }
             }],
             items: [{
@@ -229,18 +234,29 @@ Ext.onReady(function(){
         success: function(response) {
             var obj = Ext.JSON.decode(response.responseText);
 
-            if (obj.data) {
-                ClientSession.user = obj.data.user;
-
-                //更新使用者資訊列
-                if (obj.data.user) {
-                    var user = obj.data.user;
-                    var cmp = Ext.getCmp('userinfo');
-                    cmp.setText(user.chtname+' '+user.studentno+' '+user.classname);
-                }
+            if (!obj.success) {
+                Ext.Msg.alert(
+                    '發生錯誤',
+                    '請重新登入再操作一次！',
+                    function() {
+                        location.href = 'login.html';
+                    }
+                );
             }
+            else {
+                if (obj.data) {
+                    ClientSession.user = obj.data.user;
 
-            completeJob(0);
+                    //更新使用者資訊列
+                    if (obj.data.user) {
+                        var user = obj.data.user;
+                        var cmp = Ext.getCmp('userinfo');
+                        cmp.setText(user.chtname+' '+user.studentno+' '+user.classname);
+                    }
+                }
+
+                completeJob(0);
+            }
         }
     });
 
