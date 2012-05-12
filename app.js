@@ -19,7 +19,7 @@ var express = require('express')
 
 var app = module.exports = express.createServer(
   cache({rules: [
-    {regex: /\/cached\/.*/, ttl: 60*60*1000}
+    {regex: /\/cached\/.*/, ttl: 60*1000}
   ]})
 );
 

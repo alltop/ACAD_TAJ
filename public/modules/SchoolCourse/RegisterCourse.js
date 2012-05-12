@@ -18,6 +18,7 @@ var changeFilterHandler = function(val, params) {
 
     var weekdays = params.weekdays?params.weekdays:null;
     var depttypes = params.depttypes?params.depttypes:null;
+    var gpid = params.gpid?params.gpid:null;
 
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
     var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
@@ -32,8 +33,15 @@ var changeFilterHandler = function(val, params) {
         if (record.get('coursetype')==val) {
             result = true;
 
+            //學門領域
+            if (result && gpid && gpid != '') {
+                if (record.get('selectgpid') != gpid) {
+                    result = false;
+                }
+            }
+
             //單位篩選
-            if (depttypes) {
+            if (result && depttypes) {
                 //部（studytype）
                 if (result && Ext.Array.contains(depttypes, 'studytype')) {
                     if (record.get('studytype') != ClientSession.user.studytype) {
@@ -225,7 +233,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
             align: 'center',
             style: {cursor: 'hand'},
             items: [{
-                icon: __SILK_ICONS_URL+'delete.png',
+                icon: __SILK_ICONS_URL + 'delete.png',
                 tooltip: '移除',
                 handler: function(grid, rowIndex, colIndex) {
                     var store2 = grid.getStore();
@@ -256,11 +264,32 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
     ]
 });
 
+var __createFilterHandler = function(code, text) {
+    return function(button, e) {
+        button.toggle(true);
+        changeFilterHandler(code);
+
+        //通識特別處理：學門領域下拉選單啟用
+        var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
+        if (cmp) {
+            if (code == '1') {
+                cmp.enable();
+            }
+            else {
+                cmp.disable();
+            }
+        }
+
+        var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+        label.setText(text);
+    };
+}
+
 Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
     closable: true,
-    icon: __SILK_ICONS_URL+'application_view_columns.png',
+    icon: __SILK_ICONS_URL + 'application_view_columns.png',
     title: '加選 - 登記',
     layout: 'border',
     dockedItems: [{
@@ -268,82 +297,47 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         dock: 'top',
         items: [{
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '通識選修',
             toggleGroup: 'grid1-filter',
             pressed: true,
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('1');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
-            }
+            handler: __createFilterHandler('1', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '體育選修',
             toggleGroup: 'grid1-filter',
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('2');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('體育選修...');
-            }
+            handler: __createFilterHandler('2', '體育選修...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '院訂選修',
             toggleGroup: 'grid1-filter',
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('3');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('院訂選修...');
-            }
+            handler: __createFilterHandler('3', '院訂選修...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '軍訓課程',
             toggleGroup: 'grid1-filter',
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('4');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('軍訓課程...');
-            }
+            handler: __createFilterHandler('4', '軍訓課程...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '專業課程',
             toggleGroup: 'grid1-filter',
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('5');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('專業課程...');
-            }
+            handler: __createFilterHandler('5', '專業課程...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '英文課程',
             toggleGroup: 'grid1-filter',
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('7');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('英文課程...');
-            }
+            handler: __createFilterHandler('7', '英文課程...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'bullet_green.png',
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '服務教育',
             toggleGroup: 'grid1-filter',
-            handler: function(button, e) {
-                button.toggle(true);
-                changeFilterHandler('8');
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('服務教育...');
-            }
+            handler: __createFilterHandler('8', '服務教育...')
         }, '-', {
             xtype: 'tbtext',
             text: '最低學分/最高學分：16學分/28學分'
@@ -351,9 +345,31 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
     }, {
         xtype: 'toolbar',
         dock: 'top',
+        itemId: 'filterbar',
         items: [{
+            xtype: 'combo',
+            itemId: 'gpid-filter',
+            disabled: false,
+            store: {
+                fields: ['value', 'display'],
+                data : [
+                    {value: '', display: '- 全部顯示 -'},
+                    {value: 'G00001', display: '人文藝術'},
+                    {value: 'G00002', display: '社會科學'},
+                    {value: 'G00003', display: '自然科學'},
+                    {value: 'G00004', display: '生命倫理與環境關懷'},
+                    {value: 'G00005', display: '生活應用'},
+                ]
+            },
+            queryMode: 'local',
+            displayField: 'display',
+            valueField: 'value',
+            emptyText: '學門領域',
+            allowBlank: true
+        }, {
             xtype: 'checkboxgroup',
             itemId: 'dept-filter',
+            disabled: true,
             width: 180,
             items: [
                 {xtype: 'checkbox', boxLabel: '全校', name: 'types', inputValue: 'all', checked: false},
@@ -380,7 +396,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             ]
         }, '-', {
             xtype: 'button',
-            icon: __SILK_ICONS_URL+'magnifier.png',
+            icon: __SILK_ICONS_URL + 'magnifier.png',
             tooltip: '加選',
             text: '查詢',
             handler: function() {
@@ -390,8 +406,10 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 //取得勾選的單位資料（陣列）
                 var depttypes = this.up('toolbar').getComponent('dept-filter').getValue().types;
 
+                var gpid = this.up('toolbar').getComponent('gpid-filter').getValue();
+
                 //重新篩選查詢
-                changeFilterHandler(null, {weekdays: weekdays, depttypes: depttypes});
+                changeFilterHandler(null, {weekdays: weekdays, depttypes: depttypes, gpid: gpid});
             }
         }]
     }, {
@@ -532,7 +550,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         resizable: true,
         region: 'south',
         title: '候選區',
-        icon: __SILK_ICONS_URL+'cart_add.png',
+        icon: __SILK_ICONS_URL + 'cart_add.png',
         autoScroll: true,
         height: 150,
         margins: '5 5 5 5'
