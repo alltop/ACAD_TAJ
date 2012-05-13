@@ -9,7 +9,12 @@ Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
     disableSelection: false,
     invalidateScrollerOnRefresh: true,
     viewConfig: {
-        trackOver: false
+        trackOver: false,
+        plugins: {
+            ddGroup: 'grid2-group',
+            ptype: 'gridviewdragdrop',
+            enableDrop: true
+        }
     },
     listeners: {
         render: function(grid) {
@@ -86,17 +91,24 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
     frame: false,
     closable: true,
     title: '加選 - 待分發',
-    icon: __SILK_ICONS_URL+'application_view_columns.png',
+    icon: __SILK_ICONS_URL + 'application_view_columns.png',
     layout: 'border',
     tbar: [{
         xtype: 'button',
-        icon: __SILK_ICONS_URL+'arrow_rotate_clockwise.png',
+        icon: __SILK_ICONS_URL + 'arrow_rotate_clockwise.png',
         text: '重新讀取',
         handler: function(button, e) {
             Ext.defer(function() {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
                 store3.load();
             }, 1);
+        }
+    }, {
+        xtype: 'button',
+        icon: __SILK_ICONS_URL + 'database_save.png',
+        text: '儲存志願排序',
+        handler: function(button, e) {
+            alert("志願排序");
         }
     }],
     items: [{

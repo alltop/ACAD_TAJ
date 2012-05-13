@@ -224,6 +224,13 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-RegisterCourse-Grid2',
     store: 'SchoolCourse-Store2',
+    viewConfig: {
+        plugins: {
+            ddGroup: 'grid2-group',
+            ptype: 'gridviewdragdrop',
+            enableDrop: true
+        }
+    },
     columns: [
         { 
             header: '移除',
