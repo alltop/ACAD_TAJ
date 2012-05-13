@@ -215,7 +215,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
         { header: '上課地點', dataIndex: 'roomname' },
         { header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 }
+        { header: '上限', dataIndex: 'maxcount', width: 50 },
+        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true }
     ]
 });
 
@@ -260,7 +261,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
         { header: '上課地點', dataIndex: 'roomname' },
         { header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 }
+        { header: '上限', dataIndex: 'maxcount', width: 50 },
+        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true }
     ]
 });
 
@@ -282,6 +284,10 @@ var __createFilterHandler = function(code, text) {
 
         var label = this.up('panel').getComponent('footbar').getComponent('label-status');
         label.setText(text);
+
+        //切換[英文]顯示級別欄位
+        this.up('panel').getComponent('grid1').getView().getHeaderCt().getHeaderAtIndex(9).setVisible(code=='7');
+        this.up('panel').getComponent('grid2').getView().getHeaderCt().getHeaderAtIndex(9).setVisible(code=='7');
     };
 }
 

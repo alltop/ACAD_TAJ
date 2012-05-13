@@ -5,7 +5,7 @@ Ext.define('Module.SchoolCourse.Store1a', {
     extend: 'Ext.data.Store',
     fields: [
         'courseid', 'coursetype', 'semcoursename', 'coursetime',
-        'unitid', 'collegeid', 'studytype', 'selectgpid'
+        'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
     ],
     sorters: [{
         property : 'semcoursename',
