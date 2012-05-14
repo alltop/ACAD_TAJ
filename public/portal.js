@@ -72,11 +72,12 @@ Ext.onReady(function(){
                 }, {
                     text: '我的課程清單',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
+                    id: 'Module.SchoolCourse.ShowCourse',
                     leaf: true
                 }]
             }, {
                 text : '即選即上',
-                expanded: true,
+                expanded: false,
                 children : [{
                     text: '加選 - 即選即上',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
@@ -187,7 +188,7 @@ Ext.onReady(function(){
             items: [{
                 title: '首頁',
                 itemId: 'home',
-                icon: __SILK_ICONS_URL+'application_home.png',
+                icon: __SILK_ICONS_URL + 'application_home.png',
                 bodyStyle: 'padding: 10px',
                 closable: false,
                 autoLoad: {

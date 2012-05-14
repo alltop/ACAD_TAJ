@@ -18,5 +18,6 @@
     , "mongoskin": "latest"
     , "connect-mongodb": "latest"
     , "connect-cache": "latest"
+    , "cloudfoundry": "latest"
   }
 }

@@ -13,7 +13,8 @@ var express = require('express')
   , cache = require('connect-cache')
   , mongo = require('mongoskin')
   , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=2')
-  , mongoStore = require('connect-mongodb');
+  , mongoStore = require('connect-mongodb')
+  , cloudfoundry = require('cloudfoundry');
 
 // Express web server
 
