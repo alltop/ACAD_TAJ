@@ -5,7 +5,7 @@ Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
     icon: __SILK_ICONS_URL + 'application_view_columns.png',
     title: '我的課程清單',
     layout: 'border',
-    bodyStyle: 'padding: 10px',
+    bodyStyle: 'padding: 10px; background: white',
     autoScroll: true,
     autoLoad: {
         url: 'table.html',
