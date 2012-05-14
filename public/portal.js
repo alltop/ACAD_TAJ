@@ -65,7 +65,7 @@ Ext.onReady(function(){
                     id: 'Module.SchoolCourse.RegisterCourse',
                     leaf: true
                 }, {
-                    text: '加選 - 待分發',
+                    text: '加選 - 待分發（修改刪除）',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
                     id: 'Module.SchoolCourse.BookingCourse',
                     leaf: true
@@ -214,7 +214,8 @@ Ext.onReady(function(){
     var jobs = new Array();
     jobs[0] = 0;
     jobs[1] = 0;
-    //jobs[2] = 0;
+    jobs[2] = 0;
+    jobs[3] = 0;
 
     //背景工作完成查核函式
     var completeJob = function(index) {
@@ -233,7 +234,6 @@ Ext.onReady(function(){
         method: 'GET',
         success: function(response) {
             var obj = Ext.JSON.decode(response.responseText);
-
             if (!obj.success) {
                 Ext.Msg.alert(
                     '發生錯誤',
@@ -254,38 +254,28 @@ Ext.onReady(function(){
                         cmp.setText(user.chtname+' '+user.studentno+' '+user.classname);
                     }
                 }
-
                 completeJob(0);
             }
         }
     });
 
-    //job1
     Ext.defer(function() {
         var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+        var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
+        var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
         store0.load({
             callback: function(records, operation, success) {
-                var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
-                
-                var tempIds = {};
-                var result = store0.queryBy(function(record) {
-                    var returnValue = (tempIds[record.get('courseid')]==null);
-                    tempIds[record.get('courseid')] = true;
-                    return returnValue;
-                });
-                store1a.loadRecords(result.items);
-                //store1a.sort();
-
-                //Ext.Msg.alert('除錯訊息', "共載入 " + store0.count() + " 筆課程資料！", function() {
-                //    completeJob(1);
-                //});
-
-                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
                 store3.load({
                     callback: function(records, operation, success) {
-                        completeJob(1);
+                        completeJob(2);
                     }
                 });
+                store1a.load({
+                    callback: function(records, operation, success) {
+                        completeJob(3);
+                    }
+                });
+                completeJob(1);
             }
         });
     }, 0);

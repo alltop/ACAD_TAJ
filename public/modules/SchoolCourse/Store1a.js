@@ -3,8 +3,10 @@
  */
 Ext.define('Module.SchoolCourse.Store1a', {
     extend: 'Ext.data.Store',
+    autoLoad: false,
+    autoSync: false,
     fields: [
-        'courseid', 'coursetype', 'semcoursename', 'coursetime',
+        'courseid', 'coursetype', 'semcoursename', 'coursetime', 'choose',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
     ],
     sorters: [{
@@ -17,6 +19,26 @@ Ext.define('Module.SchoolCourse.Store1a', {
         reader: {
             type: 'json',
             root: 'results'
+        }
+    },
+    listeners: {
+        load: function(store1a, records, options) {
+            var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+            if (store0 && store0.count() > 0) {
+                var tempIds = {};
+                var result = store0.queryBy(function(record) {
+                    /*
+                    var record_courseid = record.get('courseid');
+                    var returnValue = (tempIds[record_courseid]==null);
+                    tempIds[record_courseid] = true;
+                    */
+                    var record_semcoursename = record.get('semcoursename');
+                    var returnValue = (tempIds[record_semcoursename]==null);
+                    tempIds[record_semcoursename] = true;
+                    return returnValue;
+                });
+                store1a.loadRecords(result.items);
+            }
         }
     }
 });

@@ -8,7 +8,7 @@ Ext.define('Module.SchoolCourse.Store3', {
     fields: [
         'semcourseid', 'courseid', 'coursetype', 'coursetypename',
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
-        'roomname', 'maxcount', 'selectedcount',
+        'roomname', 'maxcount', 'selectedcount', 'choose',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
     ],
     data: {'items':[]},
@@ -22,7 +22,7 @@ Ext.define('Module.SchoolCourse.Store3', {
     listeners: {
         load: function(store3, records, options) {
             var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
-            if (store0) {
+            if (store0 && store0.count() > 0) {
                 var request = Ext.Ajax.request({
                     url: __SERVICE_URL + '/service/listselected.json',
                     method: 'GET',

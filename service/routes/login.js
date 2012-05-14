@@ -10,20 +10,22 @@ app.post(urlprefix + '/service/login.json', function(req, res) {
     // SELECT * FROM tStudent WHERE [query]
     db.collection('tStudent').findOne(query, function(err, row){
         //console.log(row);
+        var results = {};
+        
         if (row) {
-            var results = {
+            results = {
                 success: true,
                 data: row
             };
             req.session.user = row;
-            res.send(JSON.stringify(results));
         }
         else {
-            var results = {
+            results = {
                 success: false,
                 errors: {reason: '帳號密碼不正確'}
             };
-            res.send(JSON.stringify(results));
         }
+        res.send(JSON.stringify(results));
+        res.end();
     });
 });

@@ -16,10 +16,22 @@ var changeFilterHandler = function(val, params) {
         params = {};
     }
 
+    //必修選修特別處理
+    var val_tokens = val.split('-');
+    var val_choose = null;
+
+    if (val_tokens.length > 1) {
+        val = val_tokens[0];
+        val_choose = val_tokens[1];
+    }
+
+    //篩選資料前置處理
     var weekdays = params.weekdays?params.weekdays:null;
     var depttypes = params.depttypes?params.depttypes:null;
     var gpid = params.gpid?params.gpid:null;
+    var semcoursename = params.semcoursename?params.semcoursename:null;
 
+    //資料來源設定
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
     var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
     var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
@@ -32,6 +44,20 @@ var changeFilterHandler = function(val, params) {
 
         if (record.get('coursetype')==val) {
             result = true;
+
+            //必修選修特別處理
+            if (result && val_choose != null) {
+                if (record.get('choose') != val_choose) {
+                    result = false;
+                }
+            }
+
+            //課程名稱篩選
+            if (result && semcoursename != null && Ext.String.trim(semcoursename) != '') {
+                if (record.get('semcoursename').indexOf(semcoursename) == -1) {
+                    result = false;
+                }
+            }
 
             //學門領域
             if (result && gpid && gpid != '') {
@@ -140,10 +166,19 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1a', {
             //grid.body.mask('讀取中');
         },
         select: function(grid, record, index, eOpts) {
+            // group by courseid
+            /*
             var record_courseid = record.get('courseid');
             var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
             store1.filterBy(function(record2) {
                 return (record2.get('courseid')==record_courseid);
+            });
+            */
+            // group by semcoursename
+            var record_semcoursename = record.get('semcoursename');
+            var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+            store1.filterBy(function(record2) {
+                return (record2.get('semcoursename')==record_semcoursename);
             });
         }
     },
@@ -281,7 +316,7 @@ var __createFilterHandler = function(code, text) {
         //通識特別處理：學門領域下拉選單啟用
         var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
         if (cmp) {
-            if (code == '1') {
+            if (code == '1-1' || code == '1-2') {
                 cmp.enable();
             }
             else {
@@ -310,44 +345,56 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         dock: 'top',
         items: [{
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            text: '通識必修',
+            toggleGroup: 'grid1-filter',
+            handler: __createFilterHandler('1-1', '通識必修...')
+        }, {
+            xtype: 'button',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
             text: '通識選修',
             toggleGroup: 'grid1-filter',
             pressed: true,
-            handler: __createFilterHandler('1', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。')
+            handler: __createFilterHandler('1-2', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
-            text: '體育選修',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            text: '體育課程',
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('2', '體育選修...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
             text: '院訂選修',
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('3', '院訂選修...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
             text: '軍訓課程',
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('4', '軍訓課程...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
-            text: '專業課程',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            text: '專業必修',
             toggleGroup: 'grid1-filter',
-            handler: __createFilterHandler('5', '專業課程...')
+            handler: __createFilterHandler('5-1', '專業必修...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            text: '專業選修',
+            toggleGroup: 'grid1-filter',
+            handler: __createFilterHandler('5-2', '專業選修...')
+        }, {
+            xtype: 'button',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
             text: '英文課程',
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('7', '英文課程...')
         }, {
             xtype: 'button',
-            icon: __SILK_ICONS_URL + 'bullet_green.png',
+            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
             text: '服務教育',
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('8', '服務教育...')
@@ -399,15 +446,22 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             width: 320,
             items: [
                 { xtype: 'checkbox', boxLabel: '全時段', name: 'days', inputValue: 0, checked: true, width: 60 },
-                { xtype: 'checkbox', boxLabel: '一', name: 'days', inputValue: 1, checked: true },
-                { xtype: 'checkbox', boxLabel: '二', name: 'days', inputValue: 2, checked: true },
-                { xtype: 'checkbox', boxLabel: '三', name: 'days', inputValue: 3, checked: true },
-                { xtype: 'checkbox', boxLabel: '四', name: 'days', inputValue: 4, checked: true },
-                { xtype: 'checkbox', boxLabel: '五', name: 'days', inputValue: 5, checked: true },
-                { xtype: 'checkbox', boxLabel: '六', name: 'days', inputValue: 6, checked: true },
-                { xtype: 'checkbox', boxLabel: '日', name: 'days', inputValue: 7, checked: true }
+                { xtype: 'checkbox', boxLabel: '一', name: 'days', inputValue: 1, checked: false },
+                { xtype: 'checkbox', boxLabel: '二', name: 'days', inputValue: 2, checked: false },
+                { xtype: 'checkbox', boxLabel: '三', name: 'days', inputValue: 3, checked: false },
+                { xtype: 'checkbox', boxLabel: '四', name: 'days', inputValue: 4, checked: false },
+                { xtype: 'checkbox', boxLabel: '五', name: 'days', inputValue: 5, checked: false },
+                { xtype: 'checkbox', boxLabel: '六', name: 'days', inputValue: 6, checked: false },
+                { xtype: 'checkbox', boxLabel: '日', name: 'days', inputValue: 7, checked: false }
             ]
         }, '-', {
+            xtype: 'textfield',
+            itemId: 'semcoursename-filter',
+            fieldLabel: '課程名稱',
+            labelWidth: 'right',
+            labelWidth: 60,
+            text: 'test'
+        }, {
             xtype: 'button',
             icon: __SILK_ICONS_URL + 'magnifier.png',
             tooltip: '加選',
@@ -419,10 +473,19 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 //取得勾選的單位資料（陣列）
                 var depttypes = this.up('toolbar').getComponent('dept-filter').getValue().types;
 
+                //學門領域
                 var gpid = this.up('toolbar').getComponent('gpid-filter').getValue();
 
+                //課程名稱
+                var semcoursename = this.up('toolbar').getComponent('semcoursename-filter').getValue();
+
                 //重新篩選查詢
-                changeFilterHandler(null, {weekdays: weekdays, depttypes: depttypes, gpid: gpid});
+                changeFilterHandler(null, {
+                    weekdays: weekdays,
+                    depttypes: depttypes,
+                    gpid: gpid,
+                    semcoursename: semcoursename
+                });
             }
         }]
     }, {
@@ -481,10 +544,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                             //設定選課來源資料
                             var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
                             var rowIndex = store1.findBy(function(record, id) {
-                                if (record.get('semcourseid')==text) {
-                                    return true;
-                                }
-                                return false;
+                                return (record.get('semcourseid')==text);
                             });
                             if (rowIndex > -1) {
                                 var record = store1.getAt(rowIndex);

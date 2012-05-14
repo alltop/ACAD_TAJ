@@ -90,7 +90,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
     closable: true,
-    title: '加選 - 待分發',
+    title: '加選 - 待分發（修改刪除）',
     icon: __SILK_ICONS_URL + 'application_view_columns.png',
     layout: 'border',
     tbar: [{
