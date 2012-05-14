@@ -6,6 +6,7 @@ Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
     title: '我的課程清單',
     layout: 'border',
     bodyStyle: 'padding: 10px',
+    autoScroll: true,
     autoLoad: {
         url: 'table.html',
         scripts: false
