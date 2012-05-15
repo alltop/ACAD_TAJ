@@ -6,7 +6,7 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
     res.contentType('application/json');
 
     //學生資料（SESSION）
-    var user = req.session.user;
+    var user = req.session.user?req.session.user:{};
 
     //課程清單（網頁表單）    
     var courses = req.body['courses'].split(',');
