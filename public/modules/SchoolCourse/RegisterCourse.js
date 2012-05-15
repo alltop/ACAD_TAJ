@@ -528,7 +528,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                         params: {
                             courses: Ext.Array.from(courses).join(',')
                         },
-                        success: function(response) {
+                        success: function(response, opts) {
                             Ext.Msg.hide();
 
                             var obj = Ext.JSON.decode(response.responseText);
@@ -539,6 +539,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                 store2.removeAll();
                                 store3.load();
                             }
+                        },
+                        failure: function(response, opts) {
+                            Ext.Msg.hide();
+
+                            Ext.Msg.alert("伺服器回應", response.responseText);
                         }
                     });
                 }
