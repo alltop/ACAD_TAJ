@@ -4,7 +4,8 @@ Ext.define('Module.SchoolCourse.Store2', {
         'semcourseid', 'courseid', 'coursetype', 'coursetypename',
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
         'roomname', 'maxcount', 'selectedcount', 'choose',
-        'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
+        'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel',
+        'seqno'
     ],
     data: {'items':[]},
     proxy: {

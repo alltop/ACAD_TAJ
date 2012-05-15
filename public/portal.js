@@ -131,7 +131,7 @@ Ext.onReady(function(){
                                     url: __SERVICE_URL + '/service/logout.json',
                                     method: 'GET',
                                     success: function(response) {
-                                         location.href = 'login.html';
+                                         location.href = '/login';
                                     }
                                 });
                             }
@@ -240,7 +240,7 @@ Ext.onReady(function(){
                     '發生錯誤',
                     '請重新登入再操作一次！',
                     function() {
-                        location.href = 'login.html';
+                        location.href = '/login';
                     }
                 );
             }

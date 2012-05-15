@@ -15,6 +15,7 @@
   }
   , "dependencies": {
       "express": "latest"
+    , "jade": "latest"
     , "mongoskin": "latest"
     , "connect-mongodb": "latest"
     , "connect-cache": "latest"

@@ -39,7 +39,7 @@ Ext.onReady(function() {
                         */
 
                         //載入主畫面
-                        window.location = 'portal.html';
+                        window.location = '/portal';
                     },
                     failure: function(form, action) {
                         if(action.failureType == 'server'){

@@ -35,15 +35,15 @@ db.open(function(err, nativedb) {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
         app.use(express.methodOverride());
-        app.use(express.static(__dirname + '/public'));
         app.use(express.bodyParser());
         app.use(express.cookieParser());
         app.use(express.session({
-            cookie: { maxAge: 30 * 60 * 1000 },
+            cookie: { maxAge: 30 * 60 * 60 * 1000 },
             secret: '50709ff051bfabda20ac5284fc01a1e5',
             key: 'jsessionid',
             store: new mongoStore({db: nativedb})
         }));
+        app.use(express.static(__dirname + '/public'));
         app.use(app.router);
     });
 
@@ -57,6 +57,8 @@ db.open(function(err, nativedb) {
 
     // Routes
     app.get('/', routes.index);
+    app.get('/login.:format?', routes.login);
+    app.get('/portal.:format?', routes.portal);
 
     // Load Services
     require('./service')(app, db, urlprefix);

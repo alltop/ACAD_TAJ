@@ -236,6 +236,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
                                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                                record.set('seqno', store2.count()+1);
                                 store2.add(record);
                             }
                         }
@@ -264,6 +265,15 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
             ddGroup: 'grid2-group',
             ptype: 'gridviewdragdrop',
             enableDrop: true
+        },
+        listeners: {
+            drop: function(node, data, overModel, dropPosition, eOpts) {
+                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                store2.each(function(record) {
+                    record.set('seqno', store2.indexOf(record)+1);
+                });
+                //store2.sort('seqno', 'ASC');
+            }
         }
     },
     columns: [
@@ -296,6 +306,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
                 }
             }]
         },
+        { header: '志願順序', dataIndex: 'seqno', width: 60 },
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
@@ -429,7 +440,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         }, {
             xtype: 'checkboxgroup',
             itemId: 'dept-filter',
-            disabled: true,
+            disabled: false,
             width: 180,
             items: [
                 {xtype: 'checkbox', boxLabel: '全校', name: 'types', inputValue: 'all', checked: false},
@@ -555,6 +566,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                         if (btn=='yes') {
                                             //將選課資料移到待選區
                                             var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                                            record.set('seqno', store2.count()+1);
                                             store2.add(record);
                                         }
                                     }
@@ -622,7 +634,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         border: true,
         resizable: true,
         region: 'south',
-        title: '候選區',
+        title: '候選區 <small>（滑鼠左鍵按下可拖曳調整志願順序）</small>',
         icon: __SILK_ICONS_URL + 'cart_add.png',
         autoScroll: true,
         height: 150,
