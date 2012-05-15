@@ -9,7 +9,8 @@ Ext.define('Module.SchoolCourse.Store3', {
         'semcourseid', 'courseid', 'coursetype', 'coursetypename',
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
         'roomname', 'maxcount', 'selectedcount', 'choose',
-        'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
+        'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel',
+        'seqno'
     ],
     data: {'items':[]},
     proxy: {
@@ -32,6 +33,9 @@ Ext.define('Module.SchoolCourse.Store3', {
                             return Ext.Array.contains(obj, record.get('semcourseid'));
                         });
                         store3.loadRecords(result.items);
+                        store3.each(function(record) {
+                            record.set('seqno', store3.indexOf(record)+1);
+                        });
                     }
                 });
             }

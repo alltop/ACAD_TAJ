@@ -1,3 +1,31 @@
+Ext.define('Module.SchoolCourse.ShowCourse.Grid1', {
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.SchoolCourse-ShowCourse-Grid1',
+    store: 'SchoolCourse-Store4',
+    loadMask: true,
+    disableSelection: true,
+    columnLines: true,
+    rowLines: true,
+    invalidateScrollerOnRefresh: true,
+    viewConfig: {
+        trackOver: false
+    },
+    listeners: {
+        render: function(grid) {
+        }
+    },
+    columns: [
+        { header: '節次', dataIndex: 'seqno', width: 60, sortable: false },
+        { header: '星期一', dataIndex: 'day1', flex: true, sortable: false },
+        { header: '星期二', dataIndex: 'day2', flex: true, sortable: false },
+        { header: '星期三', dataIndex: 'day3', flex: true, sortable: false },
+        { header: '星期四', dataIndex: 'day4', flex: true, sortable: false },
+        { header: '星期五', dataIndex: 'day5', flex: true, sortable: false },
+        { header: '星期六', dataIndex: 'day6', flex: true, sortable: false },
+        { header: '星期日', dataIndex: 'day7', flex: true, sortable: false }
+    ]
+});
+
 Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
@@ -5,12 +33,21 @@ Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
     icon: __SILK_ICONS_URL + 'application_view_columns.png',
     title: '我的課程清單',
     layout: 'border',
-    bodyStyle: 'padding: 10px; background: white',
+    /*bodyStyle: 'padding: 10px; background: white',
     autoScroll: true,
     autoLoad: {
         url: 'table.html',
         scripts: false
-    }
+    }*/
+    items: [{
+        xtype: 'SchoolCourse-ShowCourse-Grid1',
+        itemId: 'grid1',
+        border: true,
+        region: 'center',
+        autoHeight: true,
+        autoScroll: true,
+        margins: '5 5 5 5'
+    }]
 });
 
 /**

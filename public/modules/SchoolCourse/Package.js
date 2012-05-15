@@ -9,5 +9,6 @@ Ext.define('Module.SchoolCourse.Package', {
 		this.requireStore('Module.SchoolCourse.Store1a', 'SchoolCourse-Store1a');
 		this.requireStore('Module.SchoolCourse.Store2', 'SchoolCourse-Store2');
 		this.requireStore('Module.SchoolCourse.Store3', 'SchoolCourse-Store3');
+		this.requireStore('Module.SchoolCourse.Store4', 'SchoolCourse-Store4');
 	}
 });

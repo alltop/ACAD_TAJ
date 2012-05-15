@@ -14,6 +14,15 @@ Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
             ddGroup: 'grid2-group',
             ptype: 'gridviewdragdrop',
             enableDrop: true
+        },
+        listeners: {
+            drop: function(node, data, overModel, dropPosition, eOpts) {
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                store3.each(function(record) {
+                    record.set('seqno', store3.indexOf(record)+1);
+                });
+                //store3.sort('seqno', 'ASC');
+            }
         }
     },
     listeners: {
@@ -75,6 +84,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
                 }
             }]  
         },
+        { header: '志願順序', dataIndex: 'seqno', width: 60 },
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true},
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
