@@ -4,6 +4,11 @@ exports.index = function(req, res){
 };
 
 exports.login = function(req, res){
+	// clear sessions and cookies
+	req.session.destroy();
+	res.clearCookie('JSESSIONID');
+	res.clearCookie('jsessionid');
+
 	res.render('login.jade', { title: '登入選課系統', bootstrap: 'login.js' });
 }
 

@@ -1,27 +1,34 @@
 Ext.onReady(function() {
     Ext.QuickTips.init();
     var login = new Ext.FormPanel({
-        labelWidth:80,
+        region: 'center',
         url: __SERVICE_URL + '/service/login.json',
         frame: false,
         border: false,
         defaultType: 'textfield',
         monitorValid: true,
         margins: '3 3 3 3',
-        bodyStyle: 'padding:5px;background:transparent;',
-        items:[{
+        bodyStyle: {
+            padding: '10px',
+            background: 'transparent'
+        },
+        items: [{
             fieldLabel: '學號',
+            labelWidth: 60,
             name: 'studentno',
             allowBlank: false
-        },{
+        }, {
             fieldLabel: '密碼',
+            labelWidth: 60,
             name: 'password',
             inputType: 'password',
             allowBlank: false
         }],
-        buttons:[{
+        buttons: [{
+            xtype: 'button',
             text: '登入',
-            icon: __SILK_ICONS_URL+'application_go.png',
+            cls: 'test',
+            icon: __SILK_ICONS_URL + 'application_go.png',
             formBind: true,
             handler: function() {
                 login.getForm().submit({
@@ -56,15 +63,46 @@ Ext.onReady(function() {
     });
     var win = new Ext.Window({
         title: '選課學生登入',
-        icon: __SILK_ICONS_URL+'user.png',
-        layout: 'fit',
-        width: 300,
-        height: 150,
+        icon: __SILK_ICONS_URL + 'user.png',
+        layout: 'border',
+        width: 480,
+        height: 260,
+        draggable: false,
         closable: false,
         resizable: false,
         plain: true,
-        border: false,
-        items: [login]
+        border: true,
+        bodyStyle: {
+            padding: '5px',
+            background: "#fff url('http://netcc.tajen.edu.tw/pro_course_choose/images/top.jpg') no-repeat"
+        },
+        items: [{
+            xtype: 'panel',
+            region: 'north',
+            bodyStyle: {
+                background: 'transparent'
+            },
+            border: false,
+            height: 100
+        }, {
+            xtype: 'panel',
+            region: 'west',
+            bodyStyle: {
+                background: 'transparent'
+            },
+            border: false,
+            width: 250
+        }, login],
+        dockedItems: [{
+            xtype: 'toolbar',
+            dock: 'bottom',
+            border: false,
+            bodyStyle: {
+                padding: '5px',
+                background: 'transparent'
+            },
+            items: ['© ALLTOP 2012', '-','DEMO ID: 300051013']
+        }]
     });
     win.show();
 });

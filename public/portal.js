@@ -100,6 +100,9 @@ Ext.onReady(function(){
         layout: 'border',
         title: '選課系統',
         id: 'topview',
+        style: {
+            background: '#fff'
+        },
         items: [{
             region: 'north',
             bbar: [{
@@ -110,17 +113,17 @@ Ext.onReady(function(){
                 text: '資料讀取中'
             }, '-', {
                 text: '首頁',
-                icon: __SILK_ICONS_URL+'application_home.png',
+                icon: __SILK_ICONS_URL + 'application_home.png',
                 handler: function(button, e) {
                     var tabpanel = Ext.getCmp('portal-tabpanel');
                     tabpanel.setActiveTab('home');
                 }
             }, {
                 text: '個人設定',
-                icon: __SILK_ICONS_URL+'user_edit.png'
+                icon: __SILK_ICONS_URL + 'user_edit.png'
             }, {
                 text: '離開',
-                icon: __SILK_ICONS_URL+'link_break.png',
+                icon: __SILK_ICONS_URL + 'link_break.png',
                 handler: function(button, e) {
                     Ext.MessageBox.confirm(
                         '是否登出系統',
@@ -151,17 +154,16 @@ Ext.onReady(function(){
             region: 'west',
             layout: 'border',
             border: true,
-            split: true,
+            /*split: true,*/
             collapsible: true,
-            margins: '2 0 5 5',
-            width: 200,
+            resizable: true,
+            width: 220,
             minSize: 100,
             maxSize: 360,
             items: [{
                 layout: 'accordion',
                 region: 'center',
                 border: true,
-                margins: '3 3 3 3',
                 items: [{
                     title: '學生加退選',
                     layout: 'fit',
@@ -175,7 +177,6 @@ Ext.onReady(function(){
                 title: '通知',
                 region: 'south',
                 height: 100,
-                margins: '3 3 3 3',
                 bodyStyle: 'padding:15px;background:#eee;',
                 autoScroll: true,
                 html: '<p class="details-info">沒有通知。</p>',

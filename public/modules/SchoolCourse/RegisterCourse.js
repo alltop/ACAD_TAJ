@@ -229,6 +229,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                     var store1 = grid.getStore();
                     var record = store1.getAt(rowIndex);
 
+                    //將選課資料移到待選區
+                    var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                    record.set('seqno', store2.count()+1);
+                    store2.add(record);
+
+                    /*--從加選區加選時，不提示訊息--
                     Ext.MessageBox.confirm(
                         '符合選課條件',
                         '<span class="portal-message">請按「是」將課程<strong>'+record.get('semcoursename')+'</strong>放入候選區！<br/>請按<strong style="color:red">確定加選</strong>按鈕送出所有候選區資料！</span>',
@@ -240,7 +246,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                                 store2.add(record);
                             }
                         }
-                    );
+                    );*/
                 }
             }]  
         },
@@ -437,11 +443,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             valueField: 'value',
             emptyText: '學門領域',
             allowBlank: true
-        }, {
+        }, '-', {
             xtype: 'checkboxgroup',
             itemId: 'dept-filter',
             disabled: false,
-            width: 180,
+            width: 200,
             items: [
                 {xtype: 'checkbox', boxLabel: '全校', name: 'types', inputValue: 'all', checked: false},
                 {xtype: 'checkbox', boxLabel: '跨部', name: 'types', inputValue: 'studytype', checked: false},
@@ -455,6 +461,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             labelAlign: 'right',
             labelWidth: 30,
             width: 320,
+            hidden: true,
             items: [
                 { xtype: 'checkbox', boxLabel: '全時段', name: 'days', inputValue: 0, checked: true, width: 60 },
                 { xtype: 'checkbox', boxLabel: '一', name: 'days', inputValue: 1, checked: false },
@@ -469,8 +476,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             xtype: 'textfield',
             itemId: 'semcoursename-filter',
             fieldLabel: '課程名稱',
-            labelWidth: 'right',
-            labelWidth: 60,
+            labelAlign: 'right',
+            labelWidth: 80,
             text: 'test'
         }, {
             xtype: 'button',
@@ -505,8 +512,10 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         ui: 'footer',
         itemId: 'footbar',
         items: [{
+            xtype: 'button',
             icon: __SILK_ICONS_URL + 'accept.png',
             text: '確定登記',
+            scale: 'medium',
             handler: function() {
                 var courses = new Array();
 
@@ -551,6 +560,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         }, {
             icon: __SILK_ICONS_URL + 'lightning_add.png',
             text: '快速登記',
+            scale: 'medium',
             handler: function() {
                 Ext.Msg.prompt(
                     '加入課程候選區',
@@ -587,6 +597,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         }, {
             icon: __SILK_ICONS_URL + 'cart_delete.png',
             text: '清除候選區',
+            scale: 'medium',
             handler: function() {
                 Ext.Msg.confirm(
                     '清除確認',
@@ -623,16 +634,14 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         resizable: true,
         region: 'west',
         autoScroll: true,
-        width: 180,
-        margins: '5 0 0 5'
+        width: 200
     }, {
         xtype: 'SchoolCourse-RegisterCourse-Grid1',
         itemId: 'grid1',
         border: true,
         resizable: true,
         region: 'center',
-        autoScroll: true,
-        margins: '5 5 0 5'
+        autoScroll: true
     }, {
         xtype: 'SchoolCourse-RegisterCourse-Grid2',
         itemId: 'grid2',
@@ -642,8 +651,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         title: '候選區 <small>（滑鼠左鍵按下可拖曳調整志願順序）</small>',
         icon: __SILK_ICONS_URL + 'cart_add.png',
         autoScroll: true,
-        height: 150,
-        margins: '5 5 5 5'
+        height: 150
     }]
 });
 
@@ -672,6 +680,14 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
             var panel = Ext.create('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 listeners: {
                     beforeclose: function(panel, eOpts) {
+
+                        //候選區有資料禁止關閉 Tab 視窗
+                        var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                        if (store2.count() > 0) {
+                            Ext.Msg.alert('無法關閉', '候選區尚有課程資料！');
+                            return false;
+                        }
+
                         thisModule.moduleUnload();
                         Module.SchoolCourse.RegisterCourse._previous = null;
                     },
