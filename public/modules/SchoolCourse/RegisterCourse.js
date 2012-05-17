@@ -333,12 +333,7 @@ var __createFilterHandler = function(code, text) {
         //通識特別處理：學門領域下拉選單啟用
         var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
         if (cmp) {
-            if (code == '1-1' || code == '1-2') {
-                cmp.enable();
-            }
-            else {
-                cmp.disable();
-            }
+            cmp.setVisible(code == '1-1' || code == '1-2');
         }
 
         var label = this.up('panel').getComponent('footbar').getComponent('label-status');
@@ -427,6 +422,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             xtype: 'combo',
             itemId: 'gpid-filter',
             disabled: false,
+            hidden: false,
             store: {
                 fields: ['value', 'display'],
                 data : [
@@ -443,7 +439,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             valueField: 'value',
             emptyText: '學門領域',
             allowBlank: true
-        }, '-', {
+        }, {
             xtype: 'checkboxgroup',
             itemId: 'dept-filter',
             disabled: false,
@@ -472,7 +468,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 { xtype: 'checkbox', boxLabel: '六', name: 'days', inputValue: 6, checked: false },
                 { xtype: 'checkbox', boxLabel: '日', name: 'days', inputValue: 7, checked: false }
             ]
-        }, '-', {
+        }, {
             xtype: 'textfield',
             itemId: 'semcoursename-filter',
             fieldLabel: '課程名稱',
