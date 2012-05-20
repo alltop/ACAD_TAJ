@@ -228,11 +228,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                     //設定選課來源資料
                     var store1 = grid.getStore();
                     var record = store1.getAt(rowIndex);
+                    store1.remove(record);
 
                     //將選課資料移到待選區
                     var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                    record.set('seqno', store2.count()+1);
                     store2.add(record);
+                    store2.generateSeqno();
 
                     /*--從加選區加選時，不提示訊息--
                     Ext.MessageBox.confirm(
@@ -275,9 +276,10 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
         listeners: {
             drop: function(node, data, overModel, dropPosition, eOpts) {
                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                store2.each(function(record) {
-                    record.set('seqno', store2.indexOf(record)+1);
-                });
+                store2.generateSeqno();
+                //store2.each(function(record) {
+                //    record.set('seqno', store2.indexOf(record)+1);
+                //});
                 //store2.sort('seqno', 'ASC');
             }
         }
@@ -519,7 +521,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
 
                 store2.each(function(record) {
-                    courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
+                    courses.push(record.get('semcourseid') + ':' + record.get('courseid') + ':' + record.get('seqno'));
                 });
 
                 if (courses.length == 0) {
@@ -538,17 +540,24 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
 
                             var obj = Ext.JSON.decode(response.responseText);
 
-                            Ext.Msg.alert("伺服器回應", response.responseText);
+                            //Ext.Msg.alert("伺服器回應", response.responseText);
 
                             if (obj.success) {
                                 store2.removeAll();
                                 store3.load();
+
+                                Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
+                            }
+                            else {
+                                Ext.getCmp('notifier').setText('<font color="red">選課登記失敗，請重新操作一次</font>');
                             }
                         },
                         failure: function(response, opts) {
                             Ext.Msg.hide();
 
                             Ext.Msg.alert("伺服器回應", response.responseText);
+
+                            Ext.getCmp('notifier').setText('<font color="red">選課登記失敗</font>');
                         }
                     });
                 }
@@ -577,8 +586,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                         if (btn=='yes') {
                                             //將選課資料移到待選區
                                             var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                                            record.set('seqno', store2.count()+1);
                                             store2.add(record);
+                                            store2.generateSeqno();
                                         }
                                     }
                                 );
@@ -606,15 +615,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                     }
                 );
             }
-        }/*, {
-            icon: __SILK_ICONS_URL + 'arrow_up.png',
-            handler: function() {
-            }
         }, {
-            icon: __SILK_ICONS_URL + 'arrow_down.png',
-            handler: function() {
-            }
-        }*/, {
             xtype: 'tbtext',
             text: '必修/必選的學分數: 4 選修的學分數: 0'
         }, {
@@ -626,18 +627,20 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
     items: [{
         xtype: 'SchoolCourse-RegisterCourse-Grid1a',
         itemId: 'grid1a',
+        region: 'west',
         border: true,
         resizable: true,
-        region: 'west',
         autoScroll: true,
-        width: 200
+        width: 200,
+        minWidth: 150,
+        maxWidth: 250
     }, {
         xtype: 'SchoolCourse-RegisterCourse-Grid1',
         itemId: 'grid1',
         border: true,
-        resizable: true,
-        region: 'center',
-        autoScroll: true
+        resizable: false,
+        autoScroll: true,
+        region: 'center'
     }, {
         xtype: 'SchoolCourse-RegisterCourse-Grid2',
         itemId: 'grid2',
@@ -665,6 +668,10 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
         //將目前的模組記錄在 URL HASH
     	window.location.hash = '#'+this.$className;
         
+        //顯示提示訊息
+        Ext.getCmp('notifier').setText('<font color="blue">需點擊確定登記按鈕，候選課程才會加到待分發課程清單</font>');
+
+        //加入新畫面到 Tab 視窗
         var tabpanel = Ext.getCmp('portal-tabpanel');
 
         //判斷 Panel 是否已經存在 Tab（建立或切換）

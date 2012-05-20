@@ -109,6 +109,10 @@ Ext.onReady(function(){
                 xtype: 'tbfill'
             }, {
                 xtype: 'tbtext',
+                id: 'notifier',
+                text: '請從左方主選單點選一項功能開始進行操作'
+            }, '-', {
+                xtype: 'tbtext',
                 id: 'userinfo',
                 text: '資料讀取中'
             }, '-', {

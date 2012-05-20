@@ -26,8 +26,10 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
             courseid: course_arr[1],    //課號
             studentid: user.studentid,  //學生代碼
             studentno: user.studentno,  //學號
-            createdate: new Date().getTime(),     //資料建立日期
-            regtype: '1'                //選課類型
+            timestamp: new Date().getTime(),            //時間戳記
+            serialno: course_arr[2]?course_arr[2]:'0',  //志願順序
+            createdate: new Date().getTime(),           //資料建立日期
+            regtype: '1'                                //選課類型
         });
 
         //tSelectedAddDel 選課記錄資料表
