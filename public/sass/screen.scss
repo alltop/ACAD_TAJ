@@ -36,6 +36,12 @@ body {
     line-height: 1.25em;
 }
 
+.x-grid-with-col-lines .x-grid-cell.clearlook-grid-cell {
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    background-color: #fff;
+}
+
 /*------------------ ExtJS Customization ---------------------*/
 
 /* cusor pointer for grid action icons */

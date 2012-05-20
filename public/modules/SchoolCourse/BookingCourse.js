@@ -169,7 +169,7 @@ Ext.define('Module.SchoolCourse.BookingCourse', {
                         Ext.defer(function() {
                             var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
                             store3.load();
-                        }, 50);
+                        }, 100);
                     }
                 }
             });

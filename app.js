@@ -38,7 +38,7 @@ db.open(function(err, nativedb) {
         app.use(express.bodyParser());
         app.use(express.cookieParser());
         app.use(express.session({
-            cookie: { maxAge: 30 * 60 * 1000 },
+            cookie: { maxAge: 60 * 60 * 1000 },
             secret: '50709ff051bfabda20ac5284fc01a1e5',
             key: 'jsessionid',
             store: new mongoStore({db: nativedb})

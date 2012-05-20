@@ -14,16 +14,23 @@ Ext.define('Module.SchoolCourse.ShowCourse.Grid1', {
         render: function(grid) {
         }
     },
-    columns: [
-        { header: '節次', dataIndex: 'seqno', width: 60, sortable: false },
-        { header: '星期一', dataIndex: 'day1', flex: true, sortable: false },
-        { header: '星期二', dataIndex: 'day2', flex: true, sortable: false },
-        { header: '星期三', dataIndex: 'day3', flex: true, sortable: false },
-        { header: '星期四', dataIndex: 'day4', flex: true, sortable: false },
-        { header: '星期五', dataIndex: 'day5', flex: true, sortable: false },
-        { header: '星期六', dataIndex: 'day6', flex: true, sortable: false },
-        { header: '星期日', dataIndex: 'day7', flex: true, sortable: false }
-    ]
+    columns: {
+        items: [
+            { header: '節次', dataIndex: 'classno', width: 60, flex: false, align: 'center' },
+            { header: '星期一', dataIndex: 'day1' },
+            { header: '星期二', dataIndex: 'day2' },
+            { header: '星期三', dataIndex: 'day3' },
+            { header: '星期四', dataIndex: 'day4' },
+            { header: '星期五', dataIndex: 'day5' },
+            { header: '星期六', dataIndex: 'day6' },
+            { header: '星期日', dataIndex: 'day7' }
+        ],
+        defaults: {
+            tdCls: 'clearlook-grid-cell',
+            sortable: false,
+            flex: true
+        }
+    }
 });
 
 Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
@@ -39,14 +46,22 @@ Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
         url: 'table.html',
         scripts: false
     }*/
+    tbar: [{
+        xtype: 'button',
+        icon: __SILK_ICONS_URL + 'arrow_rotate_clockwise.png',
+        text: '重新整理',
+        handler: function(button, e) {
+            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store4');
+            store4.generateData();
+        }
+    }],
     items: [{
         xtype: 'SchoolCourse-ShowCourse-Grid1',
         itemId: 'grid1',
         border: true,
         region: 'center',
         autoHeight: true,
-        autoScroll: true,
-        margins: '5 5 5 5'
+        autoScroll: true
     }]
 });
 
@@ -79,8 +94,10 @@ Ext.define('Module.SchoolCourse.ShowCourse', {
                         Module.SchoolCourse.ShowCourse._previous = null;
                     },
                     afterrender: function(panel, eOpts) {
-                        //載入資料
-                        //changeFilterHandler('1');
+                        Ext.defer(function() {
+                            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store4');
+                            store4.generateData();
+                        }, 100);
                     }
                 }
             });

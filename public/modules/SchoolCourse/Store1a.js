@@ -18,7 +18,7 @@ Ext.define('Module.SchoolCourse.Store1a', {
         type: 'memory',
         reader: {
             type: 'json',
-            root: 'results'
+            root: 'items'
         }
     },
     listeners: {
