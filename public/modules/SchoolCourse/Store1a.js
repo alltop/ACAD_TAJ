@@ -6,7 +6,7 @@ Ext.define('Module.SchoolCourse.Store1a', {
     autoLoad: false,
     autoSync: false,
     fields: [
-        'courseid', 'coursetype', 'semcoursename', 'coursetime', 'choose',
+        'courseid', 'coursetype', 'semcoursename', 'coursetime', 'choose', 'grade',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
     ],
     sorters: [{

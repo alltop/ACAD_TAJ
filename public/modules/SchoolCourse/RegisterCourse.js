@@ -259,7 +259,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '上課地點', dataIndex: 'roomname' },
         //{ header: '已選', dataIndex: 'selectedcount', width: 50 },
         { header: '上限', dataIndex: 'maxcount', width: 50 },
-        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true }
+        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true },
+        { header: '年級', dataIndex: 'grade', width: 50, hidden: true}
     ]
 });
 
@@ -359,64 +360,65 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         dock: 'top',
         items: [{
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '通識必修',
             hidden: true,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('1-1', '通識必修...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '通識選修',
             hidden: true,
             toggleGroup: 'grid1-filter',
-            pressed: true,
+            pressed: false,
             handler: __createFilterHandler('1-2', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '體育課程',
             hidden: true,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('2', '體育選修...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '院訂選修',
             hidden: false,
             toggleGroup: 'grid1-filter',
+            pressed: true,
             handler: __createFilterHandler('3', '院訂選修...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '軍訓課程',
             hidden: true,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('4', '軍訓課程...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '專業必修',
             hidden: true,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('5-1', '專業必修...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '專業選修',
             hidden: false,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('5-2', '專業選修...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '英文課程',
             hidden: true,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('7', '英文課程...')
         }, {
             xtype: 'button',
-            /* icon: __SILK_ICONS_URL + 'bullet_green.png', */
+            icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '服務教育',
             hidden: true,
             toggleGroup: 'grid1-filter',
@@ -432,6 +434,52 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         itemId: 'filterbar',
         items: [{
             xtype: 'combo',
+            itemId: 'unitid-filter',
+            disabled: false,
+            hidden: false,
+            width: 150,
+            store: {
+                fields: ['value', 'display'],
+                data : [
+                    {value: 'all', display: '全系所'},
+                    {value: 'each', display: '各系所'}
+                ]
+            },
+            queryMode: 'local',
+            displayField: 'display',
+            valueField: 'value',
+            emptyText: '系所',
+            allowBlank: true,
+            fieldLabel: '系所',
+            labelAlign: 'right',
+            labelWidth: 40
+        }, {
+            xtype: 'combo',
+            itemId: 'grade-filter',
+            disabled: false,
+            hidden: false,
+            width: 150,
+            store: {
+                fields: ['value', 'display'],
+                data : [
+                    {value: '', display: '全年級'},
+                    {value: '1', display: '一'},
+                    {value: '2', display: '二'},
+                    {value: '3', display: '三'},
+                    {value: '4', display: '四'},
+                    {value: '5', display: '五'}
+                ]
+            },
+            queryMode: 'local',
+            displayField: 'display',
+            valueField: 'value',
+            emptyText: '全年級',
+            allowBlank: true,
+            fieldLabel: '年級',
+            labelAlign: 'right',
+            labelWidth: 40
+        }, {
+            xtype: 'combo',
             itemId: 'gpid-filter',
             disabled: false,
             hidden: true,
@@ -443,7 +491,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                     {value: 'G00002', display: '社會科學'},
                     {value: 'G00003', display: '自然科學'},
                     {value: 'G00004', display: '生命倫理與環境關懷'},
-                    {value: 'G00005', display: '生活應用'},
+                    {value: 'G00005', display: '生活應用'}
                 ]
             },
             queryMode: 'local',
@@ -455,6 +503,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             xtype: 'checkboxgroup',
             itemId: 'dept-filter',
             disabled: false,
+            hidden: true,
             width: 220,
             items: [
                 {xtype: 'checkbox', boxLabel: '全校', name: 'types', inputValue: 'all', checked: false},
