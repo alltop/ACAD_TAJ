@@ -5,7 +5,7 @@ Ext.define('Module.SchoolCourse.Store2', {
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
         'roomname', 'maxcount', 'selectedcount', 'choose', 'grade',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel',
-        'seqno'
+        'serialno'
     ],
     data: {'items':[]},
     proxy: {
@@ -18,7 +18,7 @@ Ext.define('Module.SchoolCourse.Store2', {
     /**
      * 產生志願順序
      */
-    generateSeqno: function() {
+    generateSerialno: function() {
         var store2 = this;
         store2.each(function(record) {
             var record_index = store2.indexOf(record);
@@ -27,7 +27,11 @@ Ext.define('Module.SchoolCourse.Store2', {
                 if (store2.indexOf(record2) >= record_index) return false;
                 return (record2.get('semcoursename')==record_semcoursename);
             });
-            record.set('seqno', result.items.length + 1);
+            record.set('serialno', result.items.length + 1);
         });
+        store2.sort([
+            {property: 'semcoursename', direction: 'ASC'},
+            {property: 'serialno', direction: 'ASC'}
+        ]);
     }
 });

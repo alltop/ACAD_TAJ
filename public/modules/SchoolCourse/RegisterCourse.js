@@ -233,7 +233,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                     //將選課資料移到待選區
                     var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
                     store2.add(record);
-                    store2.generateSeqno();
+                    store2.generateSerialno();
 
                     /*--從加選區加選時，不提示訊息--
                     Ext.MessageBox.confirm(
@@ -243,7 +243,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
                                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                                record.set('seqno', store2.count()+1);
+                                record.set('serialno', store2.count()+1);
                                 store2.add(record);
                             }
                         }
@@ -277,11 +277,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
         listeners: {
             drop: function(node, data, overModel, dropPosition, eOpts) {
                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                store2.generateSeqno();
+                store2.generateSerialno();
                 //store2.each(function(record) {
-                //    record.set('seqno', store2.indexOf(record)+1);
+                //    record.set('serialno', store2.indexOf(record)+1);
                 //});
-                //store2.sort('seqno', 'ASC');
+                //store2.sort('serialno', 'ASC');
             }
         }
     },
@@ -315,16 +315,16 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
                 }
             }]
         },
-        { header: '志願順序', dataIndex: 'seqno', width: 60 },
-        { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
-        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
-        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '教師', dataIndex: 'teachername', width: 80 },
-        { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
-        { header: '上課地點', dataIndex: 'roomname' },
-        //{ header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 },
-        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true }
+        { header: '志願順序', dataIndex: 'serialno', width: 60, sortable: false },
+        { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true, sortable: false },
+        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true, sortable: false },
+        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1, sortable: false },
+        { header: '教師', dataIndex: 'teachername', width: 80, sortable: false },
+        { header: '星期/節', dataIndex: 'coursetime_view', width: 100, sortable: false },
+        { header: '上課地點', dataIndex: 'roomname', sortable: false },
+        //{ header: '已選', dataIndex: 'selectedcount', width: 50, sortable: false },
+        { header: '上限', dataIndex: 'maxcount', width: 50, sortable: false },
+        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true, sortable: false }
     ]
 });
 
@@ -338,9 +338,6 @@ var __createFilterHandler = function(code, text) {
         if (cmp) {
             cmp.setVisible(code == '1-1' || code == '1-2');
         }
-
-        var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-        label.setText(text);
 
         //切換[英文]顯示級別欄位
         this.up('panel').getComponent('grid1').getView().getHeaderCt().getHeaderAtIndex(9).setVisible(code=='7');
@@ -611,7 +608,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                     var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
 
                     store2.each(function(record) {
-                        courses.push(record.get('semcourseid') + ':' + record.get('courseid') + ':' + record.get('seqno'));
+                        courses.push(record.get('semcourseid') + ':' + record.get('courseid') + ':' + record.get('serialno'));
                     });
 
                     if (courses.length == 0) {
@@ -678,7 +675,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                                 //將選課資料移到待選區
                                                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
                                                 store2.add(record);
-                                                store2.generateSeqno();
+                                                store2.generateSerialno();
                                             }
                                         }
                                     );

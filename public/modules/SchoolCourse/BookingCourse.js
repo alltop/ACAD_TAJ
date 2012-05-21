@@ -18,10 +18,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
         listeners: {
             drop: function(node, data, overModel, dropPosition, eOpts) {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-                store3.each(function(record) {
-                    record.set('seqno', store3.indexOf(record)+1);
-                });
-                //store3.sort('seqno', 'ASC');
+                store3.generateSerialno();
             }
         }
     },
@@ -84,15 +81,15 @@ Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
                 }
             }]  
         },
-        { header: '志願順序', dataIndex: 'seqno', width: 60 },
-        { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true},
-        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
-        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '教師', dataIndex: 'teachername' },
-        { header: '星期/節', dataIndex: 'coursetime_view' },
-        { header: '上課地點', dataIndex: 'roomname' },
-        { header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 }
+        { header: '志願順序', dataIndex: 'serialno', width: 60, sortable: false },
+        { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true, sortable: false },
+        { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true, sortable: false },
+        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1, sortable: false },
+        { header: '教師', dataIndex: 'teachername', sortable: false },
+        { header: '星期/節', dataIndex: 'coursetime_view', sortable: false },
+        { header: '上課地點', dataIndex: 'roomname', sortable: false },
+        { header: '已選', dataIndex: 'selectedcount', width: 50, sortable: false },
+        { header: '上限', dataIndex: 'maxcount', width: 50, sortable: false }
     ]
 });
 
@@ -127,8 +124,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
         border: true,
         region: 'center',
         autoHeight: true,
-        autoScroll: true,
-        margins: '5 5 5 5'
+        autoScroll: true
     }],
     bbar: [{
         xtype: 'tbtext',
