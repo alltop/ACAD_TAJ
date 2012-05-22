@@ -8,6 +8,7 @@ Ext.define('Module.SchoolCourse.Store0', {
         'semcourseid', 'courseid', 'coursetype', 'coursetypename',
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
         'roomname', 'maxcount', 'selectedcount', 'choose', 'grade',
+        'credit', 'semilarhr',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel'
     ],
     proxy: {

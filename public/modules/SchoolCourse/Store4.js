@@ -35,40 +35,45 @@ Ext.define('Module.SchoolCourse.Store4', {
     },
     generateData: function() {
         var store4 = this;
-        var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+        var store5 = Ext.data.StoreManager.lookup('SchoolCourse-Store5');
+        store5.load({
+            callback: function(records, operation, success) {
+                Ext.defer(function() {
+                    store4.each(function(record) {
+                        var classno = record.get('classno');
 
-        store4.each(function(record) {
-            var classno = record.get('classno');
+                        var class_array = new Array();
+                        class_array[0] = '';
+                        class_array[1] = '';
+                        class_array[2] = '';
+                        class_array[3] = '';
+                        class_array[4] = '';
+                        class_array[5] = '';
+                        class_array[6] = '';
 
-            var class_array = new Array();
-            class_array[0] = '';
-            class_array[1] = '';
-            class_array[2] = '';
-            class_array[3] = '';
-            class_array[4] = '';
-            class_array[5] = '';
-            class_array[6] = '';
+                        store5.each(function(record2) {
+                            var record2_coursetime = record2.get('coursetime');
+                            var coursetime_array = record2_coursetime.split(',');
 
-            store3.each(function(record2) {
-                var record2_coursetime = record2.get('coursetime');
-                var coursetime_array = record2_coursetime.split(',');
+                            Ext.Array.each(coursetime_array, function(coursetime) {
+                                var the_classno = coursetime % 100;
+                                var index = (coursetime - the_classno) / 100 - 1;
 
-                Ext.Array.each(coursetime_array, function(coursetime) {
-                    var the_classno = coursetime % 100;
-                    var index = (coursetime - the_classno) / 100 - 1;
+                                if (classno == the_classno) {
+                                    class_array[index] = class_array[index] + record2.get('semcoursename') + '<br/>';
+                                }
+                            });
+                        });
 
-                    if (classno == the_classno) {
-                        class_array[index] = class_array[index] + record2.get('semcoursename') + '<br/>';
-                    }
-                });
-            });
+                        for (var i = 0; i < 7; i++) {
+                            var the_day = 'day' + (i+1);
+                            record.set(the_day, class_array[i]);
+                        }
+                    });
 
-            for (var i = 0; i < 7; i++) {
-                var the_day = 'day' + (i+1);
-                record.set(the_day, class_array[i]);
+                    store4.commitChanges();
+                }, 2000);
             }
         });
-
-        store4.commitChanges();
     }
 });

@@ -1,7 +1,7 @@
 /**
  * 回傳學生已選課程清單
  */
-app.get(urlprefix + '/service/listselected.json', function(req, res) {
+app.get(urlprefix + '/service/listcourse.json', function(req, res) {
     
     res.charset = 'UTF-8';
     res.contentType('application/json');
@@ -12,18 +12,19 @@ app.get(urlprefix + '/service/listselected.json', function(req, res) {
     if (user) {
         //查詢條件
         var where = {
-            studentid: user.studentid,
-            regtype: {$ne: '0'}
+            studentid: user.studentid
         };
 
         //SELECT * FROM tSelectedSemCus WHERE studentid=?
         db.collection('tSelectedSemCus').find(where).toArray(function(err, rows){
             var arr = new Array();
             rows.forEach(function(item) {
-                arr.push(item.semcourseid + ':' + item.serialno);
+                arr.push(item.semcourseid + ':' + (item.serialno?item.serialno:'0'));
             });
             res.send(JSON.stringify(arr));
             res.end();
         });
     }
+
+    //res.end();
 });

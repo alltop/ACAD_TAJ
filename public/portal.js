@@ -21,7 +21,8 @@ Ext.Loader.setConfig({
 //實作瀏覽器資料快取
 Ext.define('ClientSession', { 
     singleton: true,
-    user: {}
+    user: {},
+    units: []
 });
 
 //資料讀取提示訊息
@@ -252,6 +253,7 @@ Ext.onReady(function(){
             else {
                 if (obj.data) {
                     ClientSession.user = obj.data.user;
+                    ClientSession.units = obj.data.units;
 
                     //更新使用者資訊列
                     if (obj.data.user) {

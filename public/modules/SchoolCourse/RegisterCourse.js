@@ -30,6 +30,8 @@ var changeFilterHandler = function(val, params) {
     var depttypes = params.depttypes?params.depttypes:null;
     var gpid = params.gpid?params.gpid:null;
     var semcoursename = params.semcoursename?params.semcoursename:null;
+    var grade = params.grade?params.grade:null;
+    var unitid = params.unitid?params.unitid:null;
 
     //資料來源設定
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
@@ -65,6 +67,20 @@ var changeFilterHandler = function(val, params) {
                     result = false;
                 }
             }
+
+            //年級
+            if (result && grade && grade != '') {
+                if (record.get('grade') != grade) {
+                    result = false;
+                }
+            }
+
+            //系所
+            if (result && unitid && unitid != '') {
+                if (record.get('unitid') != unitid) {
+                    result = false;
+                }
+            }            
 
             //單位篩選
             if (result && depttypes) {
@@ -147,6 +163,11 @@ var changeFilterHandler = function(val, params) {
         var result = store0.queryBy(__filter_proc);
         store1.loadRecords(result.items);
         store1.sort();
+
+        //預設顯示0筆
+        store1.filterBy(function(record) {
+            return false;
+        });
     }, 100);
 };
 
@@ -258,9 +279,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100 },
         { header: '上課地點', dataIndex: 'roomname' },
         //{ header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 50 },
-        { header: '級別', dataIndex: 'englevel', width: 50, hidden: true },
-        { header: '年級', dataIndex: 'grade', width: 50, hidden: true}
+        { header: '上限', dataIndex: 'maxcount', width: 40 },
+        { header: '級別', dataIndex: 'englevel', width: 40, hidden: true },
+        { header: '年級', dataIndex: 'grade', width: 50, hidden: true},
+        { header: '開課系所', dataIndex: 'unitid', width: 60, hidden: false},
+        { header: '學分', dataIndex: 'credit', width: 40, hidden: false},
+        { header: '時數', dataIndex: 'semilarhr', width: 40, hidden: false}
     ]
 });
 
@@ -434,17 +458,14 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             itemId: 'unitid-filter',
             disabled: false,
             hidden: false,
-            width: 150,
+            width: 200,
             store: {
-                fields: ['value', 'display'],
-                data : [
-                    {value: 'all', display: '全系所'},
-                    {value: 'each', display: '各系所'}
-                ]
+                fields: ['unitid', 'unitname'],
+                data : ClientSession.units
             },
             queryMode: 'local',
-            displayField: 'display',
-            valueField: 'value',
+            displayField: 'unitname',
+            valueField: 'unitid',
             emptyText: '系所',
             allowBlank: true,
             fieldLabel: '系所',
@@ -548,6 +569,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 //學門領域
                 var gpid = this.up('toolbar').getComponent('gpid-filter').getValue();
 
+                //年級下拉清單值
+                var grade = this.up('toolbar').getComponent('grade-filter').getValue();
+
+                //系所下拉清單值
+                var unitid = this.up('toolbar').getComponent('unitid-filter').getValue();
+
                 //課程名稱
                 var semcoursename = this.up('toolbar').getComponent('semcoursename-filter').getValue();
 
@@ -556,7 +583,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                     weekdays: weekdays,
                     depttypes: depttypes,
                     gpid: gpid,
-                    semcoursename: semcoursename
+                    semcoursename: semcoursename,
+                    grade: grade,
+                    unitid: unitid
                 });
             }
         }]
