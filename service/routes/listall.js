@@ -6,7 +6,7 @@ app.get(urlprefix + '/service/:cached?/listall.json', function(req, res) {
         'semcourseid':1, 'courseid': 1, 'coursetype':1, 'coursetypename':1,
         'semcoursename':1, 'teachername':1, 'coursetime': 1, 'coursetime_view':1,
         'roomname':1, 'maxcount':1, 'selectedcount': 1, 'choose': 1, 'grade': 1,
-        'credit': 1, 'semilarhr': 1,
+        'credit': 1, 'semilarhr': 1, 'classname': 1,
         'unitid': 1, 'collegeid': 1, 'studytype': 1, 'selectgpid': 1, 'englevel': 1
     };
 

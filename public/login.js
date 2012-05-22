@@ -101,7 +101,7 @@ Ext.onReady(function() {
                 padding: '5px',
                 background: 'transparent'
             },
-            items: ['© ALLTOP 2012', '-','DEMO ID: 300051013']
+            items: ['© ALLTOP 2012', '-','DEMO ID: 400111073']
         }]
     });
     win.show();
