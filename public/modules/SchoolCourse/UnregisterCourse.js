@@ -4,7 +4,7 @@
 Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-UnregisterCourse-Grid1',
-    store: 'SchoolCourse-Store3',
+    store: 'SchoolCourse-Store-real3',
     loadMask: true,
     disableSelection: false,
     invalidateScrollerOnRefresh: true,
@@ -73,7 +73,9 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true},
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
-        { header: '教師', dataIndex: 'teachername' },
+		{ header: '學分', dataIndex: 'credit', width: 40 },
+		{ header: '開課系所', dataIndex: 'unitname', width: 90 },
+        { header: '教師', dataIndex: 'teachername' },		
         { header: '星期/節', dataIndex: 'coursetime_view' },
         { header: '上課地點', dataIndex: 'roomname' },
         { header: '已選', dataIndex: 'selectedcount', width: 50 },
@@ -94,7 +96,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
         text: '重新讀取',
         handler: function(button, e) {
             Ext.defer(function() {
-                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
                 store3.load();
             }, 1);
         }
@@ -145,7 +147,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料
                         Ext.defer(function() {
-                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
                             store3.load();
                         }, 50);
                     }
