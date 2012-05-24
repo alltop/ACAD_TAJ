@@ -92,6 +92,7 @@ Ext.onReady(function(){
                 }, {
                     text: '我的課程清單',
                     icon: __SILK_ICONS_URL+'application_view_columns.png',
+					id: 'Module.SchoolCourse.ShowCourseReal',
                     leaf: true
                 }]
             }]
