@@ -283,7 +283,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '級別', dataIndex: 'englevel', width: 40, hidden: true },
         { header: '年級', dataIndex: 'grade', width: 50, hidden: true},
         { header: '開課班級', dataIndex: 'classname', width: 110, hidden: false},
-        { header: '開課系所', dataIndex: 'unitid', width: 60, hidden: false},
+        { header: '開課系所', dataIndex: 'unitname', width: 60, hidden: false},
         { header: '學分', dataIndex: 'credit', width: 40, hidden: false},
         { header: '時數', dataIndex: 'semilarhr', width: 40, hidden: false}
     ]
@@ -333,6 +333,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
                                 store2.removeAt(rowIndex);
+                                store2.generateSerialno();
                                 //changeFilterHandler();
                             }
                         }
@@ -472,6 +473,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             fieldLabel: '系所',
             labelAlign: 'right',
             labelWidth: 40
+        }, {
+            xtype: 'checkbox',
+            boxLabel: '全系所',
+            name: 'college-filter',
+            inputValue: 'all',
+            checked: false
         }, {
             xtype: 'combo',
             itemId: 'grade-filter',
@@ -629,7 +636,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }, '-', {
                 xtype: 'button',
                 icon: __SILK_ICONS_URL + 'accept.png',
-                text: '確定登記',
+                text: '<font size="3">確定登記</font>',
                 scale: 'medium',
                 handler: function() {
                     var courses = new Array();
