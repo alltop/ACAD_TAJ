@@ -32,6 +32,7 @@ var changeFilterHandler = function(val, params) {
     var semcoursename = params.semcoursename?params.semcoursename:null;
     var grade = params.grade?params.grade:null;
     var unitid = params.unitid?params.unitid:null;
+    var college = params.college?params.college:null;
 
     //資料來源設定
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
@@ -76,11 +77,18 @@ var changeFilterHandler = function(val, params) {
             }
 
             //系所
-            if (result && unitid && unitid != '') {
+            if (result && !college && unitid && unitid != '') {
                 if (record.get('unitid') != unitid) {
                     result = false;
                 }
-            }            
+            }
+
+            //全系所（學院）
+            if (result && college) {
+                if (record.get('collegeid') != ClientSession.user.collegeid) {
+                    result = false;
+                }
+            }
 
             //單位篩選
             if (result && depttypes) {
@@ -463,7 +471,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             width: 200,
             store: {
                 fields: ['unitid', 'unitname'],
-                data : ClientSession.units
+                data : ClientSession.myunits
             },
             queryMode: 'local',
             displayField: 'unitname',
@@ -476,9 +484,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         }, {
             xtype: 'checkbox',
             boxLabel: '全系所',
-            name: 'college-filter',
-            inputValue: 'all',
-            checked: false
+            itemId: 'college-filter',
+            checked: false,
+            handler: function(checkbox, checked) {
+                this.up('toolbar').getComponent('unitid-filter').setDisabled(checked);
+            }
         }, {
             xtype: 'combo',
             itemId: 'grade-filter',
@@ -583,6 +593,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 //系所下拉清單值
                 var unitid = this.up('toolbar').getComponent('unitid-filter').getValue();
 
+                //全系所（學院）
+                var college = this.up('toolbar').getComponent('college-filter').getValue();
+
                 //課程名稱
                 var semcoursename = this.up('toolbar').getComponent('semcoursename-filter').getValue();
 
@@ -593,8 +606,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                     gpid: gpid,
                     semcoursename: semcoursename,
                     grade: grade,
-                    unitid: unitid
+                    unitid: unitid,
+                    college: college
                 });
+
+                //取消左方課程清單的選擇項目
+                this.up('panel').getComponent('grid1a').getSelectionModel().deselectAll();
             }
         }]
     }],
