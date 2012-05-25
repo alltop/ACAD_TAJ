@@ -125,9 +125,6 @@ Ext.onReady(function(){
                     tabpanel.setActiveTab('home');
                 }
             }, {
-                text: '個人設定',
-                icon: __SILK_ICONS_URL + 'user_edit.png'
-            }, {
                 text: '離開',
                 icon: __SILK_ICONS_URL + 'link_break.png',
                 handler: function(button, e) {
