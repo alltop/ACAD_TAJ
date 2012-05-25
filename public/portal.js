@@ -126,10 +126,7 @@ Ext.onReady(function(){
                     tabpanel.setActiveTab('home');
                 }
             }, {
-                text: '個人設定',
-                icon: __SILK_ICONS_URL + 'user_edit.png'
-            }, {
-                text: '離開',
+                text: '登出',
                 icon: __SILK_ICONS_URL + 'link_break.png',
                 handler: function(button, e) {
                     Ext.MessageBox.confirm(
@@ -153,7 +150,7 @@ Ext.onReady(function(){
                 xtype: 'box',
                 id: 'header',
                 cls: 'portal-header',
-                html: '<h1 class="portal-title">ExtJS 網路選課系統</h1>'
+                html: '<h1 class="portal-title">大仁科技大學選課系統</h1>'
             }]
         },{
             id: 'menu',
@@ -175,9 +172,6 @@ Ext.onReady(function(){
                     title: '學生加退選',
                     layout: 'fit',
                     items: [tree1]
-                }, {
-                    title: '系統管理',
-                    html: '選單二'
                 }]
             }, {
                 id: 'details-panel',

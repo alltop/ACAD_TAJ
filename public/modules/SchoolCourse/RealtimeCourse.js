@@ -203,7 +203,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
         { header: '上限', dataIndex: 'maxcount', width: 40 }
     ]
 });
-
+  
 Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-RealtimeCourse-Grid2',
@@ -251,6 +251,20 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
     ]
 });
 
+var __createFilterHandler = function(code, text) {
+    return function(button, e) {
+        
+        changeFilterHandler(code);
+/*
+        //通識特別處理：學門領域下拉選單啟用
+        var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
+        if (cmp) {
+            cmp.setVisible(code == '1');
+        }
+		*/
+    };
+}
+
 Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
     extend: 'Ext.Panel',
     frame: false,
@@ -268,8 +282,10 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             toggleGroup: 'grid1-filter',
             pressed: true,
             handler: function(button, e) {
-                button.toggle(true);
+				button.toggle(true);
                 changeFilterHandler('1');
+				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
+				cmp.setVisible(true);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
             }
@@ -279,8 +295,10 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             text: '體育課程 ',
             toggleGroup: 'grid1-filter',
             handler: function(button, e) {
-                button.toggle(true);
+				button.toggle(true);
                 changeFilterHandler('2');
+				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
+				cmp.setVisible(false);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('體育選修');
             }
@@ -291,6 +309,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
     }, {
         xtype: 'toolbar',
         dock: 'top',
+		itemId: 'filterbar',
         items: [ {
             xtype: 'combo',
             itemId: 'gpid-filter',
@@ -364,10 +383,54 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
         dock: 'bottom',
         ui: 'footer',
         itemId: 'footbar',
-        items: [{
-            icon: __SILK_ICONS_URL+'accept.png',
-            text: '確定加選',
-            handler: function() {
+        items: [ {
+            xtype: 'tbtext',
+            text: ''
+        }, {
+            xtype: 'tbtext',
+            itemId: 'label-status',
+            text: ''
+        }]
+    }],
+    items: [{
+        xtype: 'SchoolCourse-RealtimeCourse-Grid1a',
+        itemId: 'grid1a',
+        border: true,
+        resizable: false,
+        region: 'west',
+        autoScroll: true,
+        width: 180,
+        //margins: '5 0 0 5'
+    }, {
+        xtype: 'SchoolCourse-RealtimeCourse-Grid1',
+        itemId: 'grid1',
+        border: true,
+        resizable: false,
+        region: 'center',
+        autoScroll: true,
+        //margins: '5 5 0 5'
+    }, {
+        xtype: 'SchoolCourse-RealtimeCourse-Grid2',
+        itemId: 'grid2',
+        border: true,
+        resizable: true,
+        region: 'south',
+        //title: '候選區',
+        icon: __SILK_ICONS_URL+'cart_add.png',
+        autoScroll: true,
+        height: 150,
+		dockedItems: [{
+            xtype: 'toolbar',
+            dock: 'top',
+            ui: 'default',
+            itemId: 'footbar',
+            items: [{
+                xtype: 'tbtext',
+                text: '候選區'
+            }, '-', {
+				icon: __SILK_ICONS_URL+'accept.png',
+				text: '<b><font size="3">確定加選</font></b>',
+				handler: function() {
                 var courses = new Array();
 
                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2');
@@ -430,43 +493,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                     }
                 );
             }
-        }, {
-            xtype: 'tbtext',
-            text: ''
-        }, {
-            xtype: 'tbtext',
-            itemId: 'label-status',
-            text: ''
         }]
-    }],
-    items: [{
-        xtype: 'SchoolCourse-RealtimeCourse-Grid1a',
-        itemId: 'grid1a',
-        border: true,
-        resizable: false,
-        region: 'west',
-        autoScroll: true,
-        width: 180,
-        margins: '5 0 0 5'
-    }, {
-        xtype: 'SchoolCourse-RealtimeCourse-Grid1',
-        itemId: 'grid1',
-        border: true,
-        resizable: false,
-        region: 'center',
-        autoScroll: true,
-        margins: '5 5 0 5'
-    }, {
-        xtype: 'SchoolCourse-RealtimeCourse-Grid2',
-        itemId: 'grid2',
-        border: true,
-        resizable: true,
-        region: 'south',
-        title: '候選區',
-        icon: __SILK_ICONS_URL+'cart_add.png',
-        autoScroll: true,
-        height: 150,
-        margins: '5 5 5 5'
+		}]
+        //margins: '5 5 5 5'
     }]
 });
 
