@@ -112,7 +112,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
     }],
     bbar: [{
         xtype: 'tbtext',
-        text: '必修/必選的學分數: 4 選修的學分數: 0'
+        text: ''
     }]
 });
 
