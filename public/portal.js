@@ -22,7 +22,8 @@ Ext.Loader.setConfig({
 Ext.define('ClientSession', { 
     singleton: true,
     user: {},
-    units: []
+    units: [],
+    myunits: []
 });
 
 //資料讀取提示訊息
@@ -258,6 +259,15 @@ Ext.onReady(function(){
                         var user = obj.data.user;
                         var cmp = Ext.getCmp('userinfo');
                         cmp.setText(user.chtname+' '+user.studentno+' '+user.classname);
+                    }
+
+                    //設定登入身分所屬學院系所清單
+                    if (obj.data.units) {
+                        Ext.Array.each(obj.data.units, function(unit) {
+                            if (unit && unit.collegeid == ClientSession.user.collegeid) {
+                                ClientSession.myunits.push(unit);
+                            }
+                        });
                     }
                 }
                 completeJob(0);

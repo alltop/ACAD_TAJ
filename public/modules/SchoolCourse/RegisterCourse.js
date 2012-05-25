@@ -32,6 +32,7 @@ var changeFilterHandler = function(val, params) {
     var semcoursename = params.semcoursename?params.semcoursename:null;
     var grade = params.grade?params.grade:null;
     var unitid = params.unitid?params.unitid:null;
+    var college = params.college?params.college:null;
 
     //資料來源設定
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
@@ -76,11 +77,18 @@ var changeFilterHandler = function(val, params) {
             }
 
             //系所
-            if (result && unitid && unitid != '') {
+            if (result && !college && unitid && unitid != '') {
                 if (record.get('unitid') != unitid) {
                     result = false;
                 }
-            }            
+            }
+
+            //全系所（學院）
+            if (result && college) {
+                if (record.get('collegeid') != ClientSession.user.collegeid) {
+                    result = false;
+                }
+            }
 
             //單位篩選
             if (result && depttypes) {
@@ -283,7 +291,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '級別', dataIndex: 'englevel', width: 40, hidden: true },
         { header: '年級', dataIndex: 'grade', width: 50, hidden: true},
         { header: '開課班級', dataIndex: 'classname', width: 110, hidden: false},
-        { header: '開課系所', dataIndex: 'unitid', width: 60, hidden: false},
+        { header: '開課系所', dataIndex: 'unitname', width: 60, hidden: false},
         { header: '學分', dataIndex: 'credit', width: 40, hidden: false},
         { header: '時數', dataIndex: 'semilarhr', width: 40, hidden: false}
     ]
@@ -333,6 +341,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
                                 store2.removeAt(rowIndex);
+                                store2.generateSerialno();
                                 //changeFilterHandler();
                             }
                         }
@@ -462,7 +471,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             width: 200,
             store: {
                 fields: ['unitid', 'unitname'],
-                data : ClientSession.units
+                data : ClientSession.myunits
             },
             queryMode: 'local',
             displayField: 'unitname',
@@ -472,6 +481,14 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             fieldLabel: '系所',
             labelAlign: 'right',
             labelWidth: 40
+        }, {
+            xtype: 'checkbox',
+            boxLabel: '全系所',
+            itemId: 'college-filter',
+            checked: false,
+            handler: function(checkbox, checked) {
+                this.up('toolbar').getComponent('unitid-filter').setDisabled(checked);
+            }
         }, {
             xtype: 'combo',
             itemId: 'grade-filter',
@@ -576,6 +593,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 //系所下拉清單值
                 var unitid = this.up('toolbar').getComponent('unitid-filter').getValue();
 
+                //全系所（學院）
+                var college = this.up('toolbar').getComponent('college-filter').getValue();
+
                 //課程名稱
                 var semcoursename = this.up('toolbar').getComponent('semcoursename-filter').getValue();
 
@@ -586,8 +606,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                     gpid: gpid,
                     semcoursename: semcoursename,
                     grade: grade,
-                    unitid: unitid
+                    unitid: unitid,
+                    college: college
                 });
+
+                //取消左方課程清單的選擇項目
+                this.up('panel').getComponent('grid1a').getSelectionModel().deselectAll();
             }
         }]
     }],
@@ -629,7 +653,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }, '-', {
                 xtype: 'button',
                 icon: __SILK_ICONS_URL + 'accept.png',
-                text: '確定登記',
+                text: '<font size="3">確定登記</font>',
                 scale: 'medium',
                 handler: function() {
                     var courses = new Array();
