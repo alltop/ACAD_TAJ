@@ -447,6 +447,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 
                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2');
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
+				var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real4');
 
                 store2.each(function(record) {
                     courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
@@ -473,6 +474,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                                 if (obj.success) {
                                     store2.removeAll();
                                     store3.load();
+									store4.generateData();
 
                                     Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
                                 }

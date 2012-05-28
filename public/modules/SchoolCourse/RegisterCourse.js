@@ -692,6 +692,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
 
                     var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
                     var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+					var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store4');
 
                     store2.each(function(record) {
                         courses.push(record.get('semcourseid') + ':' + record.get('courseid') + ':' + record.get('serialno'));
@@ -718,6 +719,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                 if (obj.success) {
                                     store2.removeAll();
                                     store3.load();
+									store4.generateData();
 
                                     Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
                                 }

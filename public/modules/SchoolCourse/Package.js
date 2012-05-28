@@ -13,5 +13,6 @@ Ext.define('Module.SchoolCourse.Package', {
 		this.requireStore('Module.SchoolCourse.Store5', 'SchoolCourse-Store5');
 		this.requireStore('Module.SchoolCourse.StoreReal2', 'SchoolCourse-Store-real2'); //即選即上_候選
 		this.requireStore('Module.SchoolCourse.StoreReal3', 'SchoolCourse-Store-real3'); //即選即上_已選
+		this.requireStore('Module.SchoolCourse.StoreReal4', 'SchoolCourse-Store-real4'); //即選即上_課表
 	}
 });
