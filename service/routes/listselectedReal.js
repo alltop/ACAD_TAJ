@@ -1,7 +1,7 @@
 /**
  * 回傳學生已選課程清單
  */
-app.get(urlprefix + '/service/listselected.json', function(req, res) {
+app.get(urlprefix + '/service/listselectedReal.json', function(req, res) {
     
     res.charset = 'UTF-8';
     res.contentType('application/json');
@@ -13,7 +13,7 @@ app.get(urlprefix + '/service/listselected.json', function(req, res) {
         //查詢條件
         var where = {
             studentid: user.studentid,
-            regtype: '1'
+            regtype: '2'
         };
 
         //SELECT * FROM tSelectedSemCus WHERE studentid=?
