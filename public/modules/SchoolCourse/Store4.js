@@ -60,7 +60,16 @@ Ext.define('Module.SchoolCourse.Store4', {
                                 var index = (coursetime - the_classno) / 100 - 1;
 
                                 if (classno == the_classno) {
-                                    class_array[index] = class_array[index] + record2.get('semcoursename') + '<br/>';
+                                    var display_text = record2.get('semcoursename');
+
+                                    //選課需求：
+                                    //課表regtype=1(分發)和regtype<>1(已選上(配課、即選即上))的顏色區別。
+                                    //(regtype=1→藍色、regtype<>1→黑色)
+                                    if (record2.get('regtype') == '1') {
+                                        display_text = '<font color="blue">' + display_text + '</font>';
+                                    }
+
+                                    class_array[index] = class_array[index] + display_text + '<br/>';
                                 }
                             });
                         });
