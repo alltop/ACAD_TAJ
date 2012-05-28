@@ -1,7 +1,7 @@
 Ext.define('Module.SchoolCourse.ShowCourseReal.Grid1', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-ShowCourseReal-Grid1',
-    store: 'SchoolCourse-Store-Real4',
+    store: 'SchoolCourse-StoreReal4',
     loadMask: true,
     disableSelection: true,
     columnLines: true,
@@ -51,7 +51,7 @@ Ext.define('Module.SchoolCourse.ShowCourseReal.MainPanel', {
         icon: __SILK_ICONS_URL + 'arrow_rotate_clockwise.png',
         text: '重新整理',
         handler: function(button, e) {
-            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store-Real4');
+            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4');
             store4.generateData();
         }
     }],
@@ -95,7 +95,7 @@ Ext.define('Module.SchoolCourse.ShowCourseReal', {
                     },
                     afterrender: function(panel, eOpts) {
                         Ext.defer(function() {
-                            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store-Real4');
+                            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4');
                             store4.generateData();
                         }, 100);
                     }

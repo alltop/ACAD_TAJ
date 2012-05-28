@@ -4,7 +4,7 @@
 Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-UnregisterCourse-Grid1',
-    store: 'SchoolCourse-Store-real3',
+    store: 'SchoolCourse-StoreReal3',
     loadMask: true,
     disableSelection: false,
     invalidateScrollerOnRefresh: true,
@@ -96,7 +96,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
         text: '重新讀取',
         handler: function(button, e) {
             Ext.defer(function() {
-                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
                 store3.load();
             }, 1);
         }
@@ -147,7 +147,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料
                         Ext.defer(function() {
-                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
+                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
                             store3.load();
                         }, 50);
                     }
