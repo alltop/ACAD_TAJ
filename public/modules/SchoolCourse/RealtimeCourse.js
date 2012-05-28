@@ -170,10 +170,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                 tooltip: '加選',
                 getClass: function(value, metadata, record) {
                     //如果課程已經在已選清單中，就不顯示加選按鈕
-					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2');
-                    var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
+					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2'); //候選
+                    var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3'); //已選
                     var record_semcourseid = record.get('semcourseid');
-                    var exists = store3.find('semcourseid', record_semcourseid);
 					var exists = false;
 					
 					exists = store2.find('semcourseid', record_semcourseid);
@@ -194,7 +193,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                     var record = store1.getAt(rowIndex);
 					store1.remove(record);
 
-                    console.log(item);
+                    //將選課資料移到待選區
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2');
                     store2.add(record);
 
@@ -501,7 +500,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                     '請按「是」將候選區資料清空；按「否」取消動作。',
                     function(btn, text){
                         if (btn == 'yes'){
-                            var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+                            var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2');
                             store2.removeAll();
                         }
                     }
