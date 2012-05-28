@@ -170,12 +170,22 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                 tooltip: '加選',
                 getClass: function(value, metadata, record) {
                     //如果課程已經在已選清單中，就不顯示加選按鈕
+					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real2');
                     var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store-real3');
                     var record_semcourseid = record.get('semcourseid');
                     var exists = store3.find('semcourseid', record_semcourseid);
+					var exists = false;
+					
+					exists = store2.find('semcourseid', record_semcourseid);
                     if (exists >= 0) {
                        return 'x-hide-display';
                     }
+					
+					exists = store3.find('semcourseid', record_semcourseid);
+                    if (exists >= 0) {
+                       return 'x-hide-display';
+                    }
+					
                     return 'x-grid-center-icon';
                 },
                 handler: function(view, rowIndex, colIndex, item, e) {
@@ -221,6 +231,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
                 icon: __SILK_ICONS_URL+'delete.png',
                 tooltip: '移除',
                 handler: function(grid, rowIndex, colIndex) {
+					var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
                     var store2 = grid.getStore();
                     var record = store2.getAt(rowIndex);
                     
@@ -230,8 +241,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
                         function (btn, text) {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
-                                store2.removeAt(rowIndex);
-                                //changeFilterHandler();
+								store2.removeAt(rowIndex);
+                                store2.generateSerialno();
+                                store1.add(record);
                             }
                         }
                     );
