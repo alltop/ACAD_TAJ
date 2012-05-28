@@ -387,7 +387,44 @@ var __createFilterHandler = function(code, text) {
         this.up('panel').getComponent('grid1').getView().getHeaderCt().getHeaderAtIndex(9).setVisible(code=='7');
         this.up('panel').getComponent('grid2').getView().getHeaderCt().getHeaderAtIndex(9).setVisible(code=='7');
     };
-}
+};
+
+var __queryByFilters = function(toolbar) {
+    //取得勾選的星期資料（陣列）
+    var weekdays = toolbar.getComponent('week-filter').getValue().days;
+
+    //取得勾選的單位資料（陣列）
+    var depttypes = toolbar.getComponent('dept-filter').getValue().types;
+
+    //學門領域
+    var gpid = toolbar.getComponent('gpid-filter').getValue();
+
+    //年級下拉清單值
+    var grade = toolbar.getComponent('grade-filter').getValue();
+
+    //系所下拉清單值
+    var unitid = toolbar.getComponent('unitid-filter').getValue();
+
+    //全系所（學院）
+    var college = toolbar.getComponent('college-filter').getValue();
+
+    //課程名稱
+    var semcoursename = toolbar.getComponent('semcoursename-filter').getValue();
+
+    //重新篩選查詢
+    changeFilterHandler(null, {
+        weekdays: weekdays,
+        depttypes: depttypes,
+        gpid: gpid,
+        semcoursename: semcoursename,
+        grade: grade,
+        unitid: unitid,
+        college: college
+    });
+
+    //取消左方課程清單的選擇項目
+    this.up('panel').getComponent('grid1a').getSelectionModel().deselectAll();
+};
 
 Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
     extend: 'Ext.Panel',
@@ -490,7 +527,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             allowBlank: true,
             fieldLabel: '系所',
             labelAlign: 'right',
-            labelWidth: 40
+            labelWidth: 40,
+            listeners: {
+                change: function(field, newValue, oldValue, eOpts) {
+                    __queryByFilters(this.up('toolbar'));
+                }
+            }
         }, {
             xtype: 'checkbox',
             boxLabel: '全系所',
@@ -498,6 +540,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             checked: false,
             handler: function(checkbox, checked) {
                 this.up('toolbar').getComponent('unitid-filter').setDisabled(checked);
+                __queryByFilters(this.up('toolbar'));
             }
         }, {
             xtype: 'combo',
@@ -524,7 +567,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             allowBlank: false,
             fieldLabel: '年級',
             labelAlign: 'right',
-            labelWidth: 40
+            labelWidth: 40,
+            listeners: {
+                change: function(field, newValue, oldValue, eOpts) {
+                    __queryByFilters(this.up('toolbar'));
+                }
+            }
         }, {
             xtype: 'combo',
             itemId: 'gpid-filter',
@@ -545,7 +593,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             displayField: 'display',
             valueField: 'value',
             emptyText: '學門領域',
-            allowBlank: true
+            allowBlank: true,
+            listeners: {
+                change: function(field, newValue, oldValue, eOpts) {
+                    __queryByFilters(this.up('toolbar'));
+                }
+            }
         }, {
             xtype: 'checkboxgroup',
             itemId: 'dept-filter',
@@ -588,41 +641,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             icon: __SILK_ICONS_URL + 'magnifier.png',
             tooltip: '加選',
             text: '查詢',
+            itemId: 'query-button',
             handler: function() {
-                //取得勾選的星期資料（陣列）
-                var weekdays = this.up('toolbar').getComponent('week-filter').getValue().days;
-
-                //取得勾選的單位資料（陣列）
-                var depttypes = this.up('toolbar').getComponent('dept-filter').getValue().types;
-
-                //學門領域
-                var gpid = this.up('toolbar').getComponent('gpid-filter').getValue();
-
-                //年級下拉清單值
-                var grade = this.up('toolbar').getComponent('grade-filter').getValue();
-
-                //系所下拉清單值
-                var unitid = this.up('toolbar').getComponent('unitid-filter').getValue();
-
-                //全系所（學院）
-                var college = this.up('toolbar').getComponent('college-filter').getValue();
-
-                //課程名稱
-                var semcoursename = this.up('toolbar').getComponent('semcoursename-filter').getValue();
-
-                //重新篩選查詢
-                changeFilterHandler(null, {
-                    weekdays: weekdays,
-                    depttypes: depttypes,
-                    gpid: gpid,
-                    semcoursename: semcoursename,
-                    grade: grade,
-                    unitid: unitid,
-                    college: college
-                });
-
-                //取消左方課程清單的選擇項目
-                this.up('panel').getComponent('grid1a').getSelectionModel().deselectAll();
+                __queryByFilters(this.up('toolbar'));
             }
         }]
     }],
