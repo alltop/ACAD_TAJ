@@ -11,7 +11,7 @@ Ext.define('Module.SchoolCourse.Package', {
 		this.requireStore('Module.SchoolCourse.Store3', 'SchoolCourse-Store3');
 		this.requireStore('Module.SchoolCourse.Store4', 'SchoolCourse-Store4');
 		this.requireStore('Module.SchoolCourse.Store5', 'SchoolCourse-Store5');
-		this.requireStore('Module.SchoolCourse.StoreReal2', 'SchoolCourse-Store-real2'); //§Y¿ï§Y¤W_­Ô¿ï
-		this.requireStore('Module.SchoolCourse.StoreReal3', 'SchoolCourse-Store-real3'); //§Y¿ï§Y¤W_¤w¿ï
+		this.requireStore('Module.SchoolCourse.StoreReal2', 'SchoolCourse-Store-real2'); //å³é¸å³ä¸Š_å€™é¸
+		this.requireStore('Module.SchoolCourse.StoreReal3', 'SchoolCourse-Store-real3'); //å³é¸å³ä¸Š_å·²é¸
 	}
 });
