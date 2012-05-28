@@ -441,7 +441,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 text: '候選區'
             }, '-', {
 				icon: __SILK_ICONS_URL+'accept.png',
-				text: '<b><font size="3">確定加選</font></b>',
+				text: '<b><font size="3" color="#E68E36">確定加選</font></b>',
 				handler: function() {
                 var courses = new Array();
 

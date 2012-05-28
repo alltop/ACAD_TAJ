@@ -685,7 +685,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             }, '-', {
                 xtype: 'button',
                 icon: __SILK_ICONS_URL + 'accept.png',
-                text: '<font size="3">確定登記</font>',
+                text: '<b><font size="3" color="#E68E36">確定登記</font></b>',
                 scale: 'medium',
                 handler: function() {
                     var courses = new Array();
