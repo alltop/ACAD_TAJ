@@ -51,27 +51,32 @@ body {
 
 /*------------------ 選課系統樣式調整 ---------------------------*/
 /*課程名稱左邊的邊界寬度設為0*/
-.x-grid-header-ct {border:0px;}
+.x-grid-header-ct {
+    border:none;
+}
+
 /*表首的右邊邊界寬度*/
-.x-column-header{border-right: 1px solid #fff;}
+/*.x-column-header{border-right: 1px solid #fff;}*/
 
-.x-grid-header-ct{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}
+/*.x-grid-header-ct{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}*/
 
 /*表首的顏色*/
-.x-column-header-inner{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}
+/*.x-column-header-inner{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}*/
 /*表首的顏色*/
-.x-column-header-over{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}
+/*.x-column-header-over{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}*/
 /*表首的顏色*/
-.x-column-header-sort-ASC{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}
+/*.x-column-header-sort-ASC{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}*/
 /*表首的顏色*/
-.x-column-header-sort-DESC{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}
+/*.x-column-header-sort-DESC{background-image: -webkit-linear-gradient(top, #FFD22C,#FFD22C);}*/
 
 /*偶數列的顏色*/
-.x-grid-row-alt .x-grid-cell{background-color:#FFE1D6;}
+/*.x-grid-row-alt .x-grid-cell{background-color:#FFE1D6;}*/
 /*偶數列的顏色*/
-.x-grid-row-alt .x-grid-rowwrap-div{background-color:#FFE1D6;}
+/*.x-grid-row-alt .x-grid-rowwrap-div{background-color:#FFE1D6;}*/
 
 /*tab-bar的顏色*/
-.x-tab-bar{background-image: -webkit-linear-gradient(top, #FFAB4B 60%,#E68E36 40%);}
+/*.x-tab-bar{background-image: -webkit-linear-gradient(top, #FFAB4B 60%,#E68E36 40%);}*/
 
-button:hover{background-color:#C9F0FF;}
+/*button:hover {
+    background-color:#C9F0FF;
+}*/

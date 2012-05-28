@@ -49,7 +49,8 @@
         } @else if $type == tabbar {
             @include background-image(linear-gradient($direction, color_stops(
                 adjust-color($bg-color, $hue: 0.0deg, $saturation: 1.604%, $lightness: 4.706%),
-                $bg-color
+                $bg-color,
+                adjust-color($bg-color, $hue: 0.0deg, $saturation: 1.604%, $lightness: -14.706%)
             )));
         } @else if $type == tab {
             @include background-image(linear-gradient($direction, color_stops(
@@ -76,8 +77,10 @@
             )));
         } @else if $type == grid-header {
             @include background-image(linear-gradient($direction, color_stops(
-                adjust-color($bg-color, $hue: 0deg, $saturation: 0%, $lightness: 20.392%),
-                adjust-color($bg-color, $hue: 220.0deg, $saturation: 5.66%, $lightness: 12.353%)
+                //adjust-color($bg-color, $hue: 0deg, $saturation: 0%, $lightness: 20.392%),
+                adjust-color($bg-color, $hue: 0deg, $saturation: 0%, $lightness: 12.353%),
+                //adjust-color($bg-color, $hue: 220.0deg, $saturation: 5.66%, $lightness: 12.353%)
+                adjust-color($bg-color, $hue: 0deg, $saturation: 0%, $lightness: -12.353%)
             )));
         } @else if $type == grid-header-over {
             @include background-image(linear-gradient($direction, color_stops(

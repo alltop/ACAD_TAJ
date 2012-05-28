@@ -8,6 +8,8 @@ $include-default: false;
 $theme-name: 'gray';
 $base-color: #ccc;
 $font-size: 11pt;
+$neutral-color: #FFD22C;
+//$base-gradient: 'glossy';
 
 //panel
 $panel-header-background-gradient: color-stops(#F0F0F0, #D7D7D7);
@@ -34,13 +36,20 @@ $datepicker-item-hover-background-color: transparent;
 //progress bar
 $progress-border-color: #8e8e8e;
 $progress-background-color: #f1f1f1;
-$progress-bar-background-color: #ababab;
+$progress-bar-background-color: #E68E36;
 
 //tips
 $tip-base-color: $base-color;
 
 //grid
-$grid-header-over-border-color: darken($base-color, 3);
+//$grid-header-color: #FFD22C;
+$grid-header-background-color: #FFD22C;
+$grid-header-background-gradient: 'grid-header';
+$grid-header-over-border-color: #FFD22C;
+$grid-header-over-background-color: #FFD22C;
+$grid-header-over-background-gradient: 'grid-header';
+$grid-row-cell-alt-background: lighten(#FFE1D6, 1%);
+$grid-row-cell-selected-background-color: darken($grid-row-cell-alt-background, 15%);
 
 //toolbar
 $toolbar-background-gradient: color-stops(#e6e6e6, #efefef);
@@ -65,6 +74,7 @@ $accordion-header-background-color: #e5e5e5;
 //tabs
 $tab-base-color: #eaeaea;
 $tab-color-active: #333333;
+$tabbar-base-color: #FFAB4B;
 
 $tab-background-gradient: color-stops(#dcdcdc, #eaeaea);
 $tab-background-gradient-over: 'tab-over' !default;
@@ -73,7 +83,7 @@ $tab-background-gradient-disabled: 'tab-disabled' !default;
 
 //buttons
 $button-default-base-color: #f8f8f8;
-$button-default-base-color-over: #f3f3f3;
+$button-default-base-color-over: #C9F0FF;
 $button-default-base-color-focus: $button-default-base-color-over;
 $button-default-base-color-pressed: #d6d6d6;
 $button-default-base-color-disabled: adjust-color($base-color, $hue: 0deg, $saturation: -55.556%, $lightness: 12.745%) !default; //F7F7F7
