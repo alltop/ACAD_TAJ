@@ -519,8 +519,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             queryMode: 'local',
             displayField: 'display',
             valueField: 'value',
-            emptyText: '全年級',
-            allowBlank: true,
+            emptyText: '年級',
+            value: '',
+            allowBlank: false,
             fieldLabel: '年級',
             labelAlign: 'right',
             labelWidth: 40
