@@ -25,7 +25,7 @@ Ext.define('Module.SchoolCourse.StoreReal3', {
             var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
             if (store0 && store0.count() > 0) {
                 var request = Ext.Ajax.request({
-                    url: __SERVICE_URL + '/service/listselected.json',
+                    url: __SERVICE_URL + '/service/listselectedReal.json',
                     method: 'GET',
                     success: function(response) {
                         var obj = Ext.JSON.decode(response.responseText);
