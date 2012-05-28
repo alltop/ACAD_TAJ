@@ -104,6 +104,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
         xtype: 'button',
         icon: __SILK_ICONS_URL + 'arrow_rotate_clockwise.png',
         text: '重新讀取',
+        scale: 'medium',
         handler: function(button, e) {
             Ext.defer(function() {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
@@ -113,9 +114,55 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
     }, {
         xtype: 'button',
         icon: __SILK_ICONS_URL + 'database_save.png',
-        text: '儲存志願排序',
+        text: '<font size="3" color="#E68E36">儲存志願排序</font>',
+        scale: 'medium',
         handler: function(button, e) {
-            alert("志願排序");
+            var courses = new Array();
+
+            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+            var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store4');
+
+            store3.each(function(record) {
+                courses.push(record.get('semcourseid') + ':' + record.get('courseid') + ':' + record.get('serialno'));
+            });
+
+            if (courses.length == 0) {
+                Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
+            }
+            else {
+                Ext.Msg.wait('正在儲存志願排序...');
+                Ext.Ajax.request({
+                    url: __SERVICE_URL + '/service/updateselected.json',
+                    method: 'POST',
+                    params: {
+                        courses: Ext.Array.from(courses).join(',')
+                    },
+                    success: function(response, opts) {
+                        Ext.Msg.hide();
+
+                        var obj = Ext.JSON.decode(response.responseText);
+
+                        //Ext.Msg.alert("伺服器回應", response.responseText);
+
+                        if (obj.success) {
+                            store3.load();
+                            store4.generateData();
+
+                            Ext.getCmp('notifier').setText('<font color="green">志願排序儲存完成！</font>');
+                        }
+                        else {
+                            Ext.getCmp('notifier').setText('<font color="red">志願排序儲存失敗，請重新操作一次</font>');
+                        }
+                    },
+                    failure: function(response, opts) {
+                        Ext.Msg.hide();
+
+                        Ext.Msg.alert("伺服器回應", "無法儲存，請重新再試一次！<br/>" + response.responseText);
+
+                        Ext.getCmp('notifier').setText('<font color="red">志願排序儲存失敗</font>');
+                    }
+                });
+            }
         }
     }],
     items: [{
