@@ -74,7 +74,7 @@ Ext.onReady(function() {
         border: true,
         bodyStyle: {
             padding: '5px',
-            background: "#fff url('http://netcc.tajen.edu.tw/pro_course_choose/images/top.jpg') no-repeat"
+            background: "#fff url('./images/top.jpg') no-repeat"
         },
         items: [{
             xtype: 'panel',
