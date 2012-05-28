@@ -14,7 +14,7 @@ exports.login = function(req, res){
 
 exports.portal = function(req, res){
 	if (req.session.user) {
-		res.render('portal.jade', { title: '先傑大學選課系統', bootstrap: 'portal.js' });
+		res.render('portal.jade', { title: '大仁科技大學選課系統', bootstrap: 'portal.js' });
 	}
 	else {
 		res.redirect('login');
