@@ -1,5 +1,29 @@
 /* Welcome to Compass. Use this file to write IE specific override styles.
- * Import this file using the following HTML or equivalent:*/
- <!--[if IE]>
-   <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
- <![endif]--> 
+ * Import this file using the following HTML or equivalent:
+ * <!--[if IE]>
+ *  <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
+ * <![endif]--> */
+
+/*
+ * 此檔是給 IE 瀏覽器專用
+ */
+
+/*課程名稱左邊的邊界寬度設為0*/
+.x-grid-header-ct {border:0px;}
+/*表首的右邊邊界寬度*/
+.x-column-header{border-right: 1px solid #fff;}
+/*表首的顏色*/
+.x-grid-header-ct div{background-color: #FFD22C;}
+/*表首的顏色*/
+.x-grid-header-ct div:hover{background-color: #FFD22C;}
+.x-column-header-over div{background-color: #FFD22C;}
+/*表首的顏色*/
+.x-column-header-sort-ASC{background-color: #FFD22C;}
+/*表首的顏色*/
+.x-column-header-sort-DESC{background-color: #FFD22C;}
+/*偶數列的顏色*/
+.x-grid-row-alt .x-grid-cell{background-color:#FFE1D6;}
+/*偶數列的顏色*/
+.x-grid-row-alt .x-grid-rowwrap-div{background-color:#FFE1D6;}
+/*tab-bar的顏色*/
+.x-tab-bar{background-color: #FFAB4B;}
