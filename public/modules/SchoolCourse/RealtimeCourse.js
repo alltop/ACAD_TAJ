@@ -458,7 +458,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 else {
                         Ext.Msg.wait('正在處理加選...');
                         Ext.Ajax.request({
-                            url: __SERVICE_URL + '/service/selectcourse.json',
+                            url: __SERVICE_URL + '/service/selectcourseReal.json',
                             method: 'POST',
                             params: {
                                 courses: Ext.Array.from(courses).join(',')
