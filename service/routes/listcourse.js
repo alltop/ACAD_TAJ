@@ -19,7 +19,7 @@ app.get(urlprefix + '/service/listcourse.json', function(req, res) {
         db.collection('tSelectedSemCus').find(where).toArray(function(err, rows){
             var arr = new Array();
             rows.forEach(function(item) {
-                arr.push(item.semcourseid + ':' + (item.serialno?item.serialno:'0'));
+                arr.push(item.semcourseid + ':' + (item.serialno?item.serialno:'0') + ':' + item.regtype);
             });
             res.send(JSON.stringify(arr));
             res.end();

@@ -10,7 +10,7 @@ Ext.define('Module.SchoolCourse.Store5', {
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
         'roomname', 'maxcount', 'selectedcount', 'choose', 'grade',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel',
-        'serialno'
+        'serialno', 'regtype'
     ],
     data: {'items':[]},
     proxy: {
@@ -32,11 +32,13 @@ Ext.define('Module.SchoolCourse.Store5', {
 
                         var semcourseid_array = new Array();
                         var serialno_map = new Ext.util.HashMap();
+                        var regtype_map = new Ext.util.HashMap();
 
                         Ext.Array.each(obj, function(item) {
                             var tokens = item.split(':');
                             semcourseid_array.push(tokens[0]);
                             serialno_map.add(tokens[0], tokens[1]);
+                            regtype_map.add(tokens[0], tokens[1]);
                         });
 
                         var records_array = new Array();
@@ -49,6 +51,7 @@ Ext.define('Module.SchoolCourse.Store5', {
                         store5.loadRecords(records_array);
                         store5.each(function(record) {
                             record.set('serialno', serialno_map.get(record.get('semcourseid')));
+                            record.set('regtype', regtype_map.get(record.get('semcourseid')));
                         });
                         store5.sort([
                             {property: 'semcoursename', direction: 'ASC'},
