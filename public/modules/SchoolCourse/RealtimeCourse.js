@@ -294,7 +294,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             pressed: true,
             handler: function(button, e) {
 				button.toggle(true);
-                changeFilterHandler('1');
+                changeFilterHandler('2');
 				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
 				cmp.setVisible(true);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
@@ -311,7 +311,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
 				cmp.setVisible(false);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('體育選修');
+                label.setText('體育課程');
             }
         }, '-', {
             xtype: 'tbtext',
