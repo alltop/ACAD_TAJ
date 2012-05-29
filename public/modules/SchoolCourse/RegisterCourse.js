@@ -423,7 +423,7 @@ var __queryByFilters = function(toolbar) {
     });
 
     //取消左方課程清單的選擇項目
-    this.up('panel').getComponent('grid1a').getSelectionModel().deselectAll();
+    toolbar.up('panel').getComponent('grid1a').getSelectionModel().deselectAll();
 };
 
 Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {

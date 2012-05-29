@@ -23,7 +23,8 @@ Ext.define('ClientSession', {
     singleton: true,
     user: {},
     units: [],
-    myunits: []
+    myunits: [],
+    blocklist: []
 });
 
 //資料讀取提示訊息
@@ -250,6 +251,7 @@ Ext.onReady(function(){
                 if (obj.data) {
                     ClientSession.user = obj.data.user;
                     ClientSession.units = obj.data.units;
+                    ClientSession.blocklist = obj.data.blocklist;
 
                     //更新使用者資訊列
                     if (obj.data.user) {
@@ -267,31 +269,48 @@ Ext.onReady(function(){
                         });
                     }
                 }
+
+                Ext.defer(function() {
+                    var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
+                    var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
+                    var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+                    store0.load({
+                        callback: function(records, operation, success) {
+                            
+                            //列舉需要被移除的課程清單
+                            var blocklist_array = new Array();
+                            Ext.Array.each(ClientSession.blocklist, function(block) {
+                                blocklist_array.push(block.semcoursename);
+                            });
+
+                            //找出需要被移除的課程
+                            var blocklist_records = new Array();
+                            store0.each(function(record) {
+                                if (Ext.Array.contains(blocklist_array, record.get('semcoursename'))) {
+                                    blocklist_records.push(record);
+                                }
+                            });
+                            store0.remove(blocklist_records);
+
+                            store3.load({
+                                callback: function(records, operation, success) {
+                                    completeJob(2);
+                                }
+                            });
+                            store1a.load({
+                                callback: function(records, operation, success) {
+                                    completeJob(3);
+                                }
+                            });
+                            completeJob(1);
+                        }
+                    });
+                }, 0);
+
                 completeJob(0);
             }
         }
     });
-
-    Ext.defer(function() {
-        var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
-        var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
-        var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
-        store0.load({
-            callback: function(records, operation, success) {
-                store3.load({
-                    callback: function(records, operation, success) {
-                        completeJob(2);
-                    }
-                });
-                store1a.load({
-                    callback: function(records, operation, success) {
-                        completeJob(3);
-                    }
-                });
-                completeJob(1);
-            }
-        });
-    }, 0);
 
     /*
     //re-open tab from url hash
