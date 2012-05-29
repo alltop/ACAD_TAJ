@@ -294,7 +294,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             pressed: true,
             handler: function(button, e) {
 				button.toggle(true);
-                changeFilterHandler('2');
+                changeFilterHandler('1');
 				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
 				cmp.setVisible(true);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
