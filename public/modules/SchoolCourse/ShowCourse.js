@@ -56,7 +56,7 @@ Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
         }
     }, '-',{
                 xtype: 'tbtext',
-                text: '黑色：配課  <font color="blue">藍色：登記</font>  <font color="red">紅色：即選即上</font>'
+                text: '黑色：配課。<font color="blue">藍色：登記。</font>  <font color="red">紅色：即選即上</font>'
     }],
     items: [{
         xtype: 'SchoolCourse-ShowCourse-Grid1',

@@ -292,17 +292,17 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
+		{ header: '學分', dataIndex: 'credit', width: 40, hidden: false},
+		{ header: '開課系所', dataIndex: 'unitname', width: 60, hidden: false},
+		{ header: '開課班級', dataIndex: 'classname', width: 110, hidden: false},
         { header: '教師', dataIndex: 'teachername', width: 60 },
         { header: '星期/節', dataIndex: 'coursetime_view', width: 80 },
         { header: '上課地點', dataIndex: 'roomname', width: 60 },
         //{ header: '已選', dataIndex: 'selectedcount', width: 50 },
-        { header: '上限', dataIndex: 'maxcount', width: 40 },
         { header: '級別', dataIndex: 'englevel', width: 40, hidden: true },
-        { header: '年級', dataIndex: 'grade', width: 50, hidden: true},
-        { header: '開課班級', dataIndex: 'classname', width: 110, hidden: false},
-        { header: '開課系所', dataIndex: 'unitname', width: 60, hidden: false},
-        { header: '學分', dataIndex: 'credit', width: 40, hidden: false},
-        { header: '時數', dataIndex: 'semilarhr', width: 40, hidden: false}
+        //{ header: '年級', dataIndex: 'grade', width: 50, hidden: true},
+        { header: '上限', dataIndex: 'maxcount', width: 40 }
+        //{ header: '時數', dataIndex: 'semilarhr', width: 40, hidden: false}
     ]
 });
 
@@ -363,11 +363,15 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true, sortable: false },
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true, sortable: false },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1, sortable: false },
+		{ header: '學分', dataIndex: 'credit', width: 40, hidden: false},
+		{ header: '開課系所', dataIndex: 'unitname', width: 60, hidden: false},
+		{ header: '開課班級', dataIndex: 'classname', width: 110, hidden: false},
         { header: '教師', dataIndex: 'teachername', width: 80, sortable: false },
         { header: '星期/節', dataIndex: 'coursetime_view', width: 100, sortable: false },
         { header: '上課地點', dataIndex: 'roomname', sortable: false },
         //{ header: '已選', dataIndex: 'selectedcount', width: 50, sortable: false },
         { header: '上限', dataIndex: 'maxcount', width: 50, sortable: false },
+		//{ header: '年級', dataIndex: 'grade', width: 50, hidden: true},
         { header: '級別', dataIndex: 'englevel', width: 50, hidden: true, sortable: false }
     ]
 });
