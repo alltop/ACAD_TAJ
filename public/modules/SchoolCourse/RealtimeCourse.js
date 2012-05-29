@@ -34,6 +34,12 @@ var changeFilterHandler = function(val, params) {
         if (record.get('coursetype')==val) {
             result = true;
 
+			//我的體育課程
+			var is_myphy = (result && record.get('coursetype') == '2' && record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false;
+			if(!is_myphy) {
+				result = false;
+			}
+
 			//課程名稱篩選
             if (result && semcoursename != null && Ext.String.trim(semcoursename) != '') {
                 if (record.get('semcoursename').indexOf(semcoursename) == -1) {
@@ -379,11 +385,11 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             displayField: 'display',
             valueField: 'value',
             emptyText: '學門領域',
+			value: 'G00001',
 			width: 150,
-			listeners: {
+			listeners: {				
                 change: function(field, newValue, oldValue, eOpts) {
                     __queryByFilters(this.up('toolbar'));
-					//alert('abc');
                 }
             },
             allowBlank: true
