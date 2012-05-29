@@ -35,9 +35,12 @@ var changeFilterHandler = function(val, params) {
             result = true;
 
 			//我的體育課程
-			var is_myphy = (result && record.get('coursetype') == '2' && record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false;
-			if(!is_myphy) {
-				result = false;
+			if(record.get('coursetype') == '2')
+			{
+				var is_myphy = (result && record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false;
+				if(!is_myphy) {
+					result = false;
+				}
 			}
 
 			//課程名稱篩選
