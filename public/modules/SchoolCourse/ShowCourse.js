@@ -54,6 +54,9 @@ Ext.define('Module.SchoolCourse.ShowCourse.MainPanel', {
             var store4 = Ext.data.StoreManager.lookup('SchoolCourse-Store4');
             store4.generateData();
         }
+    }, '-',{
+                xtype: 'tbtext',
+                text: '黑色：配課  <font color="blue">藍色：登記</font>  <font color="red">紅色：即選即上</font>'
     }],
     items: [{
         xtype: 'SchoolCourse-ShowCourse-Grid1',

@@ -64,9 +64,12 @@ Ext.define('Module.SchoolCourse.StoreReal4', {
 
                                     //選課需求：
                                     //課表regtype=1(分發)和regtype<>1(已選上(配課、即選即上))的顏色區別。
-                                    //(regtype=1→藍色、regtype<>1→黑色)
+                                    //(regtype=1→藍色、regtype=2→紅色)
                                     if (record2.get('regtype') == '1') {
                                         display_text = '<font color="blue">' + display_text + '</font>';
+                                    }
+									else if (record2.get('regtype') == '2') {
+                                        display_text = '<font color="red">' + display_text + '</font>';
                                     }
 
                                     class_array[index] = class_array[index] + display_text + '<br/>';

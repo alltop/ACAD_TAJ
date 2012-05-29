@@ -93,7 +93,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
     tbar: [{
         xtype: 'button',
         icon: __SILK_ICONS_URL+'arrow_rotate_clockwise.png',
-        text: '重新讀取',
+        text: '重新整理',
         handler: function(button, e) {
             Ext.defer(function() {
                 var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');

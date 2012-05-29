@@ -103,7 +103,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
     tbar: [{
         xtype: 'button',
         icon: __SILK_ICONS_URL + 'arrow_rotate_clockwise.png',
-        text: '重新讀取',
+        text: '重新整理',
         scale: 'medium',
         handler: function(button, e) {
             Ext.defer(function() {
@@ -159,7 +159,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
 
                         Ext.Msg.alert("伺服器回應", "無法儲存，請重新再試一次！<br/>" + response.responseText);
 
-                        Ext.getCmp('notifier').setText('<font color="red">志願排序儲存失敗</font>');
+                        Ext.getCmp('notifier').setText('<b><font color="red">志願排序儲存失敗</font></b>');
                     }
                 });
             }
@@ -175,7 +175,7 @@ Ext.define('Module.SchoolCourse.BookingCourse.MainPanel', {
     }],
     bbar: [{
         xtype: 'tbtext',
-        text: '必修/必選的學分數: 4 選修的學分數: 0'
+        text: ''
     }]
 });
 

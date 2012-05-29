@@ -38,7 +38,7 @@ Ext.define('Module.SchoolCourse.Store5', {
                             var tokens = item.split(':');
                             semcourseid_array.push(tokens[0]);
                             serialno_map.add(tokens[0], tokens[1]);
-                            regtype_map.add(tokens[0], tokens[1]);
+                            regtype_map.add(tokens[0], tokens[2]);
                         });
 
                         var records_array = new Array();
