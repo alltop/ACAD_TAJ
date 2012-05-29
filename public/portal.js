@@ -24,7 +24,8 @@ Ext.define('ClientSession', {
     user: {},
     units: [],
     myunits: [],
-    blocklist: []
+    blocklist: [],
+    blocklist_array: []
 });
 
 //資料讀取提示訊息
@@ -268,6 +269,13 @@ Ext.onReady(function(){
                             }
                         });
                     }
+
+                    //設定 blocklist 快取陣列
+                    if (obj.data.blocklist) {
+                        Ext.Array.each(obj.data.blocklist, function(block) {
+                            ClientSession.blocklist_array.push(block.semcoursename);
+                        });
+                    }
                 }
 
                 Ext.defer(function() {
@@ -278,12 +286,15 @@ Ext.onReady(function(){
                         callback: function(records, operation, success) {
                             
                             //列舉需要被移除的課程清單
+                            /*
                             var blocklist_array = new Array();
                             Ext.Array.each(ClientSession.blocklist, function(block) {
                                 blocklist_array.push(block.semcoursename);
                             });
+                            */
 
                             //找出需要被移除的課程
+                            /*
                             var blocklist_records = new Array();
                             store0.each(function(record) {
                                 if (Ext.Array.contains(blocklist_array, record.get('semcoursename'))) {
@@ -291,6 +302,7 @@ Ext.onReady(function(){
                                 }
                             });
                             store0.remove(blocklist_records);
+                            */
 
                             store3.load({
                                 callback: function(records, operation, success) {

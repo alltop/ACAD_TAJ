@@ -48,6 +48,11 @@ var changeFilterHandler = function(val, params) {
         if (record.get('coursetype')==val) {
             result = true;
 
+            //擋課處理（blocklist）
+            if (result && Ext.Array.contains(ClientSession.blocklist_array, record.get('semcoursename'))) {
+                result = false;
+            }
+
             //必修選修特別處理
             if (result && val_choose != null) {
                 if (record.get('choose') != val_choose) {
