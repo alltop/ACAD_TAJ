@@ -196,15 +196,25 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					
                     return 'x-grid-center-icon';
                 },
-                handler: function(view, rowIndex, colIndex, item, e) {
-                    //設定選課來源資料
-                    var store1 = view.getStore();
-                    var record = store1.getAt(rowIndex);
-					store1.remove(record);
-
+                handler: function(view, rowIndex, colIndex, item, e) { 
                     //將選課資料移到待選區
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
-                    store2.add(record);
+					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //已選
+					
+					//學分是否已達學分上限
+					var amt_credit = 0;
+					store3.each(function(record2) {   
+						amt_credit += record2.get('credit');   
+					});
+					if(amt_credit > 8)
+						alert('已達學分數上限(28學分)。');
+					else {
+						//設定選課來源資料
+						var store1 = view.getStore();
+						var record = store1.getAt(rowIndex);
+						store1.remove(record);
+						store2.add(record);
+					}
 
                 }
             }]  
