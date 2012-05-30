@@ -853,8 +853,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
                         Module.SchoolCourse.RegisterCourse._previous = null;
                     },
                     afterrender: function(panel, eOpts) {
-                        //載入資料
-                        changeFilterHandler('3');
+                        //載入資料（帶預設值）
+                        //changeFilterHandler('3');
+                        changeFilterHandler('3', {
+                            grade: ClientSession.user.grade,
+                            unitid: ClientSession.user.unitid
+                        });
                     }
                 }
             });
