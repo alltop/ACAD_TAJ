@@ -17,7 +17,7 @@
       "express": "latest"
     , "jade": "latest"
     , "mongoskin": "latest"
-    , "connect-mongodb": "latest"
+    , "connect-mongodb": "git://github.com/lyhcode/connect-mongodb.git"
     , "connect-cache": "latest"
     , "cloudfoundry": "latest"
   }

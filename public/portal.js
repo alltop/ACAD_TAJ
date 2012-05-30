@@ -262,6 +262,7 @@ Ext.onReady(function(){
                     }
 
                     //設定登入身分所屬學院系所清單
+                    ClientSession.myunits.push({unitid: '', unitname: '全系所'});
                     if (obj.data.units) {
                         Ext.Array.each(obj.data.units, function(unit) {
                             if (unit && unit.collegeid == ClientSession.user.collegeid) {

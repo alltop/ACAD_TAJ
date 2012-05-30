@@ -548,6 +548,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             boxLabel: '全系所',
             itemId: 'college-filter',
             checked: false,
+            hidden: true,
             handler: function(checkbox, checked) {
                 this.up('toolbar').getComponent('unitid-filter').setDisabled(checked);
                 __queryByFilters(this.up('toolbar'));

@@ -1,10 +1,10 @@
 /**
  * 網路選課系統
- * Powerd by ExtJS + Node.js + MongoDB
+ * Powerd by ExtJS + Node.js(Express.js) + MongoDB
  *
- * @author lyhcode@gmail.com
+ * @copyright ALLTOP Computer CO., Ltd. http://www.alltop.com.tw/
+ * @author http://about.me/lyhcode
  */
-
 
 // Module dependencies.
 
@@ -70,5 +70,4 @@ db.open(function(err, nativedb) {
      */
     app.listen(process.env.PORT || process.env.VCAP_APP_PORT || process.env.npm_package_config_port || 3000);
     console.log("伺服器已經啟動，連接埠： %d ，模式： %s", app.address().port, app.settings.env);
-
 });
