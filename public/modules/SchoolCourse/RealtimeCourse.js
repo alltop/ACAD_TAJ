@@ -34,12 +34,13 @@ var changeFilterHandler = function(val, params) {
         if (record.get('coursetype')==val) {
             result = true;
 
-			//我的體育課程
-			if(record.get('coursetype') == '2')
-			{
-				var is_myphy = (result && record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false;
-				if(!is_myphy) {
-					result = false;
+			//我的體育課程時段
+			if(result && val == '2')
+			{	
+				result = false;
+				var is_myphy = (record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false;
+				if(is_myphy) {
+					result = true;
 				}
 			}
 
@@ -104,9 +105,25 @@ var changeFilterHandler = function(val, params) {
         return result;
     };
 
+	//體育籂選
+	var __filter_phy = function(record) {
+		var store_phy = store0;
+		store_phy.filter('physicalgroup' , ClientSession.user.physicalgroup);
+
+		var exist = store_phy.find('semcoursename', record.get('semcoursename'));
+		if(exist >= 0)
+			return true;
+		else 
+			return false;
+	}
+	
     //處理左邊分類清單查詢
-    Ext.defer(function() {
-        store1a.filterBy(__filter_proc);
+    Ext.defer(function() {        
+		if(val == '2') {
+			store1a.filterBy(__filter_phy);
+		} else {
+			store1a.filterBy(__filter_proc);
+		}
     }, 100);
 
     //處理課程清單
@@ -270,7 +287,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
         },
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
-        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
+        { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },		
 		{ header: '學分', dataIndex: 'credit', width: 40 },
 		{ header: '開課系所', dataIndex: 'unitname', width: 90 },
         { header: '教師', dataIndex: 'teachername', width: 80 },
