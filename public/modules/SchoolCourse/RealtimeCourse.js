@@ -453,21 +453,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             text: '查詢',
 			itemId: 'query-button',
             handler: function() {
-                //取得勾選的星期資料（陣列）
-                var weekdays = this.up('toolbar').getComponent('week-filter').getValue().days;
-
-                //學門領域
-                var gpid = this.up('toolbar').getComponent('gpid-filter').getValue();
-
-                //課程名稱
-                var semcoursename = this.up('toolbar').getComponent('semcoursename-filter').getValue();
-
-                //重新篩選查詢
-                changeFilterHandler(null, {
-                    weekdays: weekdays,
-                    gpid: gpid,
-                    semcoursename: semcoursename
-                });
+				__queryByFilters(this.up('toolbar'));
             }
         }]
     }, {
