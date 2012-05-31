@@ -17,7 +17,7 @@ var changeFilterHandler = function(val, params) {
     }
 
     var weekdays = params.weekdays?params.weekdays:null;
-    var depttypes = params.depttypes?params.depttypes:null;
+    //var depttypes = params.depttypes?params.depttypes:null;
 	var gpid = params.gpid?params.gpid:null;
     var semcoursename = params.semcoursename?params.semcoursename:null;
 
@@ -386,6 +386,19 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 				cmp.setVisible(false);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('體育課程');
+            }
+        },{
+            xtype: 'button',
+            icon: __SILK_ICONS_URL+'bullet_green.png',
+            text: '軍訓課程 ',
+            toggleGroup: 'grid1-filter',
+            handler: function(button, e) {
+				button.toggle(true);
+                changeFilterHandler('4');
+				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
+				cmp.setVisible(false);
+                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
+                label.setText('軍訓課程');
             }
         }, '-', {
             xtype: 'tbtext',
