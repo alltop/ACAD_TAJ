@@ -37,10 +37,10 @@ var changeFilterHandler = function(val, params) {
 			//我的體育課程時段
 			if(result && val == '2')
 			{	
-				result = false;
-				var is_myphy = (record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false;
-				if(is_myphy) {
-					result = true;
+				result = true;
+				var is_myphy = (record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false; //我的體育時段
+				if(!is_myphy) {
+					result = false;
 				}
 			}
 
@@ -105,7 +105,7 @@ var changeFilterHandler = function(val, params) {
         return result;
     };
 
-	//體育籂選
+	//左側選單體育籂選
 	var __filter_phy = function(record) {
 		var store_phy = store0;
 		store_phy.filter('physicalgroup' , ClientSession.user.physicalgroup);
@@ -120,7 +120,7 @@ var changeFilterHandler = function(val, params) {
     //處理左邊分類清單查詢
     Ext.defer(function() {        
 		if(val == '2') {
-			store1a.filterBy(__filter_phy);
+			store1a.filterBy(__filter_proc); //__filter_phy
 		} else {
 			store1a.filterBy(__filter_proc);
 		}
