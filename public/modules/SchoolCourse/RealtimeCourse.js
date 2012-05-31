@@ -35,20 +35,26 @@ var changeFilterHandler = function(val, params) {
             result = true;
 
 			//我的體育課程時段
-			if(result && val == '2')
+			if(result && val == '2' )
 			{	
-				result = true;
-				var is_myphy = (record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false; //我的體育時段
-				if(!is_myphy) {
+				if(Ext.String.trim(ClientSession.user.physicalgroup) != '') {
+					result = true;
+					var is_myphy = (record.get('physicalgroup') == ClientSession.user.physicalgroup)?true:false; //我的體育時段
+					if(!is_myphy) {
+						result = false;
+					}
+				} else {
 					result = false;
 				}
+				//if(result == false) alert(val+'='+record.get('semcoursename')+'?'+record.get('physicalgroup')+'-'+'pe_sotp'); //test
 			}
-
+			
 			//課程名稱篩選
             if (result && semcoursename != null && Ext.String.trim(semcoursename) != '') {
                 if (record.get('semcoursename').indexOf(semcoursename) == -1) {
                     result = false;
                 }
+				//if(result == false) alert(val+'='+record.get('semcoursename')+'-'+'name_sotp'); //test
             }
 
             //學門領域
@@ -56,6 +62,7 @@ var changeFilterHandler = function(val, params) {
                 if (record.get('selectgpid') != gpid) {
                     result = false;
                 }
+				//if(result == false && val!= '1') alert(val+'='+record.get('semcoursename')+'?'+'gpid_sotp'); //test
             }
 			
             //星期篩選
@@ -99,6 +106,7 @@ var changeFilterHandler = function(val, params) {
                         result = (result || true);
                     }
                 });
+				//if(result == false) alert(val+'='+record.get('semcoursename')+'week_stop'); //test
             }
         }
         //傳回處理結果
@@ -107,20 +115,25 @@ var changeFilterHandler = function(val, params) {
 
 	//左側選單體育籂選
 	var __filter_phy = function(record) {
-		var store_phy = store0;
-		store_phy.filter('physicalgroup' , ClientSession.user.physicalgroup);
-
-		var exist = store_phy.find('semcoursename', record.get('semcoursename'));
-		if(exist >= 0)
-			return true;
-		else 
+		if(Ext.String.trim(ClientSession.user.physicalgroup) == '') {
 			return false;
+		} else {
+			var store_phy = store0;
+			store_phy.filter('physicalgroup' , ClientSession.user.physicalgroup);
+
+			var exist = store_phy.find('semcoursename', record.get('semcoursename'));
+			if(exist >= 0)
+				return true;
+			else 
+				return false;
+		}
 	}
 	
     //處理左邊分類清單查詢
     Ext.defer(function() {        
 		if(val == '2') {
-			store1a.filterBy(__filter_proc); //__filter_phy
+			store1a.filterBy(__filter_phy); //__filter_phy
+			if(store1a.getCount() == 0) alert('無體育課程可選。');
 		} else {
 			store1a.filterBy(__filter_proc);
 		}
@@ -218,17 +231,33 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
 					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //已選
 					
+					var store1 = view.getStore();
+					var record = store1.getAt(rowIndex);
+					var coursetype = record.get('coursetype');
 					//學分是否已達學分上限
 					var amt_credit = 0;
 					store3.each(function(record2) {   
-						amt_credit += record2.get('credit');   
+						amt_credit += parseInt(record2.get('credit'));   
 					});
-					if(amt_credit > 8)
-						alert('已達學分數上限(28學分)。');
-					else {
-						//設定選課來源資料
-						var store1 = view.getStore();
-						var record = store1.getAt(rowIndex);
+					
+					//是否有選通識選修
+					var exist1 = store3.findBy(function (record2) {   
+						return record2.get('selectgpid') != '';
+					});
+					
+					//是否有體育
+					var exist2 = store3.findBy(function (record2) {   
+						return record2.get('physicalgroup') != '';   
+					});
+					
+					if(amt_credit > 28) {
+						alert('已達學分數上限(28學分)。'+amt_credit);
+					} else if(coursetype == '2' && exist2 >= 0) {
+						alert('體育課程只能選擇 1 門');
+					} else if(coursetype == '1' && exist1 >= 0) {
+						alert('通識選修只能選擇 1 門');
+					} else {
+						//設定選課來源資料												
 						store1.remove(record);
 						store2.add(record);
 					}
@@ -634,7 +663,10 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
                     },
                     afterrender: function(panel, eOpts) {
                         //載入資料
-                        changeFilterHandler('1');
+                        //changeFilterHandler('1');
+						changeFilterHandler('1', {
+                            gpid: 'G00001'
+                        });
                     }
                 }
             });
