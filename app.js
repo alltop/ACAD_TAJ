@@ -13,6 +13,8 @@ var express = require('express')
   , cache = require('connect-cache')
   , mongo = require('mongoskin')
   , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=2')
+  //, db = mongo.db('192.192.216.83/acad_taj?auto_reconnect=true&poolSize=2')
+  //, db = mongo.db('localhost/acad_taj?auto_reconnect=true&poolSize=2')
   , mongoStore = require('connect-mongodb')
   , cloudfoundry = require('cloudfoundry');
 
@@ -59,6 +61,8 @@ db.open(function(err, nativedb) {
     app.get('/', routes.index);
     app.get('/login.:format?', routes.login);
     app.get('/portal.:format?', routes.portal);
+	app.get('/select.:format?', routes.select);
+	app.get('/realtime.:format?', routes.realtime);
 
     // Load Services
     require('./service')(app, db, urlprefix);

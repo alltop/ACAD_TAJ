@@ -20,3 +20,13 @@ exports.portal = function(req, res){
 		res.redirect('login');
 	}
 }
+
+exports.select = function(req, res){
+	res.redirect('/login?mode=select');
+	res.render('select.jade', { title: '登入選課系統' });
+};
+
+exports.realtime = function(req, res){
+	res.redirect('/login?mode=realtime');
+	res.render('realtime.jade', { title: '登入選課系統' });
+};
