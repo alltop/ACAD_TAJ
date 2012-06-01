@@ -43,7 +43,11 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
             checked: '通過',
             regtype: '2',
             failcause: '記錄訊息'
-        });
+        });		
+		
+		//tSemesterCusWeb 課程資料表
+		//已選人數變更
+		db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
     });
 
     console.log(docs);
@@ -65,7 +69,6 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
                 docs: docs
             }
         };
-
         res.send(JSON.stringify(results));
         res.end();
     });

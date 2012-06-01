@@ -551,26 +551,26 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 				icon: __SILK_ICONS_URL+'accept.png',
 				text: '<b><font size="3" color="#E68E36">確定加選</font></b>',
 				handler: function() {
-                var courses = new Array();
+					var courses = new Array();
 
-                var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
-                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
-				var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4');
+					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
+					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+					var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4');
 
-                store2.each(function(record) {
-                    courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
-                });
+					store2.each(function(record) {
+						courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
+					});
 
-                if (courses.length == 0) {
-                    Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
-                }
-                else {
+					if (courses.length == 0) {
+						Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
+					}
+					else {
                         Ext.Msg.wait('正在處理加選...');
                         Ext.Ajax.request({
                             url: __SERVICE_URL + '/service/selectcourseReal.json',
                             method: 'POST',
                             params: {
-                                courses: Ext.Array.from(courses).join(',')
+                                courses: Ext.Array.from(courses).join(',')								
                             },
                             success: function(response, opts) {
                                 Ext.Msg.hide();
@@ -598,24 +598,24 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                                 Ext.getCmp('notifier').setText('<font color="red">選課登記失敗</font>');
                             }
                         });
-                    }
-            }
-        }, {
-            icon: __SILK_ICONS_URL + 'cart_delete.png',
-            text: '清除候選區',
-            handler: function() {
-                Ext.Msg.confirm(
-                    '清除確認',
-                    '請按「是」將候選區資料清空；按「否」取消動作。',
-                    function(btn, text){
-                        if (btn == 'yes'){
-                            var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
-                            store2.removeAll();
-                        }
-                    }
-                );
-            }
-        }]
+					}
+				}
+			}, {
+				icon: __SILK_ICONS_URL + 'cart_delete.png',
+				text: '清除候選區',
+				handler: function() {
+					Ext.Msg.confirm(
+						'清除確認',
+						'請按「是」將候選區資料清空；按「否」取消動作。',
+						function(btn, text){
+							if (btn == 'yes'){
+								var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
+								store2.removeAll();
+							}
+						}
+					);
+				}
+			}]
 		}]
         //margins: '5 5 5 5'
     }]

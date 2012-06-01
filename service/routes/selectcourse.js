@@ -44,6 +44,10 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
             regtype: '1',
             failcause: '記錄訊息'
         });
+		
+		//tSemesterCusWeb 課程資料表
+		//已選人數變更
+		db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
     });
 
     console.log(docs);
