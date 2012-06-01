@@ -1,4 +1,24 @@
 Ext.onReady(function() {
+
+    var mode = 'select';
+    var modeText = '';
+    var urlparams = document.URL.split("?");
+    if (urlparams.length > 1) {
+        var params = Ext.urlDecode(urlparams[1]);
+        if (params && params.mode) {
+            mode = params.mode;
+        }
+    }
+
+    switch (mode) {
+        case 'select':
+            modeText = '登記分發';
+        break;
+        case 'realtime':
+            modeText = '即選即上';
+        break;
+    }
+
     Ext.QuickTips.init();
     var login = new Ext.FormPanel({
         region: 'center',
@@ -101,7 +121,7 @@ Ext.onReady(function() {
                 padding: '5px',
                 background: 'transparent'
             },
-            items: ['© ALLTOP 2012']
+            items: ['© ALLTOP 2012', {xtype: 'tbfill'}, '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>' ]
         }]
     });
     win.show();
