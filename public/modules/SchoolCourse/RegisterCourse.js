@@ -729,7 +729,12 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
 
                                 if (obj.success) {
                                     store2.removeAll();
-                                    store3.load();
+
+                                    //重新整理已選清單
+                                    Ext.defer(function() {
+                                        store3.load();
+                                    }, 1);
+
 									store4.generateData();
 
                                     Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
