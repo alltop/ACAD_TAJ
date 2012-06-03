@@ -96,8 +96,8 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
         text: '重新整理',
         handler: function(button, e) {
             Ext.defer(function() {
-                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
-                store3.load();
+                var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+                storeReal3.load();
             }, 1);
         }
     }],

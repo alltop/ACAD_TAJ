@@ -283,6 +283,9 @@ Ext.onReady(function(){
                     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
                     var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
                     var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
+					var storeReal1a = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1a');
+                    var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+					
                     store0.load({
                         callback: function(records, operation, success) {
                             
@@ -311,6 +314,16 @@ Ext.onReady(function(){
                                 }
                             });
                             store1a.load({
+                                callback: function(records, operation, success) {
+                                    completeJob(3);
+                                }
+                            });
+							storeReal3.load({
+                                callback: function(records, operation, success) {
+                                    completeJob(2);
+                                }
+                            });
+                            storeReal1a.load({
                                 callback: function(records, operation, success) {
                                     completeJob(3);
                                 }

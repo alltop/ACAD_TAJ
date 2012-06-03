@@ -3,9 +3,11 @@
  */
 var __changeFilterHandler_state = null;
 var changeFilterHandler = function(val, params) {
+/*
     if (val==__changeFilterHandler_state) {
         return true;
     }
+*/
     if (!val) {
         val = __changeFilterHandler_state;
     }
@@ -15,16 +17,17 @@ var changeFilterHandler = function(val, params) {
     if (!params) {
         params = {};
     }
-
+	//篩選資料前置處理
     var weekdays = params.weekdays?params.weekdays:null;
     //var depttypes = params.depttypes?params.depttypes:null;
 	var gpid = params.gpid?params.gpid:null;
     var semcoursename = params.semcoursename?params.semcoursename:null;
 
+	//資料來源設定
     var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
-    var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
-    var store1a = Ext.data.StoreManager.lookup('SchoolCourse-Store1a');
-
+    var store1 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1');
+    var store1a = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1a');
+	
     store1.removeAll();
     //store1a.removeAll();
 
@@ -32,8 +35,14 @@ var changeFilterHandler = function(val, params) {
         var result = false;
 
         if (record.get('coursetype')==val) {
-            result = true;
-
+            result = true;			
+			
+			//擋課處理（blocklist）
+            if (result && Ext.Array.contains(ClientSession.blocklist_array, record.get('semcoursename'))) {
+                result = false;
+				//if(result == false) alert(val+'='+record.get('semcoursename')+'-'+'block_sotp'); //test
+            }
+			
 			//我的體育課程時段
 			if(result && val == '2' )
 			{	
@@ -59,6 +68,7 @@ var changeFilterHandler = function(val, params) {
 
             //學門領域
             if (result && gpid && gpid != '') {
+				//alert(gpid);
                 if (record.get('selectgpid') != gpid) {
                     result = false;
                 }
@@ -109,6 +119,7 @@ var changeFilterHandler = function(val, params) {
 				//if(result == false) alert(val+'='+record.get('semcoursename')+'week_stop'); //test
             }
         }
+		//alert(record.get('coursetype')+'?'+record.get('semcoursename')+'::'+result);
         //傳回處理結果
         return result;
     };
@@ -130,13 +141,17 @@ var changeFilterHandler = function(val, params) {
 	}
 	
     //處理左邊分類清單查詢
-    Ext.defer(function() {        
+    Ext.defer(function() { 
+		//store1a.clearFilter();  //test
+		//alert('b:'+store1a.getCount()); //test
 		if(val == '2') {
 			store1a.filterBy(__filter_phy); //__filter_phy
 			if(store1a.getCount() == 0) alert('無體育課程可選。');
 		} else {
 			store1a.filterBy(__filter_proc);
 		}
+		//alert('a:'+store1a.getCount()); //test
+		//alert(store0.getCount()+'?'+store1.getCount()+'?'+store1a.getCount());//test
     }, 100);
 
     //處理課程清單
@@ -155,7 +170,7 @@ var changeFilterHandler = function(val, params) {
 Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1a', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-RealtimeCourse-Grid1a',
-    store: 'SchoolCourse-Store1a',
+    store: 'SchoolCourse-StoreReal1a',
     loadMask: true,
     disableSelection: false,
     invalidateScrollerOnRefresh: true,
@@ -169,7 +184,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1a', {
         },
         select: function(grid, record, index, eOpts) {
             var record_semcoursename = record.get('semcoursename');
-            var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+            var store1 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1');
             store1.filterBy(function(record2) {
                 return (record2.get('semcoursename')==record_semcoursename);
             });
@@ -183,7 +198,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1a', {
 Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.SchoolCourse-RealtimeCourse-Grid1',
-    store: 'SchoolCourse-Store1',
+    store: 'SchoolCourse-StoreReal1',
     loadMask: true,
     disableSelection: false,
     invalidateScrollerOnRefresh: true,
@@ -228,27 +243,41 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                 },
                 handler: function(view, rowIndex, colIndex, item, e) { 
                     //將選課資料移到待選區
-					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
+					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
 					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //已選
 					
 					var store1 = view.getStore();
 					var record = store1.getAt(rowIndex);
 					var coursetype = record.get('coursetype');
+					
 					//學分是否已達學分上限
 					var amt_credit = 0;
 					store3.each(function(record2) {   
 						amt_credit += parseInt(record2.get('credit'));   
 					});
+					store2.each(function(record2) {   
+						amt_credit += parseInt(record2.get('credit'));   
+					});
 					
-					//是否有選通識選修
+					//選通識選修是否已選
 					var exist1 = store3.findBy(function (record2) {   
 						return record2.get('selectgpid') != '';
 					});
+					if(exist1 == -1) {
+						var exist1 = store2.findBy(function (record2) {   
+							return record2.get('selectgpid') != '';
+						});
+					}
 					
-					//是否有體育
+					//體育是否已選
 					var exist2 = store3.findBy(function (record2) {   
 						return record2.get('physicalgroup') != '';   
 					});
+					if(exist2 == -1) {
+						var exist2 = store2.findBy(function (record2) {   
+							return record2.get('physicalgroup') != '';
+						});
+					}
 					
 					if(amt_credit > 28) {
 						alert('已達學分數上限(28學分)。'+amt_credit);
@@ -295,7 +324,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
                 icon: __SILK_ICONS_URL+'delete.png',
                 tooltip: '移除',
                 handler: function(grid, rowIndex, colIndex) {
-					var store1 = Ext.data.StoreManager.lookup('SchoolCourse-Store1');
+					var store1 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1');
                     var store2 = grid.getStore();
                     var record = store2.getAt(rowIndex);
                     
@@ -306,7 +335,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
                             if (btn=='yes') {
                                 //將選課資料移到待選區
 								store2.removeAt(rowIndex);
-                                store2.generateSerialno();
+                                //store2.generateSerialno();
                                 store1.add(record);
                             }
                         }
@@ -329,20 +358,27 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid2', {
 
 var __createFilterHandler = function(code, text) {
     return function(button, e) {
-        
-        changeFilterHandler(code);
-/*
-        //通識特別處理：學門領域下拉選單啟用
-        var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
-        if (cmp) {
-            cmp.setVisible(code == '1');
-        }
-		*/
+        button.toggle(true);
+		
+		var weekdays = this.up('panel').getComponent('filterbar').getComponent('week-filter').getValue().days; //取得勾選的星期資料（陣列）
+		var gpid = this.up('panel').getComponent('filterbar').getComponent('gpid-filter').getValue(); //學門領域
+		if(code != '1') gpid = null;
+		var semcoursename = this.up('panel').getComponent('filterbar').getComponent('semcoursename-filter').getValue(); //課程名稱
+		
+		changeFilterHandler(code, {
+			weekdays: weekdays,
+			gpid: gpid,
+			semcoursename: semcoursename
+		});
+		
+		//通識特別處理：學門領域下拉選單啟用
+		var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
+		cmp.setVisible(code == '1');
     };
 }
 
 //
-var __queryByFilters = function(toolbar) {
+var __queryByFilters = function(val, toolbar) {
     //取得勾選的星期資料（陣列）
     var weekdays = toolbar.getComponent('week-filter').getValue().days;
 
@@ -351,7 +387,7 @@ var __queryByFilters = function(toolbar) {
 
     //學門領域
     var gpid = toolbar.getComponent('gpid-filter').getValue();
-
+	if(val != '1') gpid = null;
     //年級下拉清單值
     //var grade = toolbar.getComponent('grade-filter').getValue();
 
@@ -365,11 +401,11 @@ var __queryByFilters = function(toolbar) {
     var semcoursename = toolbar.getComponent('semcoursename-filter').getValue();
 
     //重新篩選查詢
-    changeFilterHandler(null, {
+    changeFilterHandler(val, {
         weekdays: weekdays,
         //depttypes: depttypes,
         gpid: gpid,
-        semcoursename: semcoursename,
+        semcoursename: semcoursename
         //grade: grade,
         //unitid: unitid,
         //college: college
@@ -395,40 +431,53 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             text: '通識選修',
             toggleGroup: 'grid1-filter',
             pressed: true,
+			handler: __createFilterHandler('1', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。')
+			/*
             handler: function(button, e) {
 				button.toggle(true);
-                changeFilterHandler('1');
+                //changeFilterHandler('1');
+				//__queryByFilters('1', this.getComponent('toolbar'));
+				__createFilterHandler('1', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
 				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
 				cmp.setVisible(true);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
             }
+			*/
         }, {
             xtype: 'button',
             icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '體育課程 ',
             toggleGroup: 'grid1-filter',
+			handler: __createFilterHandler('2', '體育課程')
+			/*
             handler: function(button, e) {
 				button.toggle(true);
-                changeFilterHandler('2');
-				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
-				cmp.setVisible(false);
+                //changeFilterHandler('2');
+				//__queryByFilters('2', this.getComponent('toolbar'));
+				__createFilterHandler('2','222');
+				
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('體育課程');
             }
+			*/
         },{
             xtype: 'button',
             icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '軍訓課程 ',
             toggleGroup: 'grid1-filter',
+			handler: __createFilterHandler('4', '軍訓課程')
+			/*
             handler: function(button, e) {
-				button.toggle(true);
-                changeFilterHandler('4');
+				//button.toggle(true);
+                //changeFilterHandler('4');
+				__queryByFilters('4', this.getComponent('toolbar'));
 				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
 				cmp.setVisible(false);
                 var label = this.up('panel').getComponent('footbar').getComponent('label-status');
                 label.setText('軍訓課程');
             }
+			*/
         }, '-', {
             xtype: 'tbtext',
             text: ''
@@ -461,7 +510,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 			width: 150,
 			listeners: {				
                 change: function(field, newValue, oldValue, eOpts) {
-                    __queryByFilters(this.up('toolbar'));
+                    __queryByFilters('1', this.up('toolbar'));
                 }
             },
             allowBlank: true
@@ -495,7 +544,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             text: '查詢',
 			itemId: 'query-button',
             handler: function() {
-				__queryByFilters(this.up('toolbar'));
+				__queryByFilters(__changeFilterHandler_state, this.up('toolbar'));
             }
         }]
     }, {
@@ -536,7 +585,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
         resizable: true,
         region: 'south',
         //title: '候選區',
-        icon: __SILK_ICONS_URL+'cart_add.png',
+        icon: __SILK_ICONS_URL + 'cart_add.png',
         autoScroll: true,
         height: 150,
 		dockedItems: [{
@@ -548,13 +597,15 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 xtype: 'tbtext',
                 text: '候選區'
             }, '-', {
-				icon: __SILK_ICONS_URL+'accept.png',
+				xtype: 'button',
+				icon: __SILK_ICONS_URL + 'accept.png',
 				text: '<b><font size="3" color="#E68E36">確定加選</font></b>',
+				scale: 'medium',
 				handler: function() {
 					var courses = new Array();
 
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
-					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+					var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
 					var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4');
 
 					store2.each(function(record) {
@@ -581,7 +632,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 
                                 if (obj.success) {
                                     store2.removeAll();
-                                    store3.load();
+                                    storeReal3.load();
 									store4.generateData();
 
                                     Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
@@ -603,6 +654,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 			}, {
 				icon: __SILK_ICONS_URL + 'cart_delete.png',
 				text: '清除候選區',
+				scale: 'medium',
 				handler: function() {
 					Ext.Msg.confirm(
 						'清除確認',
@@ -647,7 +699,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
         if (!panel) {
             //使用新頁籤建立主畫面
             //tabpanel.setLoading('讀取中');
-            panel = Ext.create('Module.SchoolCourse.RealtimeCourse.MainPanel', {
+            var panel = Ext.create('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                 listeners: {
                     beforeclose: function(panel, eOpts) {
 					
@@ -662,7 +714,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
                         Module.SchoolCourse.RealtimeCourse._previous = null;
                     },
                     afterrender: function(panel, eOpts) {
-                        //載入資料
+                        //載入資料（帶預設值）
                         //changeFilterHandler('1');
 						changeFilterHandler('1', {
                             gpid: 'G00001'

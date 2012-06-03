@@ -34,12 +34,12 @@ Ext.define('Module.SchoolCourse.StoreReal4', {
         }
     },
     generateData: function() {
-        var store4 = this;
+        var storeReal4 = this;
         var store5 = Ext.data.StoreManager.lookup('SchoolCourse-Store5');
         store5.load({
             callback: function(records, operation, success) {
                 Ext.defer(function() {
-                    store4.each(function(record) {
+                    storeReal4.each(function(record) {
                         var classno = record.get('classno');
 
                         var class_array = new Array();
@@ -83,7 +83,7 @@ Ext.define('Module.SchoolCourse.StoreReal4', {
                         }
                     });
 
-                    store4.commitChanges();
+                    storeReal4.commitChanges();
                 }, 2000);
             }
         });
