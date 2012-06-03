@@ -15,6 +15,9 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
     var docs = new Array();
     var docs2 = new Array();
 
+    //處理批號（排序優先於志願序號）
+    var serialseq = parseInt(Math.round(new Date().getTime()));
+
     courses.forEach(function(course) {
         
         //用冒號分隔 semcourseid 及 courseid
@@ -28,6 +31,7 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
             studentno: user.studentno,  //學號
             timestamp: new Date().getTime(),            //時間戳記
             serialno: course_arr[2]?course_arr[2]:'0',  //志願順序
+            serialseq: serialseq,
             createdate: new Date().getTime(),           //資料建立日期
             regtype: '1'                                //選課類型
         });

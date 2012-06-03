@@ -30,32 +30,44 @@ Ext.define('Module.SchoolCourse.Store3', {
                     success: function(response) {
                         var obj = Ext.JSON.decode(response.responseText);
 
-                        var semcourseid_array = new Array();
-                        var serialno_map = new Ext.util.HashMap();
+                        //var semcourseid_array = new Array();
+                        //var serialno_map = new Ext.util.HashMap();
 
-                        Ext.Array.each(obj, function(item) {
-                            var tokens = item.split(':');
-                            semcourseid_array.push(tokens[0]);
-                            serialno_map.add(tokens[0], tokens[1]);
-                        });
+                        //Ext.Array.each(obj, function(item) {
+                            //var tokens = item.split(':');
+                            //semcourseid_array.push(tokens[0]);
+                            //serialno_map.add(tokens[0], tokens[1]);
+                            //semcourseid_array.push(item);
+                        //});
 
                         //console.log(semcourseid_array);
 
                         var records = new Array();
 
-                        store0.each(function(record) {
-                            if (Ext.Array.contains(semcourseid_array, record.get('semcourseid'))) {
-                                records.push(record);
+                        //store0.each(function(record) {
+                        //    if (Ext.Array.contains(semcourseid_array, record.get('semcourseid'))) {
+                        //        records.push(record);
+                        //    }
+                        //});
+
+                        Ext.Array.each(obj, function(semcourseid) {
+                            var record_index = store0.find('semcourseid', semcourseid);
+                            if (record_index > 0) {
+                                records.push(store0.getAt(record_index));
                             }
                         });
+
+                        store3.removeAll();
                         store3.loadRecords(records);
-                        store3.each(function(record) {
-                            record.set('serialno', serialno_map.get(record.get('semcourseid')));
-                        });
-                        store3.sort([
-                            {property: 'semcoursename', direction: 'ASC'},
-                            {property: 'serialno', direction: 'ASC'}
-                        ]);
+
+                        //var count = 0;
+                        //store3.each(function(record) {
+                            //record.set('serialno', serialno_map.get(record.get('semcourseid')));
+                            //record.set('serialno', count++);
+                        //});
+
+                        //產生志願順序
+                        store3.generateSerialno();
                     }
                 });
             }
