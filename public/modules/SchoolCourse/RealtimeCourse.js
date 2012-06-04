@@ -156,6 +156,7 @@ var changeFilterHandler = function(val, params) {
 		if(val == '2') {
 			store1a.filterBy(__filter_phy); //__filter_phy
 			if(store1a.getCount() == 0) alert('無體育課程可選。');
+			store0.clearFilter();
 		} else {
 			store1a.filterBy(__filter_proc);
 		}

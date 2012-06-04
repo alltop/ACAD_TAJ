@@ -32,8 +32,8 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                 tooltip: '取消選擇的課程',
                 handler: function(grid, rowIndex, colIndex) {
                     //設定選課來源資料
-                    var store3 = grid.getStore();
-                    var record = store3.getAt(rowIndex);
+                    var StoreReal3 = grid.getStore();
+                    var record = StoreReal3.getAt(rowIndex);
                     //console.log('加選 ' + rec.get('semcourseid'));
 
                     Ext.MessageBox.confirm(
@@ -60,7 +60,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                                         //Ext.Msg.alert("伺服器回應", obj.success);
 
                                         if (obj.success) {
-                                            store3.load();
+                                            StoreReal3.load();
                                         }
                                     }
                                 });
