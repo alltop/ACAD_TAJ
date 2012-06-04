@@ -385,7 +385,18 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid2', {
 var __createFilterHandler = function(code, text) {
     return function(button, e) {
         button.toggle(true);
-        changeFilterHandler(code);
+		
+		var grade = this.up('panel').getComponent('filterbar').getComponent('grade-filter').getValue(); //課程名稱
+		var unitid = this.up('panel').getComponent('filterbar').getComponent('unitid-filter').getValue(); //課程名稱
+		var semcoursename = this.up('panel').getComponent('filterbar').getComponent('semcoursename-filter').getValue(); //課程名稱
+		var collegeid = this.up('panel').getComponent('filterbar').getComponent('college-filter').getValue(); //課程名稱
+		
+        changeFilterHandler(code, {
+			collegeid: collegeid,
+			unitid: unitid,
+			grade: grade,
+			semcoursename: semcoursename
+		});
 
         //通識特別處理：學門領域下拉選單啟用
         var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
