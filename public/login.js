@@ -136,7 +136,7 @@ Ext.onReady(function() {
     });
     
 
-    if (Ext.isIE6 || Ext.isIE7) {
+    if (Ext.isIE6 || Ext.isIE7 || Ext.isIE8) {
         Ext.Msg.confirm('重要：瀏覽器升級提示', '系統偵測到您的 Internet Explorer 瀏覽器核心可以升級，<br/>您是否願意立即升級至速度更快、更安全的版本？<br/><br/>請按「<b>是</b>」開始 Google Chrome Frame 升級程序！！！', function (btn, text) {
             if (btn=='yes') {
                 location.href = '/chrome';
