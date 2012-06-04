@@ -47,8 +47,8 @@ var changeFilterHandler = function(val, params) {
 				//if(result == false) alert(val+'='+record.get('semcoursename')+'-'+'blockgp_sotp'); //test
             }
 			
-			//這次只對選修做選課
-			if (record.get('choose') != '2') {
+			//這次通識只對選修做選課
+			if (record.get('choose') == '1' && val == '1') {
                 result = false;
              }
 			
