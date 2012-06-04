@@ -89,7 +89,7 @@ var changeFilterHandler = function(val, params) {
             }
 
             //全系所（學院）
-            if (result && college) {
+            if (result && ClientSession.user.collegeid) {
                 if (record.get('collegeid') != ClientSession.user.collegeid) {
                     result = false;
                 }
@@ -169,6 +169,7 @@ var changeFilterHandler = function(val, params) {
     //處理左邊分類清單查詢
     Ext.defer(function() {
         store1a.filterBy(__filter_proc);
+		
 		if (store1a.getCount() == 0 && val == '5') alert("因所有課程為配課 或 已修，故無課程顯示");
     }, 100);
 
@@ -177,7 +178,6 @@ var changeFilterHandler = function(val, params) {
         var result = store0.queryBy(__filter_proc);
         store1.loadRecords(result.items);
         store1.sort();
-
         //預設顯示0筆
         store1.filterBy(function(record) {
             return false;
@@ -298,6 +298,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
         { header: '學期課號', dataIndex: 'semcourseid', width: 120, hidden: true },
         { header: '來源課號', dataIndex: 'courseid', width: 120, hidden: true },
         { header: '課程名稱', dataIndex: 'semcoursename', flex: 1 },
+		{ header: '修課類別', dataIndex: 'coursetypename', width: 60, hidden: true},
+		{ header: '修課院別', dataIndex: 'collegeid', width: 60, hidden: true},
+		{ header: '必選修', dataIndex: 'choose', width: 60, hidden: true},
 		{ header: '學分', dataIndex: 'credit', width: 40, hidden: false},
 		{ header: '開課系所', dataIndex: 'unitname', width: 60, hidden: false},
 		{ header: '開課班級', dataIndex: 'classname', width: 110, hidden: false},
@@ -485,7 +488,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             text: '院訂選修',
             hidden: false,
             toggleGroup: 'grid1-filter',
-            handler: __createFilterHandler('3', '院訂選修...')
+            handler: __createFilterHandler('3-2', '院訂選修...')
         }, {
             xtype: 'button',
             icon: __SILK_ICONS_URL + 'bullet_green.png',
@@ -872,7 +875,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料（帶預設值）
                         //changeFilterHandler('3');
-                        changeFilterHandler('5', {
+                        changeFilterHandler('5-2', {
                             grade: ClientSession.user.grade,
                             unitid: ClientSession.user.unitid
                         });
