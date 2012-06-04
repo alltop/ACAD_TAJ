@@ -37,14 +37,12 @@ Ext.define('Module.SchoolCourse.StoreReal3', {
                             semcourseid_array.push(tokens[0]);
                         });
 
-                        console.log('StoreReal3:' + semcourseid_array);
 
                         var records = new Array();
 
                         store0.each(function(record) {
                             if (Ext.Array.contains(semcourseid_array, record.get('semcourseid'))) {
                                 records.push(record);
-								console.log('contains:' + record.get('semcourseid'));
                             }
                         });
                         StoreReal3.loadRecords(records);

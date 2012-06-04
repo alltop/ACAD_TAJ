@@ -45,7 +45,6 @@ Ext.define('Module.SchoolCourse.BookingCourse.Grid1', {
                     //設定選課來源資料
                     var store3 = grid.getStore();
                     var record = store3.getAt(rowIndex);
-                    //console.log('加選 ' + rec.get('semcourseid'));
 
                     Ext.MessageBox.confirm(
                         '取消確認',

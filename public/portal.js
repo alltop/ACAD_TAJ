@@ -324,12 +324,12 @@ Ext.onReady(function(){
                             });
 							storeReal3.load({
                                 callback: function(records, operation, success) {
-                                    completeJob(2);
+                                    completeJob(0);
                                 }
                             });
                             storeReal1a.load({
                                 callback: function(records, operation, success) {
-                                    completeJob(3);
+                                    completeJob(1);
                                 }
                             });
                             completeJob(1);

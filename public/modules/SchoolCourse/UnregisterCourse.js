@@ -34,7 +34,6 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.Grid1', {
                     //設定選課來源資料
                     var store3 = grid.getStore();
                     var record = store3.getAt(rowIndex);
-                    //console.log('加選 ' + rec.get('semcourseid'));
 
                     Ext.MessageBox.confirm(
                         '取消確認',
@@ -88,17 +87,17 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
     frame: false,
     closable: true,
     title: '退選',
-    icon: __SILK_ICONS_URL+'application_view_columns.png',
+    icon: __SILK_ICONS_URL + 'application_view_columns.png',
     layout: 'border',
     tbar: [{
         xtype: 'button',
-        icon: __SILK_ICONS_URL+'arrow_rotate_clockwise.png',
+        icon: __SILK_ICONS_URL + 'arrow_rotate_clockwise.png',
         text: '重新整理',
+		scale: 'medium',
         handler: function(button, e) {
             Ext.defer(function() {
-                var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
-                storeReal3.load();
-				//alert(storeReal3.getCount());
+                var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+                store3.load();
             }, 1);
         }
     }],
@@ -109,7 +108,6 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
         region: 'center',
         autoHeight: true,
         autoScroll: true,
-        margins: '5 5 5 5'
     }],
     bbar: [{
         xtype: 'tbtext',
@@ -148,9 +146,9 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料
                         Ext.defer(function() {
-                            var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
-                            storeReal3.load();
-                        }, 50);
+                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+                            store3.load();
+                        }, 100);
                     }
                 }
             });
