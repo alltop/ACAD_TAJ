@@ -1,5 +1,4 @@
 Ext.onReady(function() {
-
     var mode = 'select';
     var modeText = '';
     var urlparams = document.URL.split("?");
@@ -121,8 +120,34 @@ Ext.onReady(function() {
                 padding: '5px',
                 background: 'transparent'
             },
-            items: ['© ALLTOP 2012', {xtype: 'tbfill'}, '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>' ]
+            items: [
+                '© ALLTOP 2012',
+                {xtype: 'tbfill'},
+                {
+                    xtype: 'button',
+                    text: '<font color="red" size="3">瀏覽器升級（建議）</font>',
+                    hidden: !Ext.isIE,
+                    handler: function() {
+                        location.href = '/chrome';
+                    }
+                },
+                '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>' ]
         }]
     });
-    win.show();
+    
+
+    if (Ext.isIE6 || Ext.isIE7) {
+        Ext.Msg.confirm('重要：瀏覽器升級提示', '系統偵測到您的 Internet Explorer 瀏覽器核心可以升級，<br/>您是否願意立即升級至速度更快、更安全的版本？<br/><br/>請按「<b>是</b>」開始 Google Chrome Frame 升級程序！！！', function (btn, text) {
+            if (btn=='yes') {
+                location.href = '/chrome';
+            }
+            else {
+                win.show();
+            }
+        });
+    }
+    else {
+        win.show();
+    }
+
 });

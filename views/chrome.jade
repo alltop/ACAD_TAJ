@@ -1,0 +1,23 @@
+!!!
+html
+    head
+        script(type='text/javascript', charset='utf-8', src='http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js')
+    style(type='text/css')
+        /* 
+        CSS rules to use for styling the overlay:
+        .chromeFrameOverlayContent
+        .chromeFrameOverlayContent iframe
+        .chromeFrameOverlayCloseBar
+        .chromeFrameOverlayUnderlay
+        */
+    script(type='text/javascript')
+        // You may want to place these lines inside an onload handler
+        CFInstall.check({
+            mode: "overlay",
+            destination: "http://#{siteurl}"
+        });
+    body
+        p(class='chrome')
+            a(href='login', title='登入') 《 返回登入畫面
+        p(class='chrome', style='width:400px;padding:1em')
+            系統將協助您升級 Internet Explorer 瀏覽器核心，請依提示步驟完成 Google Chrome Frame 安裝；如果您無法看到任何安裝提示，可能表示您的電腦已曾經安裝，請按上方的連結返回登入頁面。

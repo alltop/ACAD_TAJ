@@ -59,10 +59,11 @@ db.open(function(err, nativedb) {
 
     // Routes
     app.get('/', routes.index);
+    app.get('/chrome.:format?', routes.chrome); //google chrome frame
     app.get('/login.:format?', routes.login);
     app.get('/portal.:format?', routes.portal);
-	app.get('/select.:format?', routes.select);
-	app.get('/realtime.:format?', routes.realtime);
+    app.get('/select.:format?', routes.select);
+    app.get('/realtime.:format?', routes.realtime);
 
     // Load Services
     require('./service')(app, db, urlprefix);

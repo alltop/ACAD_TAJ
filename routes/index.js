@@ -1,6 +1,9 @@
 exports.index = function(req, res){
 	res.redirect('/login');
-	//res.render('index.jade', { title: 'redirect to portal' });
+};
+
+exports.chrome = function(req, res){
+	res.render('chrome.jade', { title: '安裝 Google Chrome Frame', bootstrap: '', siteurl: req.headers.host });
 };
 
 exports.login = function(req, res){
@@ -23,10 +26,8 @@ exports.portal = function(req, res){
 
 exports.select = function(req, res){
 	res.redirect('/login?mode=select');
-	res.render('select.jade', { title: '登入選課系統' });
 };
 
 exports.realtime = function(req, res){
 	res.redirect('/login?mode=realtime');
-	res.render('realtime.jade', { title: '登入選課系統' });
 };
