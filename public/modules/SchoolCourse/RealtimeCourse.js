@@ -288,11 +288,23 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 						});
 					}
 					
+					//軍訓是否已選
+					var exist4 = store3.findBy(function (record2) {   
+						return record2.get('coursetype') == '4';   
+					});
+					if(exist4 == -1) {
+						var exist2 = store2.findBy(function (record2) {   
+							return record2.get('coursetype') == '4';
+						});
+					}
+					
 					if(amt_credit > 28) {
 						alert('已達學分數上限(28學分)。'+amt_credit);
 					} else if(coursetype == '2' && exist2 >= 0) {
 						alert('體育課程只能選擇 1 門');
 					} else if(coursetype == '1' && exist1 >= 0) {
+						alert('通識選修只能選擇 1 門');
+					} else if(coursetype == '4' && exist4 >= 0) {
 						alert('通識選修只能選擇 1 門');
 					} else {
 						//設定選課來源資料												
