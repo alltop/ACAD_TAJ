@@ -306,7 +306,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					} else if(coursetype == '1' && exist1 >= 0) {
 						alert('通識選修只能選擇 1 門');
 					} else if(coursetype == '4' && exist4 >= 0) {
-						alert('通識選修只能選擇 1 門');
+						alert('軍訓課程只能選擇 1 門');
 					} else {
 						//設定選課來源資料												
 						store1.remove(record);
