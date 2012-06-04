@@ -85,7 +85,7 @@ Ext.onReady(function() {
         icon: __SILK_ICONS_URL + 'user.png',
         layout: 'border',
         width: 480,
-        height: 260,
+        height: 280,
         draggable: false,
         closable: false,
         resizable: false,
@@ -121,11 +121,11 @@ Ext.onReady(function() {
                 background: 'transparent'
             },
             items: [
-                '© ALLTOP 2012',
+                //'© ALLTOP 2012',
                 {xtype: 'tbfill'},
                 {
                     xtype: 'button',
-                    text: '<font color="red" size="3">瀏覽器升級（建議）</font>',
+                    text: '<font color="red" size="3">IE版本過低(8以下)升級瀏覽器（建議）</font>',
                     hidden: !Ext.isIE,
                     handler: function() {
                         location.href = '/chrome';
