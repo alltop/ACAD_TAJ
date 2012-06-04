@@ -169,6 +169,7 @@ var changeFilterHandler = function(val, params) {
     //處理左邊分類清單查詢
     Ext.defer(function() {
         store1a.filterBy(__filter_proc);
+		if (store1a.getCount() == 0 && val == '5') alert("因所有課程為配課 或 已修，故無課程顯示");
     }, 100);
 
     //處理課程清單
@@ -473,7 +474,6 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             text: '院訂選修',
             hidden: false,
             toggleGroup: 'grid1-filter',
-            pressed: true,
             handler: __createFilterHandler('3', '院訂選修...')
         }, {
             xtype: 'button',
@@ -493,6 +493,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             xtype: 'button',
             icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '專業選修',
+			pressed: true,
             hidden: false,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('5-2', '專業選修...')
@@ -860,7 +861,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料（帶預設值）
                         //changeFilterHandler('3');
-                        changeFilterHandler('3', {
+                        changeFilterHandler('5', {
                             grade: ClientSession.user.grade,
                             unitid: ClientSession.user.unitid
                         });
