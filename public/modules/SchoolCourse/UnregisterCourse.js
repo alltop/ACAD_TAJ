@@ -98,6 +98,7 @@ Ext.define('Module.SchoolCourse.UnregisterCourse.MainPanel', {
             Ext.defer(function() {
                 var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
                 storeReal3.load();
+				//alert(storeReal3.getCount());
             }, 1);
         }
     }],
@@ -147,8 +148,8 @@ Ext.define('Module.SchoolCourse.UnregisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料
                         Ext.defer(function() {
-                            var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
-                            store3.load();
+                            var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+                            storeReal3.load();
                         }, 50);
                     }
                 }

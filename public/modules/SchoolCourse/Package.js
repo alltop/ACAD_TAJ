@@ -14,7 +14,8 @@ Ext.define('Module.SchoolCourse.Package', {
 		this.requireStore('Module.SchoolCourse.StoreReal1', 'SchoolCourse-StoreReal1'); //即選即上_加選區
 		this.requireStore('Module.SchoolCourse.StoreReal1a', 'SchoolCourse-StoreReal1a'); //即選即上_加選區左側
 		this.requireStore('Module.SchoolCourse.StoreReal2', 'SchoolCourse-StoreReal2'); //即選即上_候選
-		this.requireStore('Module.SchoolCourse.StoreReal3', 'SchoolCourse-StoreReal3'); //即選即上_已選
+		this.requireStore('Module.SchoolCourse.StoreReal3', 'SchoolCourse-StoreReal3'); //即選即上_退選區
 		this.requireStore('Module.SchoolCourse.StoreReal4', 'SchoolCourse-StoreReal4'); //即選即上_課表
+		this.requireStore('Module.SchoolCourse.StoreReal5', 'SchoolCourse-StoreReal5'); //即選即上_已選課程
 	}
 });

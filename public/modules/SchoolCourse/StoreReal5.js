@@ -1,7 +1,7 @@
 /**
- * ¤w¿ï½Òµ{¸ê®Æ¨Ó·½¡]°h¿ï¥Î¡^
+ * å·²é¸èª²ç¨‹è³‡æ–™ä¾†æºï¼ˆèª²è¡¨ç”¨ï¼‰
  */
-Ext.define('Module.SchoolCourse.StoreReal3', {
+Ext.define('Module.SchoolCourse.StoreReal5', {
     extend: 'Ext.data.Store',
     autoLoad: false,
     autoSync: false,
@@ -10,7 +10,7 @@ Ext.define('Module.SchoolCourse.StoreReal3', {
         'semcoursename', 'teachername', 'coursetime', 'coursetime_view',
         'roomname', 'maxcount', 'selectedcount', 'choose', 'grade',
         'unitid', 'collegeid', 'studytype', 'selectgpid', 'englevel',
-        'serialno', 'credit', 'unitname'
+        'serialno', 'regtype'
     ],
     data: {'items':[]},
     proxy: {
@@ -21,35 +21,40 @@ Ext.define('Module.SchoolCourse.StoreReal3', {
         }
     },
     listeners: {
-        load: function(StoreReal3, records, options) {
+        load: function(storeReal5, records, options) {
             var store0 = Ext.data.StoreManager.lookup('SchoolCourse-Store0');
             if (store0 && store0.count() > 0) {
                 var request = Ext.Ajax.request({
-                    url: __SERVICE_URL + '/service/listselectedReal.json',
+                    url: __SERVICE_URL + '/service/listcourse.json',
                     method: 'GET',
                     success: function(response) {
                         var obj = Ext.JSON.decode(response.responseText);
 
                         var semcourseid_array = new Array();
+                        //var serialno_map = new Ext.util.HashMap();
+                        var regtype_map = new Ext.util.HashMap();
 
+						//0:semcourseid, 1:serialno, 2:regtype
                         Ext.Array.each(obj, function(item) {
                             var tokens = item.split(':');
                             semcourseid_array.push(tokens[0]);
+                            //serialno_map.add(tokens[0], tokens[1]);
+                            regtype_map.add(tokens[0], tokens[2]);
                         });
 
-                        console.log('StoreReal3:' + semcourseid_array);
-
-                        var records = new Array();
+                        var records_array = new Array();
 
                         store0.each(function(record) {
                             if (Ext.Array.contains(semcourseid_array, record.get('semcourseid'))) {
-                                records.push(record);
-								console.log('contains:' + record.get('semcourseid'));
+                                records_array.push(record);
                             }
                         });
-                        StoreReal3.loadRecords(records);
-
-                        StoreReal3.sort([
+                        storeReal5.loadRecords(records_array);
+                        storeReal5.each(function(record) {
+                            //record.set('serialno', serialno_map.get(record.get('semcourseid')));
+                            record.set('regtype', regtype_map.get(record.get('semcourseid')));
+                        });
+                        storeReal5.sort([
                             {property: 'semcoursename', direction: 'ASC'},
                         ]);
                     }

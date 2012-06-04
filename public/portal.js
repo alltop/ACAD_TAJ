@@ -25,7 +25,8 @@ Ext.define('ClientSession', {
     units: [],
     myunits: [],
     blocklist: [],
-    blocklist_array: []
+    blocklist_array: [],
+	blockgplist_array: []
 });
 
 //資料讀取提示訊息
@@ -275,6 +276,9 @@ Ext.onReady(function(){
                     if (obj.data.blocklist) {
                         Ext.Array.each(obj.data.blocklist, function(block) {
                             ClientSession.blocklist_array.push(block.semcoursename);
+							if(block.selectgpid != '') {
+								ClientSession.blockgplist_array.push(block.selectgpid);								
+							}
                         });
                     }
                 }

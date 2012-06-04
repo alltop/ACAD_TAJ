@@ -38,10 +38,19 @@ var changeFilterHandler = function(val, params) {
             result = true;			
 			
 			//擋課處理（blocklist）
-            if (result && Ext.Array.contains(ClientSession.blocklist_array, record.get('semcoursename'))) {
+            if (result && (Ext.Array.contains(ClientSession.blocklist_array, record.get('semcoursename')))) {
                 result = false;
 				//if(result == false) alert(val+'='+record.get('semcoursename')+'-'+'block_sotp'); //test
             }
+			if (result && Ext.Array.contains(ClientSession.blockgplist_array, record.get('selectgpid'))) {
+                result = false;
+				//if(result == false) alert(val+'='+record.get('semcoursename')+'-'+'blockgp_sotp'); //test
+            }
+			
+			//這次只對選修做選課
+			if (record.get('choose') != '2') {
+                result = false;
+             }
 			
 			//我的體育課程時段
 			if(result && val == '2' )
@@ -225,7 +234,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                 getClass: function(value, metadata, record) {
                     //如果課程已經在已選清單中，就不顯示加選按鈕
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
-                    var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //已選
+                    var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //退選區
                     var record_semcourseid = record.get('semcourseid');
 					var exists = false;
 					
@@ -244,7 +253,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                 handler: function(view, rowIndex, colIndex, item, e) { 
                     //將選課資料移到待選區
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
-					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //已選
+					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //退選區
 					
 					var store1 = view.getStore();
 					var record = store1.getAt(rowIndex);
@@ -432,52 +441,18 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
             toggleGroup: 'grid1-filter',
             pressed: true,
 			handler: __createFilterHandler('1', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。')
-			/*
-            handler: function(button, e) {
-				button.toggle(true);
-                //changeFilterHandler('1');
-				//__queryByFilters('1', this.getComponent('toolbar'));
-				__createFilterHandler('1', '通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
-				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
-				cmp.setVisible(true);
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('通識選修限制：1.畢業前必須修完五大領域。2.已修過領域不顯示。3.每人只能選一科。');
-            }
-			*/
         }, {
             xtype: 'button',
             icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '體育課程 ',
             toggleGroup: 'grid1-filter',
 			handler: __createFilterHandler('2', '體育課程')
-			/*
-            handler: function(button, e) {
-				button.toggle(true);
-                //changeFilterHandler('2');
-				//__queryByFilters('2', this.getComponent('toolbar'));
-				__createFilterHandler('2','222');
-				
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('體育課程');
-            }
-			*/
         },{
             xtype: 'button',
             icon: __SILK_ICONS_URL+'bullet_green.png',
             text: '軍訓課程 ',
             toggleGroup: 'grid1-filter',
 			handler: __createFilterHandler('4', '軍訓課程')
-			/*
-            handler: function(button, e) {
-				//button.toggle(true);
-                //changeFilterHandler('4');
-				__queryByFilters('4', this.getComponent('toolbar'));
-				var cmp = this.up('panel').getComponent('filterbar').getComponent('gpid-filter');
-				cmp.setVisible(false);
-                var label = this.up('panel').getComponent('footbar').getComponent('label-status');
-                label.setText('軍訓課程');
-            }
-			*/
         }, '-', {
             xtype: 'tbtext',
             text: ''
@@ -604,9 +579,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 				handler: function() {
 					var courses = new Array();
 
-					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
-					var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
-					var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4');
+					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
+					var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //退選區
+					var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4'); //課表
 
 					store2.each(function(record) {
 						courses.push(record.get('semcourseid') + ':' + record.get('courseid'));

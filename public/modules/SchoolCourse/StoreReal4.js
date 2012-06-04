@@ -35,8 +35,9 @@ Ext.define('Module.SchoolCourse.StoreReal4', {
     },
     generateData: function() {
         var storeReal4 = this;
-        var store5 = Ext.data.StoreManager.lookup('SchoolCourse-Store5');
-        store5.load({
+        var storeReal5 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal5');
+		//storeReal5.clearFilters();
+        storeReal5.load({
             callback: function(records, operation, success) {
                 Ext.defer(function() {
                     storeReal4.each(function(record) {
@@ -51,7 +52,7 @@ Ext.define('Module.SchoolCourse.StoreReal4', {
                         class_array[5] = '';
                         class_array[6] = '';
 
-                        store5.each(function(record2) {
+                        storeReal5.each(function(record2) {
                             var record2_coursetime = record2.get('coursetime');
                             var coursetime_array = record2_coursetime.split(',');
 
