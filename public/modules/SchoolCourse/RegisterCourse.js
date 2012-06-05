@@ -170,7 +170,9 @@ var changeFilterHandler = function(val, params) {
     Ext.defer(function() {
         store1a.filterBy(__filter_proc);
 		
-		if (store1a.getCount() == 0 && val == '5') alert("因所有課程為配課 或 已修，故無課程顯示");
+		if (store1a.getCount() == 0 && val == '5') {
+			Ext.Msg.alert('選課訊息', "因所有課程為配課 或 已修，故無課程顯示");
+		}
     }, 100);
 
     //處理課程清單

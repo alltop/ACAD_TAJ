@@ -151,7 +151,7 @@ var changeFilterHandler = function(val, params) {
     Ext.defer(function() { 
 		if(val == '2') {
 			store1a.filterBy(__filter_phy); //__filter_phy
-			if(store1a.getCount() == 0) alert('無體育課程可選。');
+			if(store1a.getCount() == 0) Ext.Msg.alert('選課訊息','無體育課程可選。');
 			store0.clearFilter();
 		} else {
 			store1a.filterBy(__filter_proc);
@@ -258,7 +258,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					//選通識選修是否已選
 					var is_exist = false;
 					var existTime = storeReal5.findBy(function (record2) {
-						//alert('storeReal5:' + record2.get('coursetime') + '?select:' +record.get('coursetime')); //test
+						//Ext.Msg.alert('storeReal5:' + record2.get('coursetime') + '?select:' +record.get('coursetime')); //test
 						var store5Time_array = record2.get('coursetime').split(',');
 						var recordTime_array = record.get('coursetime').split(',');
 						
@@ -319,15 +319,15 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					}
 					
 					if(amt_credit > 28) {
-						alert('已達學分數上限(28學分)。'+amt_credit);
+						Ext.Msg.alert('選課訊息', '已達學分數上限(28學分)。'+amt_credit);
 					} else if(is_exist) {
-						alert('衝堂！'+record.get('coursetime_view')+'時段已有課程佔用。');
+						Ext.Msg.alert('選課訊息', '衝堂！'+record.get('coursetime_view')+'時段已有課程佔用。');
 					} else if(coursetype == '2' && exist2 >= 0) {
-						alert('體育課程只能選擇 1 門');
+						Ext.Msg.alert('選課訊息', '體育課程只能選擇 1 門');
 					} else if(coursetype == '1' && exist1 >= 0) {
-						alert('通識選修只能選擇 1 門');
+						Ext.Msg.alert('選課訊息', '通識選修只能選擇 1 門');
 					} else if(coursetype == '4' && exist4 >= 0) {
-						alert('軍訓課程只能選擇 1 門');
+						Ext.Msg.alert('選課訊息', '軍訓課程只能選擇 1 門');
 					} else {
 						//設定選課來源資料
 						store1.remove(record);
@@ -622,7 +622,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 					});
 
 					if (courses.length == 0) {
-						Ext.Msg.alert('沒有候選課程', '請從待選區選擇要加入候選的課程！');
+						Ext.Msg.alert('選課訊息', '沒有候選課程', '請從待選區選擇要加入候選的課程！');
 					}
 					else {
                         Ext.Msg.wait('正在處理加選...');
@@ -715,7 +715,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
 						//候選區有資料禁止關閉 Tab 視窗
                         var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2');
                         if (store2.count() > 0) {
-                            Ext.Msg.alert('無法關閉', '候選區尚有課程資料！');
+                            Ext.Msg.alert('選課訊息', '無法關閉', '候選區尚有課程資料！');
                             return false;
                         }
 						
