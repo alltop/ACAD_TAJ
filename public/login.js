@@ -42,10 +42,15 @@ Ext.onReady(function() {
             name: 'password',
             inputType: 'password',
             allowBlank: false
+        }, {
+            xtype: 'hidden',
+            name: 'mode',
+            value: mode
         }],
         buttons: [{
             xtype: 'button',
             text: '登入',
+            scale: 'medium',
             cls: 'test',
             icon: __SILK_ICONS_URL + 'application_go.png',
             formBind: true,

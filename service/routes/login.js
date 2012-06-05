@@ -32,6 +32,7 @@ app.post(urlprefix + '/service/login.json', function(req, res) {
                 data: row
             };
             req.session.user = row;
+            req.session.mode = req.body['mode'];
         }
         else {
             results = {

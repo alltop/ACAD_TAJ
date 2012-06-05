@@ -22,6 +22,7 @@ Ext.Loader.setConfig({
 Ext.define('ClientSession', { 
     singleton: true,
     user: {},
+    mode: '',
     units: [],
     myunits: [],
     blocklist: [],
@@ -61,45 +62,7 @@ Ext.onReady(function(){
             nodeType: 'async',
             text : '',
             expanded: true,
-            children : [{
-                text : '登記分發',
-                expanded: true,
-                children : [{
-                    text: '加選 - 登記',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    id: 'Module.SchoolCourse.RegisterCourse',
-                    leaf: true
-                }, {
-                    text: '加選 - 待分發（修改刪除）',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    id: 'Module.SchoolCourse.BookingCourse',
-                    leaf: true
-                }, {
-                    text: '我的課程清單',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    id: 'Module.SchoolCourse.ShowCourse',
-                    leaf: true
-                }]
-            }, {
-                text : '即選即上',
-                expanded: false,
-                children : [{
-                    text: '加選 - 即選即上',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    id: 'Module.SchoolCourse.RealtimeCourse',
-                    leaf: true
-                }, {
-                    text: '退選',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-                    id: 'Module.SchoolCourse.UnregisterCourse',
-                    leaf: true
-                }, {
-                    text: '我的課程清單',
-                    icon: __SILK_ICONS_URL+'application_view_columns.png',
-					id: 'Module.SchoolCourse.ShowCourseReal',
-                    leaf: true
-                }]
-            }]
+            children : []
         }
     });
     Ext.create('Ext.Viewport', {
@@ -255,8 +218,59 @@ Ext.onReady(function(){
             else {
                 if (obj.data) {
                     ClientSession.user = obj.data.user;
+                    ClientSession.mode = obj.data.mode;
                     ClientSession.units = obj.data.units;
                     ClientSession.blocklist = obj.data.blocklist;
+
+                    //動態設定選單（依照 mode 參數）
+                    switch (ClientSession.mode) {
+                        case 'select':
+                            tree1.getRootNode().appendChild({
+                                text : '登記分發',
+                                expanded: true,
+                                children : [{
+                                    text: '加選 - 登記',
+                                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                                    id: 'Module.SchoolCourse.RegisterCourse',
+                                    leaf: true
+                                }, {
+                                    text: '加選 - 待分發（修改刪除）',
+                                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                                    id: 'Module.SchoolCourse.BookingCourse',
+                                    leaf: true
+                                }, {
+                                    text: '我的課程清單',
+                                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                                    id: 'Module.SchoolCourse.ShowCourse',
+                                    leaf: true
+                                }]
+                            });
+                            tree1.doLayout();
+                        break;
+                        case 'realtime':
+                            tree1.getRootNode().appendChild({
+                                text : '即選即上',
+                                expanded: false,
+                                children : [{
+                                    text: '加選 - 即選即上',
+                                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                                    id: 'Module.SchoolCourse.RealtimeCourse',
+                                    leaf: true
+                                }, {
+                                    text: '退選',
+                                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                                    id: 'Module.SchoolCourse.UnregisterCourse',
+                                    leaf: true
+                                }, {
+                                    text: '我的課程清單',
+                                    icon: __SILK_ICONS_URL+'application_view_columns.png',
+                                    id: 'Module.SchoolCourse.ShowCourseReal',
+                                    leaf: true
+                                }]
+                            });
+                            tree1.doLayout();
+                        break;
+                    }
 
                     //更新使用者資訊列
                     if (obj.data.user) {
