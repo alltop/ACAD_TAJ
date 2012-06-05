@@ -829,7 +829,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 text: '清除候選區',
                 scale: 'medium',
                 handler: function() {
-                    var filterbar = this.up('panel').getComponent('filterbar');
+                    var filterbar = this.up('panel').up('panel').getComponent('filterbar');
 
                     Ext.Msg.confirm(
                         '清除確認',
