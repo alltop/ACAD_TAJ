@@ -1,6 +1,33 @@
 /**
  * 「加選 - 即選即上」功能模組
  */
+
+//已選人數顯示（背景執行）
+var runner = new Ext.util.TaskRunner();
+var task1 = runner.newTask({
+    run: function () {
+        Ext.Ajax.request({
+            url: __SERVICE_URL + '/service/listcount.json',
+            method: 'GET',
+            success: function(response) {
+                var obj = Ext.JSON.decode(response.responseText);
+                if (obj) {
+                    var storeReal2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選區
+                    storeReal2.each(function(record) {
+                        var semcourseid = record.get('semcourseid');
+                        if (obj[semcourseid] != null) {
+                            record.set('selectedcount', obj[semcourseid]);
+                        }
+                    });
+                }
+            }
+        });
+    },
+    interval: 5000
+});
+//task1.start();
+//task1.stop();
+
 var __changeFilterHandler_state = null;
 var changeFilterHandler = function(val, params) {
 /*
@@ -721,6 +748,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
 						
                         thisModule.moduleUnload();
                         Module.SchoolCourse.RealtimeCourse._previous = null;
+
+                        //關閉讀取已選人數（可以安心了）
+                        task1.stop();
                     },
                     afterrender: function(panel, eOpts) {
                         //載入資料（帶預設值）
@@ -728,6 +758,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse', {
 						changeFilterHandler('1', {
                             gpid: 'G00001'
                         });
+
+                        //開始讀取已選人數（負載會增加須小心爆炸）
+                        task1.start();
                     }
                 }
             });

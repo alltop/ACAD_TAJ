@@ -27,9 +27,9 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
             studentid: user.studentid,  //學生代碼
             studentno: user.studentno,  //學號
             timestamp: new Date().getTime(),            //時間戳記
-            serialno: 1,  //志願順序
+            serialno: 1,                                //志願順序
             createdate: new Date().getTime(),           //資料建立日期
-            regtype: '2'                                //選課類型
+            regtype: '2'                                //選課類型（2=>即選即上）
         });
 
         //tSelectedAddDel 選課記錄資料表
@@ -48,6 +48,16 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
 		//tSemesterCusWeb 課程資料表
 		//已選人數變更
 		db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
+
+        //已選人數表更新
+        db.collection('tSelectedCount').update(
+            { semcourseid: course_arr[0] },
+            { $inc: {count: 1} },
+            { upsert: true, multi: false, safe: true},
+            function(err) {
+                // if (err) { ... }
+            }
+        );
     });
 
     console.log(docs);

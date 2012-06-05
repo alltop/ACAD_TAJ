@@ -45,6 +45,16 @@ app.post(urlprefix + '/service/cancelcourse.json', function(req, res) {
 			//tSemesterCusWeb 課程資料表
 			//已選人數變更
 			db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : -1 } } );
+
+            //已選人數表更新
+            db.collection('tSelectedCount').update(
+                { semcourseid: course_arr[0] },
+                { $inc: {count: -1} },
+                { upsert: false, multi: false, safe: true},
+                function(err) {
+                    // if (err) { ... }
+                }
+            );
         });
     });
 

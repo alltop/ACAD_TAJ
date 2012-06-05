@@ -250,7 +250,7 @@ Ext.onReady(function(){
                         case 'realtime':
                             tree1.getRootNode().appendChild({
                                 text : '即選即上',
-                                expanded: false,
+                                expanded: true,
                                 children : [{
                                     text: '加選 - 即選即上',
                                     icon: __SILK_ICONS_URL+'application_view_columns.png',
