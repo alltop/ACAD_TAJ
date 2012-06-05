@@ -1,5 +1,5 @@
 Ext.onReady(function() {
-    var mode = 'select';
+    var mode = 'realtime';
     var modeText = '';
     var urlparams = document.URL.split("?");
     if (urlparams.length > 1) {
