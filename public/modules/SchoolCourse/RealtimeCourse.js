@@ -77,7 +77,6 @@ var changeFilterHandler = function(val, params) {
 
             //學門領域
             if (result && gpid && gpid != '') {
-				//alert(gpid);
                 if (record.get('selectgpid') != gpid) {
                     result = false;
                 }
@@ -128,7 +127,6 @@ var changeFilterHandler = function(val, params) {
 				//if(result == false) alert(val+'='+record.get('semcoursename')+'week_stop'); //test
             }
         }
-		//alert(record.get('coursetype')+'?'+record.get('semcoursename')+'::'+result);
         //傳回處理結果
         return result;
     };
@@ -151,8 +149,6 @@ var changeFilterHandler = function(val, params) {
 	
     //處理左邊分類清單查詢
     Ext.defer(function() { 
-		//store1a.clearFilter();  //test
-		//alert('b:'+store1a.getCount()); //test
 		if(val == '2') {
 			store1a.filterBy(__filter_phy); //__filter_phy
 			if(store1a.getCount() == 0) alert('無體育課程可選。');
@@ -160,8 +156,6 @@ var changeFilterHandler = function(val, params) {
 		} else {
 			store1a.filterBy(__filter_proc);
 		}
-		//alert('a:'+store1a.getCount()); //test
-		//alert(store0.getCount()+'?'+store1.getCount()+'?'+store1a.getCount());//test
     }, 100);
 
     //處理課程清單
@@ -255,10 +249,35 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                     //將選課資料移到待選區
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
 					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //退選區
+					var storeReal5 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal5');
 					
 					var store1 = view.getStore();
 					var record = store1.getAt(rowIndex);
 					var coursetype = record.get('coursetype');
+					
+					//選通識選修是否已選
+					var is_exist = false;
+					var existTime = storeReal5.findBy(function (record2) {
+						//alert('storeReal5:' + record2.get('coursetime') + '?select:' +record.get('coursetime')); //test
+						var store5Time_array = record2.get('coursetime').split(',');
+						var recordTime_array = record.get('coursetime').split(',');
+						
+						Ext.Array.each(store5Time_array, function(store5Time) {						
+							Ext.Array.each(recordTime_array, function(recordTime) {
+								if (Ext.String.trim(store5Time) == Ext.String.trim(recordTime)) {
+									is_exist = true;
+								}
+								return Ext.String.trim(store5Time) == Ext.String.trim(recordTime);
+							});
+						});						
+						return false;
+					});
+
+					storeReal5.load({
+						callback: function(records, operation, success) {
+							;//alert('TMD complete now!!');
+						}
+					});	
 					
 					//學分是否已達學分上限
 					var amt_credit = 0;
@@ -301,6 +320,8 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					
 					if(amt_credit > 28) {
 						alert('已達學分數上限(28學分)。'+amt_credit);
+					} else if(is_exist) {
+						alert('衝堂！'+record.get('coursetime_view')+'時段已有課程佔用。');
 					} else if(coursetype == '2' && exist2 >= 0) {
 						alert('體育課程只能選擇 1 門');
 					} else if(coursetype == '1' && exist1 >= 0) {
@@ -308,7 +329,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					} else if(coursetype == '4' && exist4 >= 0) {
 						alert('軍訓課程只能選擇 1 門');
 					} else {
-						//設定選課來源資料												
+						//設定選課來源資料
 						store1.remove(record);
 						store2.add(record);
 					}

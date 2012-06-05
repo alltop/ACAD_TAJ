@@ -222,6 +222,9 @@ Ext.onReady(function(){
     jobs[1] = 0;
     jobs[2] = 0;
     jobs[3] = 0;
+	jobs[4] = 0;
+	jobs[5] = 0;
+	jobs[6] = 0;
 
     //背景工作完成查核函式
     var completeJob = function(index) {
@@ -289,6 +292,7 @@ Ext.onReady(function(){
                     var store3 = Ext.data.StoreManager.lookup('SchoolCourse-Store3');
 					var storeReal1a = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1a');
                     var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3');
+					var storeReal5 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal5');
 					
                     store0.load({
                         callback: function(records, operation, success) {
@@ -324,12 +328,17 @@ Ext.onReady(function(){
                             });
 							storeReal3.load({
                                 callback: function(records, operation, success) {
-                                    completeJob(0);
+                                    completeJob(4);
                                 }
                             });
                             storeReal1a.load({
                                 callback: function(records, operation, success) {
-                                    completeJob(1);
+                                    completeJob(5);
+                                }
+                            });
+							storeReal5.load({
+                                callback: function(records, operation, success) {
+                                    completeJob(6);
                                 }
                             });
                             completeJob(1);
