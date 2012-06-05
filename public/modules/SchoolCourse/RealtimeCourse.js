@@ -324,13 +324,13 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 							return record2.get('selectgpid') != '';
 						});
 					}
-					
+
 					//體育是否已選
-					var exist2 = store3.findBy(function (record2) {   
+					var exist2 = store3.findBy(function (record2) {  
 						return record2.get('physicalgroup') != '';   
 					});
 					if(exist2 == -1) {
-						var exist2 = store2.findBy(function (record2) {   
+						var exist2 = store2.findBy(function (record2) {  
 							return record2.get('physicalgroup') != '';
 						});
 					}
@@ -340,7 +340,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 						return record2.get('coursetype') == '4';   
 					});
 					if(exist4 == -1) {
-						var exist2 = store2.findBy(function (record2) {   
+						var exist4 = store2.findBy(function (record2) {   
 							return record2.get('coursetype') == '4';
 						});
 					}
