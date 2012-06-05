@@ -12,8 +12,8 @@ var task1 = runner.newTask({
             success: function(response) {
                 var obj = Ext.JSON.decode(response.responseText);
                 if (obj) {
-                    var storeReal2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選區
-                    storeReal2.each(function(record) {
+                    var storeReal1 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1'); //待選區
+                    storeReal1.each(function(record) {
                         var semcourseid = record.get('semcourseid');
                         if (obj[semcourseid] != null) {
                             record.set('selectedcount', obj[semcourseid]);
