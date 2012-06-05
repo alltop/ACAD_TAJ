@@ -184,7 +184,7 @@ var changeFilterHandler = function(val, params) {
         store1.filterBy(function(record) {
             return false;
         });
-    }, 100);
+    });
 };
 
 Ext.define('Module.SchoolCourse.RegisterCourse.Grid1a', {
