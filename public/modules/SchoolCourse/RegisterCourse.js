@@ -170,8 +170,10 @@ var changeFilterHandler = function(val, params) {
     Ext.defer(function() {
         store1a.filterBy(__filter_proc);
 		
-		if (store1a.getCount() == 0 && val == '5') alert("因所有課程為配課 或 已修，故無課程顯示");
-    }, 100);
+		if (store1a.getCount() == 0 && val == '5') {
+            Ext.Msg.alert("清單未顯示課程", "因所有課程為<b>配課</b>或<b>已修</b>，故無課程顯示。");
+        }
+    });
 
     //處理課程清單
     Ext.defer(function() {
@@ -182,7 +184,7 @@ var changeFilterHandler = function(val, params) {
         store1.filterBy(function(record) {
             return false;
         });
-    }, 100);
+    });
 };
 
 Ext.define('Module.SchoolCourse.RegisterCourse.Grid1a', {
