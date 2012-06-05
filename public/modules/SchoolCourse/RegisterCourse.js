@@ -829,6 +829,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                 text: '清除候選區',
                 scale: 'medium',
                 handler: function() {
+                    var filterbar = this.up('panel').getComponent('filterbar');
+
                     Ext.Msg.confirm(
                         '清除確認',
                         '請按「是」將候選區資料清空；按「否」取消動作。',
@@ -836,6 +838,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                             if (btn == 'yes'){
                                 var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
                                 store2.removeAll();
+
+                                //重新整理待選區
+                                __queryByFilters(filterbar);
                             }
                         }
                     );
