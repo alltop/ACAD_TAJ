@@ -394,6 +394,22 @@ var __createFilterHandler = function(code, text) {
 		var semcoursename = this.up('panel').getComponent('filterbar').getComponent('semcoursename-filter').getValue(); //課程名稱
 		var collegeid = this.up('panel').getComponent('filterbar').getComponent('college-filter').getValue(); //課程名稱
 		
+		//專業選修的預設條件為該系統該年級
+		if (code == '5-2') {			
+			unitid = ClientSession.user.unitid;
+			collegeid = ClientSession.user.collegeid;
+			grade = ClientSession.user.grade;
+			this.up('panel').getComponent('filterbar').getComponent('unitid-filter').setValue(unitid); //課程名稱
+			this.up('panel').getComponent('filterbar').getComponent('grade-filter').setValue(grade); //課程名稱
+		}
+		if (code == '3-2') {			
+			unitid = '';
+			collegeid = ClientSession.user.collegeid;
+			grade = '';
+			this.up('panel').getComponent('filterbar').getComponent('unitid-filter').setValue(unitid); //課程名稱
+			this.up('panel').getComponent('filterbar').getComponent('grade-filter').setValue(grade); //課程名稱
+		}
+		
         changeFilterHandler(code, {
 			collegeid: collegeid,
 			unitid: unitid,
@@ -486,6 +502,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             xtype: 'button',
             icon: __SILK_ICONS_URL + 'bullet_green.png',
             text: '院訂選修',
+			pressed: true,
             hidden: false,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('3-2', '院訂選修...')
@@ -506,8 +523,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
         }, {
             xtype: 'button',
             icon: __SILK_ICONS_URL + 'bullet_green.png',
-            text: '專業選修',
-			pressed: true,
+            text: '專業選修',			
             hidden: false,
             toggleGroup: 'grid1-filter',
             handler: __createFilterHandler('5-2', '專業選修...')
@@ -548,7 +564,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             displayField: 'unitname',
             valueField: 'unitid',
             emptyText: '系所',
-            value: ClientSession.user.unitid,
+            value: '',
             allowBlank: true,
             fieldLabel: '系所',
             labelAlign: 'right',
@@ -589,7 +605,7 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
             displayField: 'display',
             valueField: 'value',
             emptyText: '年級',
-            value: ClientSession.user.grade,
+            value: '',
             allowBlank: false,
             fieldLabel: '年級',
             labelAlign: 'right',
@@ -875,9 +891,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
                     afterrender: function(panel, eOpts) {
                         //載入資料（帶預設值）
                         //changeFilterHandler('3');
-                        changeFilterHandler('5-2', {
-                            grade: ClientSession.user.grade,
-                            unitid: ClientSession.user.unitid
+                        changeFilterHandler('3-2', {
+                            grade: '',
+                            unitid: ''
                         });
                     }
                 }
