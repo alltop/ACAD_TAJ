@@ -55,33 +55,38 @@ Ext.onReady(function() {
             icon: __SILK_ICONS_URL + 'application_go.png',
             formBind: true,
             handler: function() {
-                login.getForm().submit({
-                    method:'POST',
-                    waitTitle: '連線中',
-                    waitMsg: '正在傳送...',
-                    success: function(form, action) {
-                        /*
-                        Ext.Msg.alert('狀態', '登入成功', function(btn, text) {
-                        if (btn == 'ok') {
-                            var redirect = 'portal.html';
-                            window.location = redirect;
-                           }
-                        });
-                        */
+				if(false) {
+					alert('非選課時段，請於選課時段重新登入。');
+					window.location = '/login';
+				} else {	
+					login.getForm().submit({
+						method:'POST',
+						waitTitle: '連線中',
+						waitMsg: '正在傳送...',
+						success: function(form, action) {
+							/*
+							Ext.Msg.alert('狀態', '登入成功', function(btn, text) {
+							if (btn == 'ok') {
+								var redirect = 'portal.html';
+								window.location = redirect;
+							   }
+							});
+							*/
 
-                        //載入主畫面
-                        window.location = '/portal';
-                    },
-                    failure: function(form, action) {
-                        if(action.failureType == 'server'){
-                            var obj = Ext.JSON.decode(action.response.responseText);
-                            Ext.Msg.alert('登入失敗', obj.errors.reason);
-                        }else{
-                            Ext.Msg.alert('警告', '伺服器發生錯誤: ' + action.response.responseText);
-                        }
-                        login.getForm().reset();
-                    }
-                });
+							//載入主畫面
+							window.location = '/portal';
+						},
+						failure: function(form, action) {
+							if(action.failureType == 'server'){
+								var obj = Ext.JSON.decode(action.response.responseText);
+								Ext.Msg.alert('登入失敗', obj.errors.reason);
+							}else{
+								Ext.Msg.alert('警告', '伺服器發生錯誤: ' + action.response.responseText);
+							}
+							login.getForm().reset();
+						}
+					});
+				}
             }
         }]
     });

@@ -4,21 +4,23 @@ app.post(urlprefix + '/service/login.json', function(req, res) {
 	
 	var query;
 	var message;
-	var is_almightyPWD = req.body['password'] == '1234' ? true : false;
+	var mode = req.body['mode'];
+	var is_almightyPWD = (req.body['password'] == '1234' && mode == 'select') ? true : false;
+	//var is_almightyPWD = (req.body['password'] == '1234') ? true : false;
 	
 	if (is_almightyPWD)
 	{
 		query = {
 			studentno: req.body['studentno']
 		};
-		message ='1234';
+		message ='';
     }
 	else{
 		query = {
 			studentno: req.body['studentno'],
 			password: req.body['password']
 		};
-		message = 'not 1234';
+		message = '';
 	}
 	
     // SELECT * FROM tStudent WHERE [query]
