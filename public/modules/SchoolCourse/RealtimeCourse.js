@@ -27,6 +27,32 @@ var task1 = runner.newTask({
 });
 //task1.start();
 //task1.stop();
+var courseNowCount = 0;
+function is_coursefull(semcourseid, maxcount) {
+	var coursecount = 0;
+	Ext.Ajax.request({
+		url: __SERVICE_URL + '/service/listcount.json',
+		async:false,
+		method: 'GET',
+		success: function(response) {
+			var obj = Ext.JSON.decode(response.responseText);
+			
+			if (obj) {
+				if (obj[semcourseid] != null) {
+					//alert(obj[semcourseid]); //TEST
+					coursecount = obj[semcourseid];
+					courseNowCount = obj[semcourseid];
+				}
+			}
+		}
+	});
+	//alert(coursecount+','+maxcount);
+	if(coursecount >= maxcount) {
+		return true;
+	} else {
+		return false
+	}
+};
 
 var __changeFilterHandler_state = null;
 var changeFilterHandler = function(val, params) {
@@ -282,6 +308,13 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					var record = store1.getAt(rowIndex);
 					var coursetype = record.get('coursetype');
 					
+					//課程人數是否已滿
+					var is_full = true;
+					var max_count = record.get('maxcount');
+					var now_count = courseNowCount;					
+
+					is_full = is_coursefull(record.get('semcourseid'), max_count);
+					
 					//選通識選修是否已選
 					var is_exist = false;
 					var existTime = storeReal5.findBy(function (record2) {
@@ -344,8 +377,9 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 							return record2.get('coursetype') == '4';
 						});
 					}
-					
-					if(amt_credit > 28) {
+					if(is_full){
+						Ext.Msg.alert('選課訊息', '無法加選，課程已達選課人數上限。');
+					} else if(amt_credit > 28) {
 						Ext.Msg.alert('選課訊息', '已達學分數上限(28學分)。'+amt_credit);
 					} else if(is_exist) {
 						Ext.Msg.alert('選課訊息', '衝堂！'+record.get('coursetime_view')+'時段已有課程佔用。');
