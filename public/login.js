@@ -95,7 +95,7 @@ Ext.onReady(function() {
         icon: __SILK_ICONS_URL + 'user.png',
         layout: 'border',
         width: 480,
-        height: 280,
+        height: 300,
         draggable: false,
         closable: false,
         resizable: false,
@@ -141,7 +141,7 @@ Ext.onReady(function() {
                         location.href = '/chrome';
                     }
                 },
-                '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>' ]
+                '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>'+'<br><a href="http://www.google.com/chromeframe?hl=zh-TW&quickenable=true">手動更新瀏覽器</a>' ]
         }]
     });
     
