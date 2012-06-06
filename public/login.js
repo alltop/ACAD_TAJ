@@ -55,7 +55,7 @@ Ext.onReady(function() {
             icon: __SILK_ICONS_URL + 'application_go.png',
             formBind: true,
             handler: function() {
-				if(false) {
+				if(mode == 'realtime') {
 					alert('非選課時段，請於選課時段重新登入。');
 					window.location = '/login';
 				} else {	
