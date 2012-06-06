@@ -324,9 +324,12 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					//課程人數是否已滿
 					var is_full = true;
 					var max_count = record.get('maxcount');
-					var now_count = courseNowCount;					
 
 					is_full = is_coursefull(record.get('semcourseid'), max_count);
+					//admin有無限加選權力
+					if(ClientSession.admin == 'admin'){
+						is_full = false; 
+					}
 					
 					//選通識選修是否已選
 					var is_exist = false;
@@ -697,6 +700,12 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 						is_full = true;	
 						var max_count = record.get('maxcount');
 						is_full = is_coursefull(record.get('semcourseid'), max_count);
+						
+						//admin有無限加選權力
+						if(ClientSession.admin == 'admin'){
+							is_full = false; 
+						}
+						//記下已達人數上限的課程
 						if(is_full){
 							if(courses_full != '') {
 								courses_full +=  (', ' + record.get('semcoursename'));

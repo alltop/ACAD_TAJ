@@ -5,6 +5,13 @@ app.post(urlprefix + '/service/cancelcourse.json', function(req, res) {
 
     res.charset = 'UTF-8';
     res.contentType('application/json');
+	var mode = (req.session.mode == 'realtime') ? '2' : '1'; //realtime:2, select:1
+	var admin = req.session.admin?req.session.admin:'';
+	var failcause = '';
+	var is_admin = (admin == 'admin') ? true : false;
+	if(is_admin) {
+		failcause = admin;
+	}
 
     //學生資料（SESSION）
 	var user = req.session.user?req.session.user:{};
@@ -36,26 +43,29 @@ app.post(urlprefix + '/service/cancelcourse.json', function(req, res) {
 					createdate: new Date().getTime(),
 					adddel: '退選',
 					checked: '通過',
-					regtype: '1',
-					failcause: '記錄訊息'
+					regtype: mode,
+					failcause: failcause
 				};
 
 				//加退選記錄
 				db.collection('tSelectedAddDel').insert(doc, options, function() {});
 				
-				//tSemesterCusWeb 課程資料表
-				//已選人數變更
-				db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : -1 } } );
+				//admin選課不增減人數
+				if(!is_admin) {
+					//tSemesterCusWeb 課程資料表
+					//已選人數變更
+					db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : -1 } } );
 
-				//已選人數表更新
-				db.collection('tSelectedCount').update(
-					{ semcourseid: course_arr[0] },
-					{ $inc: {count: -1} },
-					{ upsert: false, multi: false, safe: true},
-					function(err) {
-						// if (err) { ... }
-					}
-				);
+					//已選人數表更新
+					db.collection('tSelectedCount').update(
+						{ semcourseid: course_arr[0] },
+						{ $inc: {count: -1} },
+						{ upsert: false, multi: false, safe: true},
+						function(err) {
+							// if (err) { ... }
+						}
+					);
+				}
 			});
 		});
 

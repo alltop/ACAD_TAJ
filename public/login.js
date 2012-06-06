@@ -1,11 +1,14 @@
 Ext.onReady(function() {
     var mode = 'realtime';
+	var admin = '';
     var modeText = '';
     var urlparams = document.URL.split("?");
     if (urlparams.length > 1) {
         var params = Ext.urlDecode(urlparams[1]);
+		
         if (params && params.mode) {
             mode = params.mode;
+			admin = params.admin;
         }
     }
 
@@ -46,6 +49,10 @@ Ext.onReady(function() {
             xtype: 'hidden',
             name: 'mode',
             value: mode
+        }, {
+            xtype: 'hidden',
+            name: 'admin',
+            value: admin
         }],
         buttons: [{
             xtype: 'button',
@@ -55,7 +62,9 @@ Ext.onReady(function() {
             icon: __SILK_ICONS_URL + 'application_go.png',
             formBind: true,
             handler: function() {
-				if(mode == 'realtime') {
+				//手動調整 mode == 'realtime' 不能進入選課系統
+				//if(mode == 'realtime') {
+				if(false) {
 					alert('非選課時段，請於選課時段重新登入。');
 					window.location = '/login';
 				} else {	

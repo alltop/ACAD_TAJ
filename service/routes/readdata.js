@@ -4,6 +4,7 @@ app.get(urlprefix + '/service/readdata.json', function(req, res) {
 
     var user = req.session.user?req.session.user:{};
     var mode = req.session.mode?req.session.mode:'realtime';
+	var admin = req.session.admin?req.session.admin:'';
     
     db.collection('tUnit').find({}, {_id: 0}).toArray(function(err, units) {
 
@@ -14,7 +15,8 @@ app.get(urlprefix + '/service/readdata.json', function(req, res) {
 		            user: user,
 		            mode: mode,
 		            units: units,
-		            blocklist: blocklist
+		            blocklist: blocklist,
+					admin:admin
 		        }
 		    };
 		    res.send(JSON.stringify(results));

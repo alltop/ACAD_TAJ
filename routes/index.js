@@ -31,3 +31,8 @@ exports.select = function(req, res){
 exports.realtime = function(req, res){
 	res.redirect('/login?mode=realtime');
 };
+
+//課務組手動加選網站(無管控人數上限)
+exports.admin = function(req, res){
+	res.redirect('/login?mode=realtime&admin=admin');
+};

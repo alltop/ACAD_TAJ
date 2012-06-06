@@ -7,7 +7,13 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
 
     //學生資料（SESSION）
     var user = req.session.user?req.session.user:{};
-
+	var admin = req.session.admin?req.session.admin:'';
+	var failcause = '';
+	var is_admin = (admin == 'admin') ? true : false;
+	if(is_admin){
+		failcause = admin;
+	}
+	
 	if(user.studentid  != null) {
 		//課程清單（網頁表單）    
 		var courses = req.body['courses'].split(',');
@@ -43,22 +49,25 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
 				adddel: '加選',
 				checked: '通過',
 				regtype: '2',
-				failcause: '記錄訊息'
+				failcause: failcause
 			});		
 			
-			//tSemesterCusWeb 課程資料表
-			//已選人數變更
-			db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
+			//admin選課不增減人數
+			if(!is_admin) {
+				//tSemesterCusWeb 課程資料表
+				//已選人數變更
+				db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
 
-			//已選人數表更新
-			db.collection('tSelectedCount').update(
-				{ semcourseid: course_arr[0] },
-				{ $inc: {count: 1} },
-				{ upsert: true, multi: false, safe: true},
-				function(err) {
-					// if (err) { ... }
-				}
-			);
+				//已選人數表更新
+				db.collection('tSelectedCount').update(
+					{ semcourseid: course_arr[0] },
+					{ $inc: {count: 1} },
+					{ upsert: true, multi: false, safe: true},
+					function(err) {
+						// if (err) { ... }
+					}
+				);
+			}
 		});
 
 		console.log(docs);

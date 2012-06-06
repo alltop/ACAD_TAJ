@@ -228,6 +228,7 @@ Ext.onReady(function(){
                     ClientSession.mode = obj.data.mode;
                     ClientSession.units = obj.data.units;
                     ClientSession.blocklist = obj.data.blocklist;
+					ClientSession.admin = obj.data.admin;
 
                     //動態設定選單（依照 mode 參數）
                     switch (ClientSession.mode) {
