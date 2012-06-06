@@ -104,7 +104,14 @@ Ext.onReady(function(){
                                     url: __SERVICE_URL + '/service/logout.json',
                                     method: 'GET',
                                     success: function(response) {
-                                         location.href = '/login';
+										switch (ClientSession.mode) {
+											case 'select':
+												location.href = '/select';
+												break;
+											case 'realtime':
+												location.href = '/login';
+												break;												
+										}
                                     }
                                 });
                             }
