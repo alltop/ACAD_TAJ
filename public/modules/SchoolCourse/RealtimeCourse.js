@@ -13,7 +13,16 @@ var task1 = runner.newTask({
                 var obj = Ext.JSON.decode(response.responseText);
                 if (obj) {
                     var storeReal1 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal1'); //待選區
+					var storeReal2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選區
+					//更新待選區人數
                     storeReal1.each(function(record) {
+                        var semcourseid = record.get('semcourseid');
+                        if (obj[semcourseid] != null) {
+                            record.set('selectedcount', obj[semcourseid]);
+                        }
+                    });
+					//更新候選區人數
+					storeReal2.each(function(record) {
                         var semcourseid = record.get('semcourseid');
                         if (obj[semcourseid] != null) {
                             record.set('selectedcount', obj[semcourseid]);
@@ -302,7 +311,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
                     //將選課資料移到待選區
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
 					var store3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //退選區
-					var storeReal5 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal5');
+					var storeReal5 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal5'); //已選課程
 					
 					var store1 = view.getStore();
 					var record = store1.getAt(rowIndex);
@@ -318,7 +327,6 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 					//選通識選修是否已選
 					var is_exist = false;
 					var existTime = storeReal5.findBy(function (record2) {
-						//Ext.Msg.alert('storeReal5:' + record2.get('coursetime') + '?select:' +record.get('coursetime')); //test
 						var store5Time_array = record2.get('coursetime').split(',');
 						var recordTime_array = record.get('coursetime').split(',');
 						
@@ -327,7 +335,6 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 								if (Ext.String.trim(store5Time) == Ext.String.trim(recordTime)) {
 									is_exist = true;
 								}
-								return Ext.String.trim(store5Time) == Ext.String.trim(recordTime);
 							});
 						});						
 						return false;
@@ -677,15 +684,29 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 					var store2 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal2'); //候選
 					var storeReal3 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal3'); //退選區
 					var store4 = Ext.data.StoreManager.lookup('SchoolCourse-StoreReal4'); //課表
+					var courses_full = '';
+					var is_full = true;	
 
 					store2.each(function(record) {
 						courses.push(record.get('semcourseid') + ':' + record.get('courseid'));
+						//課程人數是否已滿
+						is_full = true;	
+						var max_count = record.get('maxcount');
+						is_full = is_coursefull(record.get('semcourseid'), max_count);
+						if(is_full){
+							if(courses_full != '') {
+								courses_full +=  (', ' + record.get('semcoursename'));
+							} else {
+								courses_full += record.get('semcoursename');
+							}
+						}
 					});
 
 					if (courses.length == 0) {
 						Ext.Msg.alert('選課訊息', '沒有候選課程', '請從待選區選擇要加入候選的課程！');
-					}
-					else {
+					} else if (is_full) {
+						Ext.Msg.alert('無法加選', '已達選課人數上限，請移除候選區課程<b> ' + courses_full + '</b>。');
+					} else {
                         Ext.Msg.wait('正在處理加選...');
                         Ext.Ajax.request({
                             url: __SERVICE_URL + '/service/selectcourseReal.json',
