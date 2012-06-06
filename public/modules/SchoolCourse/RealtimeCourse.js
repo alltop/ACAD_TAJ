@@ -729,7 +729,10 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
                                     Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
                                 }
                                 else {
-                                    Ext.getCmp('notifier').setText('<font color="red">選課登記失敗，請重新操作一次</font>');
+                                    Ext.getCmp('notifier').setText('<font color="red">選課加選失敗，請重新操作一次</font>');
+									alert('學生資料無法讀取，按確定後重新登入選課系統。');
+									//載入主畫面
+									window.location = '/login';
                                 }
                             },
                             failure: function(response, opts) {
