@@ -169,7 +169,22 @@ var changeFilterHandler = function(val, params) {
     //處理左邊分類清單查詢
     Ext.defer(function() {
 		var result_left = store0.queryBy(__filter_proc);
-        store1a.loadRecords(result_left.items);
+		var name_array={};
+		var rec_array = new Array();
+		var i=0;
+		var _length = result_left.items.length;
+		
+		for(i=0;i<_length;i++) {
+			var semcoursename = result_left.items[i].get('semcoursename');
+
+			if(name_array[semcoursename] == null) {				
+				name_array[semcoursename]=true;
+				rec_array.push(result_left.items[i])
+			} else {
+				;
+			}
+		}
+		store1a.loadRecords(rec_array);
 
         //store1a.filterBy(__filter_proc);
 		if (store1a.getCount() == 0 && val == '5') {
