@@ -165,11 +165,13 @@ var changeFilterHandler = function(val, params) {
         //傳回處理結果
         return result;
     };
-
+	
     //處理左邊分類清單查詢
     Ext.defer(function() {
-        store1a.filterBy(__filter_proc);
-		
+		var result_left = store0.queryBy(__filter_proc);
+        store1a.loadRecords(result_left.items);
+
+        //store1a.filterBy(__filter_proc);
 		if (store1a.getCount() == 0 && val == '5') {
 			Ext.Msg.alert('選課訊息', "因所有課程為配課 或 已修，故無課程顯示");
 		}
