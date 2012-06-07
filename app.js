@@ -12,7 +12,7 @@ var express = require('express')
   , routes = require('./routes')
   , cache = require('connect-cache')
   , mongo = require('mongoskin')
-  , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=2')
+  , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=10')
   //, db = mongo.db('192.192.216.83/acad_taj?auto_reconnect=true&poolSize=2')
   //, db = mongo.db('localhost/acad_taj?auto_reconnect=true&poolSize=2')
   , mongoStore = require('connect-mongodb')
@@ -40,7 +40,7 @@ db.open(function(err, nativedb) {
         app.use(express.bodyParser());
         app.use(express.cookieParser());
         app.use(express.session({
-            cookie: { maxAge: 60 * 60 * 1000 },
+            cookie: { maxAge: 3 * 60 * 60 * 1000 },
             secret: '50709ff051bfabda20ac5284fc01a1e5',
             key: 'jsessionid',
             store: new mongoStore({db: nativedb})
