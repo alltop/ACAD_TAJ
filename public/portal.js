@@ -105,12 +105,17 @@ Ext.onReady(function(){
                                     method: 'GET',
                                     success: function(response) {
 										switch (ClientSession.mode) {
-											case 'select':
+											case 'select':												
 												location.href = '/select';
 												break;
 											case 'realtime':
-												location.href = '/login';
-												break;												
+												if(ClientSession.admin == 'admin') {
+													location.href = '/admin';
+												} else {
+													location.href = '/login';
+												}												
+												break;
+											
 										}
                                     }
                                 });
