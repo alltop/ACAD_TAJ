@@ -11,6 +11,7 @@ Ext.onReady(function() {
 			admin = params.admin;
         }
     }
+	var is_hideSwitch = true;
 
     switch (mode) {
         case 'select':
@@ -62,11 +63,19 @@ Ext.onReady(function() {
             icon: __SILK_ICONS_URL + 'application_go.png',
             formBind: true,
             handler: function() {
-				//手動調整 mode == 'realtime' 不能進入選課系統
+				//手動調整。 mode == 'realtime' 不能進入選課系統, true為非選課時段，大家都不能進去, false為登記、分發都可進
 				//if(mode == 'realtime') {
-				if(false) {
+				if(true) {
 					alert('非選課時段，請於選課時段重新登入。');
-					window.location = '/login';
+					if(mode == 'realtime') {
+						if(admin == 'admin') {
+							window.location = '/admin';
+						} else {
+							window.location = '/realtime';
+						}
+					} else if(mode == 'select') {
+						window.location = '/select';
+					}
 				} else {	
 					login.getForm().submit({
 						method:'POST',
@@ -166,6 +175,7 @@ Ext.onReady(function() {
                     enableToggle: true,
                     pressed: (mode=='realtime'),
                     text: '即選即上',
+					hidden: is_hideSwitch,
                     handler: function() {
                         location.href = '/realtime';
                     }
@@ -175,6 +185,7 @@ Ext.onReady(function() {
                     enableToggle: true,
                     pressed: (mode=='select'),
                     text: '登記分發',
+					hidden: is_hideSwitch,
                     handler: function() {
                         location.href = '/select';
                     }
@@ -182,7 +193,7 @@ Ext.onReady(function() {
                 {xtype: 'tbfill'},
                 {
                     xtype: 'button',
-                    text: '<font color="blue">手動更新瀏覽器</font>',
+                    text: '<font color="blue">手動升級瀏覽器</font>',
                     handler: function() {
                         location.href = 'http://www.google.com/chromeframe?hl=zh-TW&quickenable=true';
                     }

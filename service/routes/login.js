@@ -5,9 +5,10 @@ app.post(urlprefix + '/service/login.json', function(req, res) {
 	var query;
 	var message;
 	var mode = req.body['mode'];
-	var is_almightyPWD = (req.body['password'] == '1234' && mode == 'select') ? true : false;
-	is_almightyPWD = (is_almightyPWD || (req.body['password'] == '1234' && mode == 'realtime' && req.body['admin'] == 'admin')) ? true : false;
+	var is_almightyPWD = false;
+	//var is_almightyPWD = (req.body['password'] == '1234' && mode == 'select') ? true : false; //即選即上時，登記可用
 	//var is_almightyPWD = (req.body['password'] == '1234') ? true : false; //開發用
+	is_almightyPWD = (mode == 'realtime' && req.body['admin'] == 'admin') ? true : false; //正常用(課務組可幫學生加選)
 	
 	if (is_almightyPWD)
 	{
