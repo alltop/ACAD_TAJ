@@ -287,17 +287,40 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
 
                     return 'x-grid-center-icon';
                 },
-                handler: function(grid, rowIndex, colIndex) {
+                handler: function(grid, rowIndex, colIndex) {				
+					var store5 = Ext.data.StoreManager.lookup('SchoolCourse-Store5'); //已選課程
+					
                     //設定選課來源資料
                     var store1 = grid.getStore();
                     var record = store1.getAt(rowIndex);
-                    store1.remove(record);
+					
+					//衝堂
+					var is_exist = false;
+					var existTime = store5.findBy(function (record2) {
+						var store5Time_array = record2.get('coursetime').split(',');
+						var recordTime_array = record.get('coursetime').split(',');
+						
+						Ext.Array.each(store5Time_array, function(store5Time) {
+							Ext.Array.each(recordTime_array, function(recordTime) {
+								if (Ext.String.trim(store5Time) == Ext.String.trim(recordTime) && record2.get('regtype') != '1') {
+									is_exist = true;
+								}
+								//alert(record2.get('regtype')+','+Ext.String.trim(store5Time)+','+Ext.String.trim(recordTime));
+							});
+						});						
+						return false;
+					});
+					
+					if(is_exist) {
+						Ext.Msg.alert('選課訊息', '衝堂！'+record.get('coursetime_view')+'時段已有課程佔用。');
+					} else {
+						store1.remove(record);
 
-                    //將選課資料移到待選區
-                    var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
-                    store2.add(record);
-                    store2.generateSerialno();
-
+						//將選課資料移到待選區
+						var store2 = Ext.data.StoreManager.lookup('SchoolCourse-Store2');
+						store2.add(record);
+						store2.generateSerialno();
+					}
                     /*--從加選區加選時，不提示訊息--
                     Ext.MessageBox.confirm(
                         '符合選課條件',

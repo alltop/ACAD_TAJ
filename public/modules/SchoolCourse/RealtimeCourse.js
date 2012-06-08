@@ -331,7 +331,7 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.Grid1', {
 						is_full = false; 
 					}
 					
-					//選通識選修是否已選
+					//衝堂
 					var is_exist = false;
 					var existTime = storeReal5.findBy(function (record2) {
 						var store5Time_array = record2.get('coursetime').split(',');
