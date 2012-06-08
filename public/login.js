@@ -163,6 +163,8 @@ Ext.onReady(function() {
                 //'© ALLTOP 2012',
                 {
                     xtype: 'button',
+                    enableToggle: true,
+                    pressed: (mode=='realtime'),
                     text: '即選即上',
                     handler: function() {
                         location.href = '/realtime';
@@ -170,6 +172,8 @@ Ext.onReady(function() {
                 },
                 {
                     xtype: 'button',
+                    enableToggle: true,
+                    pressed: (mode=='select'),
                     text: '登記分發',
                     handler: function() {
                         location.href = '/select';
