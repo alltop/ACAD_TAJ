@@ -18,63 +18,73 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
     //處理批號（排序優先於志願序號）
     var serialseq = parseInt(Math.round(new Date().getTime()));
 
-    courses.forEach(function(course) {
-        
-        //用冒號分隔 semcourseid 及 courseid
-        var course_arr = course.split(':');
+	if(user.studentid  != null) {
+		courses.forEach(function(course) {
+			
+			//用冒號分隔 semcourseid 及 courseid
+			var course_arr = course.split(':');
 
-        //tSelectedSemCus 加選資料表
-        docs.push({
-            semcourseid: course_arr[0], //學期課號
-            courseid: course_arr[1],    //課號
-            studentid: user.studentid,  //學生代碼
-            studentno: user.studentno,  //學號
-            timestamp: new Date().getTime(),            //時間戳記
-            serialno: course_arr[2]?course_arr[2]:'0',  //志願順序
-            serialseq: serialseq,
-            createdate: new Date().getTime(),           //資料建立日期
-            regtype: '1'                                //選課類型
-        });
+			//tSelectedSemCus 加選資料表
+			docs.push({
+				semcourseid: course_arr[0], //學期課號
+				courseid: course_arr[1],    //課號
+				studentid: user.studentid,  //學生代碼
+				studentno: user.studentno,  //學號
+				timestamp: new Date().getTime(),            //時間戳記
+				serialno: course_arr[2]?course_arr[2]:'0',  //志願順序
+				serialseq: serialseq,
+				createdate: new Date().getTime(),           //資料建立日期
+				regtype: '1'                                //選課類型
+			});
 
-        //tSelectedAddDel 選課記錄資料表
-        docs2.push({
-            semcourseid: course_arr[0],
-            courseid: course_arr[1],
-            studentid: user.studentid,
-            studentno: user.studentno,
-            createdate: new Date().getTime(),
-            adddel: '加選',
-            checked: '通過',
-            regtype: '1',
-            failcause: '記錄訊息'
-        });
-		
-		//tSemesterCusWeb 課程資料表
-		//已選人數變更
-		db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
-    });
+			//tSelectedAddDel 選課記錄資料表
+			docs2.push({
+				semcourseid: course_arr[0],
+				courseid: course_arr[1],
+				studentid: user.studentid,
+				studentno: user.studentno,
+				createdate: new Date().getTime(),
+				adddel: '加選',
+				checked: '通過',
+				regtype: '1',
+				failcause: '記錄訊息'
+			});
+			
+			//tSemesterCusWeb 課程資料表
+			//已選人數變更
+			db.collection('tSemesterCusWeb').update( { semcourseid: course_arr[0] }, { $inc:{ selectedcount : 1 } } );
+		});
 
-    console.log(docs);
+		console.log(docs);
 
-    var options = {
-        upsert: true,
-        multi: false,
-        safe: true
-    };
+		var options = {
+			upsert: true,
+			multi: false,
+			safe: true
+		};
 
-    //選課過程記錄
-    db.collection('tSelectedAddDel').insert(docs, options, function() {});
+		//選課過程記錄
+		db.collection('tSelectedAddDel').insert(docs, options, function() {});
 
-    //加選
-    db.collection('tSelectedSemCus').insert(docs, options, function() {
-        var results = {
-            success: true,
-            data: {
-                docs: docs
-            }
+		//加選
+		db.collection('tSelectedSemCus').insert(docs, options, function() {
+			var results = {
+				success: true,
+				data: {
+					docs: docs
+				}
+			};
+
+			res.send(JSON.stringify(results));
+			res.end();
+		});
+	} else {
+		var results = {
+            success: false,
+            reason: 'session lost.'
         };
-
-        res.send(JSON.stringify(results));
+		
+		res.send(JSON.stringify(results));
         res.end();
-    });
+	}
 });

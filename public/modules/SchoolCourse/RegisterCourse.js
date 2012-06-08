@@ -791,6 +791,9 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                 }
                                 else {
                                     Ext.getCmp('notifier').setText('<font color="red">選課登記失敗，請重新操作一次</font>');
+									alert('學生資料無法讀取，按確定後重新登入選課系統。');
+									//載入主畫面
+									window.location = '/select';
                                 }
                             },
                             failure: function(response, opts) {
