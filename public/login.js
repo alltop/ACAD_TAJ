@@ -135,22 +135,56 @@ Ext.onReady(function() {
             xtype: 'toolbar',
             dock: 'bottom',
             border: false,
+            hidden: !Ext.isIE,
+            bodyStyle: {
+                padding: '5px',
+                background: 'transparent'
+            },
+            items: [
+                {xtype: 'tbfill'},
+                {
+                    xtype: 'button',
+                    text: '<font color="red" size="2">IE瀏覽器版本過低（8以下）請先升級瀏覽器</font>',
+                    hidden: !Ext.isIE,
+                    handler: function() {
+                        location.href = '/chrome';
+                    }
+                }
+            ]
+        }, {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            border: false,
             bodyStyle: {
                 padding: '5px',
                 background: 'transparent'
             },
             items: [
                 //'© ALLTOP 2012',
+                {
+                    xtype: 'button',
+                    text: '即選即上',
+                    handler: function() {
+                        location.href = '/realtime';
+                    }
+                },
+                {
+                    xtype: 'button',
+                    text: '登記分發',
+                    handler: function() {
+                        location.href = '/select';
+                    }
+                },
                 {xtype: 'tbfill'},
                 {
                     xtype: 'button',
-                    text: '<font color="red" size="3">IE版本過低(8以下)升級瀏覽器（建議）</font>',
-                    hidden: !Ext.isIE,
+                    text: '<font color="blue">手動更新瀏覽器</font>',
                     handler: function() {
-                        location.href = '/chrome';
+                        location.href = 'http://www.google.com/chromeframe?hl=zh-TW&quickenable=true';
                     }
                 },
-                '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>'+'<br><a href="http://www.google.com/chromeframe?hl=zh-TW&quickenable=true">手動更新瀏覽器</a>' ]
+                '選課模式: <font color="blue" size="3"><b>' + modeText + '</b></font>'
+            ]
         }]
     });
     

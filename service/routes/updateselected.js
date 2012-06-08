@@ -30,7 +30,10 @@ app.post(urlprefix + '/service/updateselected.json', function(req, res) {
             semcourseid: course_arr[0],
             studentid: user.studentid
         }, {
-            $set: {serialno: course_arr[2]?course_arr[2]:'0'}
+            $set: {
+                serialno: course_arr[2]?course_arr[2]:'0',
+                serialseq: 0
+            }
         }, function(err, result) {
 
         });
