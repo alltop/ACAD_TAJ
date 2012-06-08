@@ -175,7 +175,13 @@ Ext.onReady(function(){
                     url: 'main.html',
                     scripts: false
                 }
-            }]
+            }],
+            listeners: {
+                tabchange: function(tabPanel, newCard, oldCard, eOpts) {
+                    newCard.fireEvent('tabshow');
+                    oldCard.fireEvent('tabhide');
+                }
+            }
         }],
         renderTo: Ext.getBody()
     });

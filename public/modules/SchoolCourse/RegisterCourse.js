@@ -922,6 +922,11 @@ Ext.define('Module.SchoolCourse.RegisterCourse', {
                             grade: '',
                             unitid: ''
                         });
+                    },
+                    tabshow: function(panel) {
+                        // tab 切換重新查詢
+                        var filterbar = this.getComponent('filterbar');
+                        __queryByFilters(filterbar);
                     }
                 }
             });
