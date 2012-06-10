@@ -67,9 +67,10 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
 		db.collection('tSelectedAddDel').insert(docs, options, function() {});
 
 		//加選
-		db.collection('tSelectedSemCus').insert(docs, options, function() {
+		db.collection('tSelectedSemCus').insert(docs, options, function(err) {
 			var results = {
-				success: true,
+				success: !err,
+				logout: !req.session.user,
 				data: {
 					docs: docs
 				}

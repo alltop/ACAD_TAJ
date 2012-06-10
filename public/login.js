@@ -1,6 +1,7 @@
 Ext.onReady(function() {
     var mode = 'realtime';
 	var admin = '';
+    var force = false;
     var modeText = '';
     var urlparams = document.URL.split("?");
     if (urlparams.length > 1) {
@@ -9,6 +10,7 @@ Ext.onReady(function() {
         if (params && params.mode) {
             mode = params.mode;
 			admin = params.admin;
+            force = params.force?true:false;
         }
     }
 	var is_hideSwitch = true;
@@ -65,18 +67,17 @@ Ext.onReady(function() {
             handler: function() {
 				//手動調整。 mode == 'realtime' 不能進入選課系統, true為非選課時段，大家都不能進去, false為登記、分發都可進
 				//if(mode == 'realtime') {
-				if(true) {
-					alert('非選課時段，請於選課時段重新登入。');
-					if(mode == 'realtime') {
-						if(admin == 'admin') {
-							window.location = '/admin';
-						} else {
-							window.location = '/realtime';
-						}
-					} else if(mode == 'select') {
-						window.location = '/select';
-					}
-				} else {	
+				if(!force && true) {
+                    Ext.Msg.alert('非選課時段', '非選課時段，請於選課時段重新登入。', function(btn) {
+                        if (mode=='realtime' && admin=='admin') {
+                            window.location = '/realtime';
+                        } else if (mode=='realtime') {
+                            window.location = '/realtime';
+                        } else if(mode=='select') {
+                            window.location = '/select';
+                        }
+                    });
+				} else {
 					login.getForm().submit({
 						method:'POST',
 						waitTitle: '連線中',

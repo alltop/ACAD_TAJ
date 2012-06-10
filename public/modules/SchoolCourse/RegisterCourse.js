@@ -814,9 +814,16 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
                                 }
                                 else {
                                     Ext.getCmp('notifier').setText('<font color="red">選課登記失敗，請重新操作一次</font>');
-									alert('學生資料無法讀取，按確定後重新登入選課系統。');
-									//載入主畫面
-									window.location = '/select';
+
+                                    //伺服器session.user資料遺失則提示登出
+                                    if (obj.logout) {
+    									Ext.Msg.alert('已遺失資料', '學生資料無法讀取，按確定後重新登入選課系統。', function(btn) {
+                                            if (btn=='ok') {
+                                                //強制登出
+                                                location.href = '/logout';
+                                            }
+                                        });
+                                    }
                                 }
                             },
                             failure: function(response, opts) {

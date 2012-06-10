@@ -29,4 +29,7 @@ app.get(urlprefix + '/service/listselected.json', function(req, res) {
             res.end();
         });
     }
+    else {
+        res.end();
+    }
 });
