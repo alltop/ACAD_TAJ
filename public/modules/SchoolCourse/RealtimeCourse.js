@@ -48,14 +48,12 @@ function is_coursefull(semcourseid, maxcount) {
 			
 			if (obj) {
 				if (obj[semcourseid] != null) {
-					//alert(obj[semcourseid]); //TEST
 					coursecount = obj[semcourseid];
 					courseNowCount = obj[semcourseid];
 				}
 			}
 		}
 	});
-	//alert(coursecount+','+maxcount);
 	if(coursecount >= maxcount) {
 		return true;
 	} else {
@@ -740,12 +738,18 @@ Ext.define('Module.SchoolCourse.RealtimeCourse.MainPanel', {
 									store4.generateData();
 
                                     Ext.getCmp('notifier').setText('<font color="green">選課登記完成</font>');
-                                }
-                                else {
+                                } else {
                                     Ext.getCmp('notifier').setText('<font color="red">選課加選失敗，請重新操作一次</font>');
-									alert('學生資料無法讀取，按確定後重新登入選課系統。');
-									//載入主畫面
-									window.location = '/login';
+									//伺服器session.user資料遺失則提示登出
+                                    if (obj.logout) {
+										Ext.Msg.alert('已遺失資料', '學生資料無法讀取，按確定後重新登入選課系統。', function(btn) {
+											if (btn=='ok') {
+												//強制登出
+												logout_url = (ClientSession.admin == 'admin') ? encodeURIComponent('/' + ClientSession.admin) : encodeURIComponent('/' + ClientSession.mode);
+												location.href='/logout?redirect='+ logout_url;
+											}
+										});
+									}
                                 }
                             },
                             failure: function(response, opts) {

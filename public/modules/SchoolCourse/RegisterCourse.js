@@ -305,7 +305,6 @@ Ext.define('Module.SchoolCourse.RegisterCourse.Grid1', {
 								if (Ext.String.trim(store5Time) == Ext.String.trim(recordTime) && record2.get('regtype') != '1') {
 									is_exist = true;
 								}
-								//alert(record2.get('regtype')+','+Ext.String.trim(store5Time)+','+Ext.String.trim(recordTime));
 							});
 						});						
 						return false;
@@ -820,7 +819,8 @@ Ext.define('Module.SchoolCourse.RegisterCourse.MainPanel', {
     									Ext.Msg.alert('已遺失資料', '學生資料無法讀取，按確定後重新登入選課系統。', function(btn) {
                                             if (btn=='ok') {
                                                 //強制登出
-                                                location.href = '/logout';
+                                                logout_url = (ClientSession.admin == 'admin') ? encodeURIComponent('/' + ClientSession.admin) : encodeURIComponent('/' + ClientSession.mode);
+												location.href='/logout?redirect='+ logout_url;
                                             }
                                         });
                                     }

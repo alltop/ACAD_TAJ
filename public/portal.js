@@ -99,26 +99,10 @@ Ext.onReady(function(){
                         '是否登出系統',
                         '<span class="portal-message">請按「是」確認登出系統，按「否」則取消！</span>',
                         function (btn, text) {
+							var logout_url = '';
                             if (btn == 'yes') {
-                                Ext.Ajax.request({
-                                    url: __SERVICE_URL + '/service/logout.json',
-                                    method: 'GET',
-                                    success: function(response) {
-										switch (ClientSession.mode) {
-											case 'select':												
-												location.href = '/select';
-												break;
-											case 'realtime':
-												if(ClientSession.admin == 'admin') {
-													location.href = '/admin';
-												} else {
-													location.href = '/login';
-												}												
-												break;
-											
-										}
-                                    }
-                                });
+								logout_url = (ClientSession.admin == 'admin') ? encodeURIComponent('/' + ClientSession.admin) : encodeURIComponent('/' + ClientSession.mode);
+								location.href='/logout?redirect='+ logout_url;
                             }
                         }
                     );

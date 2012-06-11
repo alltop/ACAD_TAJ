@@ -82,6 +82,7 @@ app.post(urlprefix + '/service/selectcourse.json', function(req, res) {
 	} else {
 		var results = {
             success: false,
+			logout: true,
             reason: 'session lost.'
         };
 		

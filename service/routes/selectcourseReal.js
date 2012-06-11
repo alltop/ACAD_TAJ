@@ -13,7 +13,7 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
 	if(is_admin){
 		failcause = admin;
 	}
-	
+
 	if(user.studentid  != null) {
 		//課程清單（網頁表單）    
 		var courses = req.body['courses'].split(',');
@@ -95,6 +95,7 @@ app.post(urlprefix + '/service/selectcourseReal.json', function(req, res) {
 	} else {
 		var results = {
             success: false,
+			logout:true,
             reason: 'session lost.'
         };
 		
