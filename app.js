@@ -61,10 +61,11 @@ db.open(function(err, nativedb) {
     app.get('/', routes.index);
     app.get('/chrome.:format?', routes.chrome); //google chrome frame
     app.get('/login.:format?', routes.login);
+    app.get('/logout.:format?', routes.logout);
     app.get('/portal.:format?', routes.portal);
     app.get('/select.:format?', routes.select);
     app.get('/realtime.:format?', routes.realtime);
-	app.get('/admin.:format?', routes.admin); //課務組手動加選網站(無管控人數上限)
+    app.get('/admin.:format?', routes.admin); //課務組手動加選網站(無管控人數上限)
 
     // Load Services
     require('./service')(app, db, urlprefix);
