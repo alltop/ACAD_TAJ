@@ -1,6 +1,6 @@
 /**
  * 網路選課系統
- * Powerd by ExtJS + Node.js(Express.js) + MongoDB
+ * Powerd by ExtJS, Node.js, MongoDB
  *
  * @copyright ALLTOP Computer CO., Ltd. http://www.alltop.com.tw/
  * @author http://about.me/lyhcode
