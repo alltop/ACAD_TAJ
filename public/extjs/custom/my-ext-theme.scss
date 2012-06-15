@@ -36,17 +36,17 @@ $datepicker-item-hover-background-color: transparent;
 //progress bar
 $progress-border-color: #8e8e8e;
 $progress-background-color: #f1f1f1;
-$progress-bar-background-color: #E68E36;
+$progress-bar-background-color: #EE913F;
 
 //tips
 $tip-base-color: $base-color;
 
 //grid
-//$grid-header-color: #FFD22C;
-$grid-header-background-color: #FFD22C;
+//$grid-header-color: #9FD7C7;
+$grid-header-background-color: #9FD7C7;
 $grid-header-background-gradient: 'grid-header';
-$grid-header-over-border-color: #FFD22C;
-$grid-header-over-background-color: #FFD22C;
+$grid-header-over-border-color: #9FD7C7;
+$grid-header-over-background-color: #9FD7C7;
 $grid-header-over-background-gradient: 'grid-header';
 $grid-row-cell-alt-background: lighten(#FFE1D6, 1%);
 $grid-row-cell-selected-background-color: darken($grid-row-cell-alt-background, 15%);
@@ -74,7 +74,7 @@ $accordion-header-background-color: #e5e5e5;
 //tabs
 $tab-base-color: #eaeaea;
 $tab-color-active: #333333;
-$tabbar-base-color: #FFAB4B;
+$tabbar-base-color: #F2E5BD;
 
 $tab-background-gradient: color-stops(#dcdcdc, #eaeaea);
 $tab-background-gradient-over: 'tab-over' !default;

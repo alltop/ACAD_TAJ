@@ -1,0 +1,5 @@
+{
+	"mongo": {
+		"url": "guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=10"
+	}
+}

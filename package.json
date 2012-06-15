@@ -20,5 +20,6 @@
     , "connect-mongodb": "git://github.com/lyhcode/connect-mongodb.git"
     , "connect-cache": "latest"
     , "cloudfoundry": "latest"
+    , "socket.io": "latest"
   }
 }

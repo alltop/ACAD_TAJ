@@ -12,22 +12,33 @@ var express = require('express')
   , routes = require('./routes')
   , cache = require('connect-cache')
   , mongo = require('mongoskin')
-  , db = mongo.db('guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=10')
-  //, db = mongo.db('192.192.216.83/acad_taj?auto_reconnect=true&poolSize=10')
-  //, db = mongo.db('localhost/acad_taj?auto_reconnect=true&poolSize=10')
   , mongoStore = require('connect-mongodb')
-  , cloudfoundry = require('cloudfoundry');
+  , cloudfoundry = require('cloudfoundry')
+  , config = require('./config.json');
+
+// Test Config
+//console.log('Config Data: ', config);
+console.log("檢查 config.json 設定");
+if (!config.mongo || !config.mongo.url) {
+    console.log("缺少 MongoDB 設定");
+    process.exit(1);
+}
+console.log("全部檢查通過");
+
+// Setup MongoDB
+var db = mongo.db(config.mongo.url);
 
 // Express web server
-
 var app = module.exports = express.createServer(
   cache({rules: [
     {regex: /\/cached\/.*/, ttl: 60 * 1000}
   ]})
 );
 
-// URL prefix setup for additional path like iisnode
+// Use Socket.IO
+var io = require('socket.io').listen(app);
 
+// URL Prefix 設置（搭配 iisnode/nginx 使用）
 var urlprefix = ''
 
 db.open(function(err, nativedb) {
