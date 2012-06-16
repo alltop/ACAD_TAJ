@@ -10,7 +10,8 @@ app.get(urlprefix + '/service/:cached?/listall.json', function(req, res) {
         'unitid': 1, 'collegeid': 1, 'studytype': 1, 'selectgpid': 1, 'englevel': 1, 'physicalgroup': 1
     };
 
-    console.log('Query tSemesterCusWeb from MongoDB '+new Date());
+    var begin = new Date();
+    console.log('查詢課程資料來源 tSemesterCusWeb ', begin);
     
     db.collection('tSemesterCusWeb').find({}, fields).toArray(function(err, rows){
         //res.send(JSON.stringify(rows));
@@ -24,5 +25,7 @@ app.get(urlprefix + '/service/:cached?/listall.json', function(req, res) {
         });
         res.send(JSON.stringify(arr));
         res.end();
+
+        console.log('時間花費：', new Date()-begin, 'ms');
     });
 });
