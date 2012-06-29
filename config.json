@@ -1,5 +1,15 @@
 {
 	"mongo": {
 		"url": "guest:guest@staff.mongohq.com:10028/acad_taj?auto_reconnect=true&poolSize=10"
+	},
+	"cache": {
+		"time": {
+			"medium": 5000,
+			"long": 30000
+		}
+	},
+	"static": {
+		"server": "http://acadtaj.s3.amazonaws.com/",
+		"enable": false
 	}
 }

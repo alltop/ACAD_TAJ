@@ -6,7 +6,7 @@
     "port": "3000"
   }
   , "scripts": {
-      "start": "node app.js"
+      "start": "node app"
     , "forever": "forever -w start app.js"
   }
   , "engines": {
@@ -16,10 +16,14 @@
   , "dependencies": {
       "express": "latest"
     , "jade": "latest"
+    , "mongodb": "latest"
     , "mongoskin": "latest"
     , "connect-mongodb": "latest"
+    , "connect-redis": "latest"
     , "connect-cache": "latest"
     , "cloudfoundry": "latest"
+    , "rabbit.js": "latest"
     , "socket.io": "latest"
+    , "memory-cache": "latest"
   }
 }
