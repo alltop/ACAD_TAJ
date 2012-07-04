@@ -1,13 +1,3 @@
-/* Simple Package Definition System */
-
-/*
-var _package = null;
-
-var package = function(name) {
-    _package = name;
-};
-*/
-
 //啟用 Ext 動態載入器
 Ext.Loader.setConfig({
     enabled: true,
@@ -15,8 +5,6 @@ Ext.Loader.setConfig({
         'Module': 'modules'
     }
 });
-
-//Ext.require([...]);
 
 //實作瀏覽器資料快取
 Ext.define('ClientSession', { 
@@ -27,17 +15,22 @@ Ext.define('ClientSession', {
     myunits: [],
     blocklist: [],
     blocklist_array: [],
-	blockgplist_array: []
+    blockgplist_array: []
 });
 
-//資料讀取提示訊息
-if (Ext.view.AbstractView) {
-    Ext.apply(Ext.view.AbstractView.prototype, {
-        loadingText: '資料讀取中...',
+Ext.onReady(function() {
+    var socket = io.connect('http://localhost');
+    socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
     });
-}
 
-Ext.onReady(function(){
+    //資料讀取提示訊息
+    if (Ext.view.AbstractView) {
+        Ext.apply(Ext.view.AbstractView.prototype, {
+            loadingText: '資料讀取中...',
+        });
+    }
 
     var tree1 = Ext.create('Ext.TreePanel', {
         header: false,

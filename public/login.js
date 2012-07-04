@@ -1,9 +1,11 @@
 Ext.onReady(function() {
     var mode = 'realtime';
 	var admin = '';
-    var force = false;
+    var force = false; //強制登入模式？
+    var local = location.hostname=='localhost'; //本地模式？
     var modeText = '';
     var urlparams = document.URL.split("?");
+
     if (urlparams.length > 1) {
         var params = Ext.urlDecode(urlparams[1]);
 		
@@ -59,7 +61,7 @@ Ext.onReady(function() {
         }],
         buttons: [{
             xtype: 'button',
-            text: '登入',
+            text: '<font color="black"><b>登入</b></font>',
             scale: 'medium',
             cls: 'test',
             icon: __SILK_ICONS_URL + 'application_go.png',
@@ -67,7 +69,8 @@ Ext.onReady(function() {
             handler: function() {
 				//手動調整。 mode == 'realtime' 不能進入選課系統, true為非選課時段，大家都不能進去, false為登記、分發都可進
 				//if(mode == 'realtime') {
-				if(!force && true) {
+                //強制模式與本地模式允許略過選課時段檢查，直接進行登入驗證（開發階段使用）
+				if(!force && !local) {
                     Ext.Msg.alert('非選課時段', '非選課時段，請於選課時段重新登入。', function(btn) {
                         if (mode=='realtime' && admin=='admin') {
                             window.location = '/realtime';
@@ -218,5 +221,4 @@ Ext.onReady(function() {
     else {
         win.show();
     }
-
 });

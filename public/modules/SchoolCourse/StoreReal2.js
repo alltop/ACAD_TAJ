@@ -16,7 +16,7 @@ Ext.define('Module.SchoolCourse.StoreReal2', {
         }
     },
     /**
-     * ²£¥Í§ÓÄ@¶¶§Ç
+     * ç”¢ç”Ÿå¿—é¡˜é †åº
      */
     generateSerialno: function() {
         var store2 = this;

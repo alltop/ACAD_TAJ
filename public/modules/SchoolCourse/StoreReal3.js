@@ -1,5 +1,5 @@
 /**
- * ¤w¿ï½Òµ{¸ê®Æ¨Ó·½¡]°h¿ï¥Î¡^
+ * å·²é¸èª²ç¨‹è³‡æ–™ä¾†æºï¼ˆé€€é¸ç”¨ï¼‰
  */
 Ext.define('Module.SchoolCourse.StoreReal3', {
     extend: 'Ext.data.Store',

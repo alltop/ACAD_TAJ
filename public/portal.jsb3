@@ -1,0 +1,141 @@
+{
+    "projectName": "Project Name",
+    "licenseText": "Copyright(c) 2012 Company Name",
+    "builds": [
+        {
+            "name": "All Classes",
+            "target": "portal-classes.js",
+            "options": {
+                "debug": true
+            },
+            "files": [
+                {
+                    "clsName": "Module.Prototype.Package",
+                    "name": "Package.js",
+                    "path": "modules/Prototype/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store0",
+                    "name": "Store0.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store1",
+                    "name": "Store1.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store1a",
+                    "name": "Store1a.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store3",
+                    "name": "Store3.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store2",
+                    "name": "Store2.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store5",
+                    "name": "Store5.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Store4",
+                    "name": "Store4.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.StoreReal1",
+                    "name": "StoreReal1.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.StoreReal1a",
+                    "name": "StoreReal1a.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.StoreReal2",
+                    "name": "StoreReal2.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.StoreReal3",
+                    "name": "StoreReal3.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.StoreReal5",
+                    "name": "StoreReal5.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.StoreReal4",
+                    "name": "StoreReal4.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.Prototype.Module",
+                    "name": "Module.js",
+                    "path": "modules/Prototype/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.BookingCourse",
+                    "name": "BookingCourse.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.RealtimeCourse",
+                    "name": "RealtimeCourse.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.RegisterCourse",
+                    "name": "RegisterCourse.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.ShowCourse",
+                    "name": "ShowCourse.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.ShowCourseReal",
+                    "name": "ShowCourseReal.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.UnregisterCourse",
+                    "name": "UnregisterCourse.js",
+                    "path": "modules/SchoolCourse/"
+                },
+                {
+                    "clsName": "Module.SchoolCourse.Package",
+                    "name": "Package.js",
+                    "path": "modules/SchoolCourse/"
+                }
+            ]
+        },
+        {
+            "name": "Application - Production",
+            "target": "portal-all.js",
+            "compress": true,
+            "files": [
+                {
+                    "path": "",
+                    "name": "portal.js"
+                },
+                {
+                    "path": "",
+                    "name": "portal-classes.js"
+                }
+            ]
+        }
+    ],
+    "resources": []
+}
